@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package>
+    <DisplayName>Rangoli</DisplayName>
+    <Description>Install Rangoli on your system</Description>
+    <Version>1.0</Version>
+    <ReleaseDate>2023-02-11</ReleaseDate>
+    <Licenses>
+        <License name="GNU General Public License Version 3.0" file="license.txt" />
+    </Licenses>
+    <Default>script</Default>
+    <Script>install-script.qs</Script>
+</Package>

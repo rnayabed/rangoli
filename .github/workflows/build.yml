@@ -1,0 +1,84 @@
+name: Build
+
+on:
+  push:
+    branches: [ master ]
+    paths-ignore:
+      - '*.md'
+      - 'screenshots/*.md'
+      - 'screenshots/*.png'
+  pull_request:
+    branches: [ master ]
+    paths-ignore:
+      - '*.md'
+      - 'screenshots/*.md'
+      - 'screenshots/*.png'
+
+env:
+  QT_VERSION: '6.4.2'
+
+jobs:
+  linux-x64:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v3 
+        with:
+          submodules: recursive
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: ${{ env.QT_VERSION }}
+          arch: 'gcc_64'
+          tools: 'tools_ninja'
+      - name: Install libhidapi dependency
+        run: |
+          sudo apt-get -y install libudev-dev
+      - name: Build
+        run: |
+          cmake -B build -S . -G Ninja -DCMAKE_MAKE_PROGRAM="${IQTA_TOOLS}/Ninja/ninja"
+          cmake --build build
+          
+  windows-x64:
+    runs-on: windows-2019
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v3 
+        with:
+          submodules: recursive
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: ${{ env.QT_VERSION }}
+          arch: 'win64_mingw'
+          tools: 'tools_ninja tools_mingw90'
+      - name: Build
+        run: |
+          ${env:IQTA_TOOLS} = ${env:IQTA_TOOLS} -replace '\\', '/'
+
+          cmake -B build -S . -G Ninja `
+          -DCMAKE_C_COMPILER="${env:IQTA_TOOLS}/mingw1120_64/bin/gcc.exe" `
+          -DCMAKE_CXX_COMPILER="${env:IQTA_TOOLS}/mingw1120_64/bin/g++.exe" `
+          -DCMAKE_MAKE_PROGRAM="${env:IQTA_TOOLS}/Ninja/ninja.exe"
+
+          cmake --build build
+
+  macos:
+    runs-on: macos-11
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v3 
+        with:
+          submodules: recursive
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: ${{ env.QT_VERSION }}
+          arch: 'clang_64'
+          tools: 'tools_ninja'
+      - name: Build
+        run: |
+          cmake -B build -S . -G Ninja -DCMAKE_MAKE_PROGRAM="${IQTA_TOOLS}/Ninja/ninja"
+          cmake --build build
+
+  

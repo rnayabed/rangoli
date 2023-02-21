@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Installer>
+    <Name>Rangoli</Name>
+    <Version>1.0</Version>
+    <Title>Rangoli Installer</Title>
+    <Publisher>Debayan Sutradhar</Publisher>
+    <StartMenuDir>Rangoli</StartMenuDir>
+    <TargetDir>@ApplicationsDir@/Rangoli</TargetDir>
+</Installer>

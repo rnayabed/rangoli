@@ -1,0 +1,55 @@
+#[[
+Copyright (C) 2023 Debayan Sutradhar (rnayabed) (debayansutradhar3@gmail.com)
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+]]
+
+cmake_minimum_required(VERSION 3.16)
+
+set(VERSION 1.0)
+
+project(rangoli VERSION ${VERSION} LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(LINUX_UDEV_RULE_WRITER_NAME "udev-rule-writer.sh")
+
+add_compile_definitions(
+    VERSION=${VERSION}
+    GIT_REPOSITORY="https://github.com/rnayabed/rangoli"
+    SUPPORTED_KEYBOARDS="https://github.com/rnayabed/rangoli/blob/master/supported-keyboards.md"
+    WEBSITE="https://rnayabed.github.io/rangoli"
+    REPORT_ISSUE="https://github.com/rnayabed/rangoli/issues/new"
+    LICENSE="https://github.com/rnayabed/rangoli/blob/master/LICENSE"
+    AUTHOR_WEBSITE="https://github.com/rnayabed"
+    AUTHOR_KO_FI="https://ko-fi.com/rnayabed"
+    AUTHOR_UPI="9903299105@upi"
+    AUTHOR_EMAIL="debayansutradhar3@gmail.com"
+    GITHUB_RELEASES="https://api.github.com/repos/rnayabed/rangoli/releases"
+    KEYBOARDS_LIST_PATH="keyboards/list.json"
+    LINUX_UDEV_RULE_WRITER_NAME="${LINUX_UDEV_RULE_WRITER_NAME}"
+    LINUX_UDEV_RULES_PATH="/etc/udev/rules.d/71-rangoli.rules"
+    LINUX_TERMINAL="xterm"
+
+    DEFAULT_ACCENT_RED=229
+    DEFAULT_ACCENT_GREEN=21
+    DEFAULT_ACCENT_BLUE=115
+)
+
+find_package(Qt6 6.4 COMPONENTS Quick REQUIRED)
+
+set(HIDAPI_WITH_LIBUSB FALSE)
+set(BUILD_SHARED_LIBS FALSE)
+
+add_subdirectory(hidapi)
+add_subdirectory(src)

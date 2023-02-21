@@ -1,0 +1,221 @@
+name: Release
+
+on: workflow_dispatch
+
+env:
+  QT_VERSION: '6.4.2'
+  QT_IFW_VERSION: '4.5'
+  INSTALLER_PACKAGE_NAME: 'io.github.rnayabed.rangoli'
+  LINUX_64_STATIC_URL: 'https://github.com/rnayabed/qt-builds/releases/download/6.4.2/qt-6.4.2-rangoli-linux-x86_64-static.zip'
+  WINDOWS_64_OPENSSL_URL: 'https://github.com/rnayabed/OpenSSL-builds/releases/download/1.1.1t/windows-x86_64.zip'
+  LINUX_64_OPENSSL_URL: 'https://github.com/rnayabed/OpenSSL-builds/releases/download/1.1.1t/linux-x86_64.zip'
+
+jobs:     
+  linux:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        arch: [64]
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: ${{ env.QT_VERSION }}
+          arch: 'gcc_64'
+          tools-only: 'true'
+          tools: 'tools_ninja tools_ifw'  
+      - name: Download static 64-bit Qt build
+        if: matrix.arch == 64
+        run: |
+          wget -O qt.zip ${LINUX_64_STATIC_URL}
+          unzip qt.zip -d qt
+      - name: Download 64-bit OpenSSL
+        if: matrix.arch == 64
+        run: |
+          wget -O openssl.zip ${LINUX_64_OPENSSL_URL}
+          unzip openssl.zip -d openssl
+      - name: Install dependencies
+        run: |
+          sudo apt-get -y install libfontconfig1-dev libfreetype6-dev libx11-dev libx11-xcb-dev libxext-dev libxfixes-dev \
+          libxi-dev libxrender-dev libxcb1-dev libxcb-glx0-dev libxcb-keysyms1-dev libxcb-image0-dev \
+          libxcb-shm0-dev libxcb-icccm4-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-shape0-dev libxcb-cursor-dev libxcb-cursor0 \
+          libxcb-randr0-dev libxcb-render-util0-dev libxcb-util-dev libxcb-xinerama0 libxcb-xinerama0-dev libxcb-xkb-dev \
+          libxkbcommon-dev libxkbcommon-x11-dev freeglut3 freeglut3-dev binutils-gold libglew-dev \
+          mesa-common-dev libglew1.5-dev libglm-dev libgles2-mesa-dev xorg-dev libatspi2.0-dev libudev-dev \
+          libmtdev-dev libmtdev1 libts-bin libts-dev libts0 libinput-bin libinput-dev libinput10
+      - name: Build 64-bit
+        if: matrix.arch == 64
+        run: |
+          export PATH=$PATH:${IQTA_TOOLS}/Ninja/:${GITHUB_WORKSPACE}/qt
+
+          cmake -B build -S . -G Ninja \
+          -DCMAKE_INSTALL_PREFIX="installer/packages/${INSTALLER_PACKAGE_NAME}/data" \
+          -DCMAKE_BUILD_TYPE=Release
+
+          cmake --build build
+          cmake --install build
+
+          chmod a+x installer/packages/${INSTALLER_PACKAGE_NAME}/data/bin/udev-rule-writer.sh
+      - name: Cleanup directories
+        run: |
+          rm -rf installer/packages/${INSTALLER_PACKAGE_NAME}/data/lib
+      - name: Create output directory
+        run: |
+          mkdir installer/output
+      - name: Move app icon
+        run: |
+          mv icons/rangoli.svg installer/packages/${INSTALLER_PACKAGE_NAME}/data/bin/rangoli.svg
+      - name: Move OpenSSL files
+        run: |
+          mv openssl/* installer/packages/${INSTALLER_PACKAGE_NAME}/data/bin
+      - name: Create installer
+        run: |
+          ${IQTA_TOOLS}/QtInstallerFramework/${QT_IFW_VERSION}/bin/binarycreator \
+          --offline-only \
+          -p installer/packages \
+          -c installer/config/config.xml \
+          installer/output/rangoli-installer-linux-${{matrix.arch}}.run
+
+          chmod a+x installer/output/rangoli-installer-linux-${{matrix.arch}}.run
+      - name: Create portable
+        run: |
+          cd installer/packages/${INSTALLER_PACKAGE_NAME}/data
+          mv bin rangoli-portable-linux-${{matrix.arch}}
+          zip -r ${GITHUB_WORKSPACE}/installer/output/rangoli-portable-linux-${{matrix.arch}}.zip rangoli-portable-linux-${{matrix.arch}}
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: Linux
+          path: installer/output/*
+
+  windows:
+    runs-on: windows-2019
+    strategy:
+      matrix:
+        arch: [64]
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: ${{ env.QT_VERSION }}
+          arch: 'win64_mingw'
+          tools: 'tools_ninja tools_mingw90 tools_ifw'     
+      - name: Download OpenSSL 64
+        if: matrix.arch == 64
+        run: |
+          Invoke-WebRequest ${env:WINDOWS_64_OPENSSL_URL} -OutFile openssl.zip
+          Expand-Archive openssl.zip -DestinationPath openssl/
+      - name: Build 64-bit
+        if: matrix.arch == 64
+        run: |
+          ${env:IQTA_TOOLS} = ${env:IQTA_TOOLS} -replace '\\', '/'
+          
+          $env:Path += ";${env:Qt6_DIR}/bin;${env:IQTA_TOOLS}/mingw1120_64/bin;${env:IQTA_TOOLS}/Ninja"
+
+          cmake -B build -S . -G Ninja `
+          -DCMAKE_INSTALL_PREFIX="installer/packages/${env:INSTALLER_PACKAGE_NAME}/data" `
+          -DCMAKE_C_COMPILER="${env:IQTA_TOOLS}/mingw1120_64/bin/gcc.exe" `
+          -DCMAKE_CXX_COMPILER="${env:IQTA_TOOLS}/mingw1120_64/bin/g++.exe" `
+          -DCMAKE_BUILD_TYPE=Release `
+
+          cmake --build build
+          cmake --install build
+      - name: Copy extra DLL files
+        run: |
+          Copy-Item ${env:Qt6_DIR}/bin/libgcc_s_seh-1.dll installer/packages/${env:INSTALLER_PACKAGE_NAME}/data/bin
+          Copy-Item ${env:Qt6_DIR}/bin/libstdc++-6.dll installer/packages/${env:INSTALLER_PACKAGE_NAME}/data/bin
+          Copy-Item ${env:Qt6_DIR}/bin/libwinpthread-1.dll installer/packages/${env:INSTALLER_PACKAGE_NAME}/data/bin
+      - name: Move OpenSSL files
+        run: |
+          Move-Item openssl/* -Destination installer/packages/${env:INSTALLER_PACKAGE_NAME}/data/bin
+      - name: Delete OpenGL SW DLL
+        run: |
+          Remove-Item -Force installer/packages/${env:INSTALLER_PACKAGE_NAME}/data/bin/opengl32sw.dll
+      - name: Cleanup directories
+        run: |
+          Remove-Item -Recurse -Force installer/packages/${env:INSTALLER_PACKAGE_NAME}/data/lib
+          Remove-Item -Recurse -Force installer/packages/${env:INSTALLER_PACKAGE_NAME}/data/translations
+      - name: Create output directory
+        run: |
+          mkdir installer/output
+      - name: Create installer
+        run: |
+          & ${env:IQTA_TOOLS}/QtInstallerFramework/${env:QT_IFW_VERSION}/bin/binarycreator.exe `
+          --offline-only `
+          -p installer/packages `
+          -c installer/config/config.xml `
+          installer/output/rangoli-installer-windows-${{matrix.arch}}.exe
+      - name: Create portable
+        run: |
+          Rename-Item installer/packages/${env:INSTALLER_PACKAGE_NAME}/data rangoli-portable-windows-${{matrix.arch}}
+          $compress = @{
+            Path = "${env:GITHUB_WORKSPACE}/installer/packages/${env:INSTALLER_PACKAGE_NAME}/rangoli-portable-windows-${{matrix.arch}}"
+            CompressionLevel = "Fastest"
+            DestinationPath = "${env:GITHUB_WORKSPACE}/installer/output/rangoli-portable-windows-${{matrix.arch}}.zip"
+          }
+          Compress-Archive @compress
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: Windows
+          path: installer/output/*
+
+  macos:
+    runs-on: macos-11
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: ${{ env.QT_VERSION }}
+          arch: 'clang_64'
+          tools: 'tools_ninja tools_ifw'          
+      - name: Build
+        run: |
+
+          export PATH=$PATH:${IQTA_TOOLS}/Ninja/
+
+          cmake -B build -S . -G Ninja \
+          -DCMAKE_INSTALL_PREFIX="installer/packages/${INSTALLER_PACKAGE_NAME}/data" \
+          -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64" \
+          -DCMAKE_BUILD_TYPE=Release
+
+          cmake --build build
+          cmake --install build
+      - name: Cleanup directories
+        run: |
+          rm -rf installer/packages/${INSTALLER_PACKAGE_NAME}/data/lib
+          rm -rf installer/packages/${INSTALLER_PACKAGE_NAME}/data/translations
+      - name: Create output directory
+        run: |
+          mkdir installer/output
+      - name: Create installer
+        run: |
+          ${IQTA_TOOLS}/QtInstallerFramework/${QT_IFW_VERSION}/bin/binarycreator \
+          --offline-only \
+          -p installer/packages \
+          -c installer/config/config.xml \
+          rangoli-installer-macos.app
+          zip -rX rangoli-installer-macos.app.zip rangoli-installer-macos.app
+          mv rangoli-installer-macos.app.zip installer/output/
+      - name: Create portable
+        run: |
+          cd installer/packages/${INSTALLER_PACKAGE_NAME}/
+          mv data rangoli-portable-macos
+          zip -rX ${GITHUB_WORKSPACE}/installer/output/rangoli-portable-macos.zip rangoli-portable-macos
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: MacOS
+          path: installer/output/*
