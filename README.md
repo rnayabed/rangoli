@@ -34,6 +34,7 @@ I decided to try another approach to this problem. I reverse engineered the prot
 Therefore, instead of changing the keyboard firmware, this software pretends to be "RK Software". There is no risk of bricking your keyboard. It is plug and play!
 
 ## Pros over RK Software
+- Free and Open Source.
 - Cross-platform. Rangoli runs on Linux, Windows and MacOS.
 - Start On Boot. You can configure Rangoli to start at system boot and also select a profile to be applied on startup.
 - Functional System Tray Icon. Although the RK Software does show up in System Tray, it is very limited and opens up the main window for even basic tasks like selecting a profile. Rangoli offers more functionality, including the ability to apply a profile per keyboard.
