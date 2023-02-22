@@ -199,6 +199,10 @@ void MainWindowController::init()
     }
 #endif
 
+    if(m_settingsController->checkForUpdatesOnStartup())
+    {
+        m_settingsController->checkForUpdates(true);
+    }
 }
 
 void MainWindowController::quit()

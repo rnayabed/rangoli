@@ -25,10 +25,12 @@ SettingsController::SettingsController(QObject *parent)
       m_selectedThemeIndex{MainWindowController::Theme::System},
       m_startOnBoot{false},
       m_applyDefaultProfileOnStartup{false},
+      m_checkForUpdatesOnStartup{false},
       m_alwaysShowSystemTrayIcon{false},
       m_closeToSystemTrayIcon{false},
       m_selectedDefaultProfileIndex{0},
       m_unsavedChanges{false},
+      m_checkForUpdatesQuietMode{false},
       m_checkForUpdatesButtonEnabled{true}
 {}
 
@@ -65,6 +67,11 @@ bool &SettingsController::startOnBoot()
 bool &SettingsController::applyDefaultProfileOnStartup()
 {
     return m_applyDefaultProfileOnStartup;
+}
+
+bool &SettingsController::checkForUpdatesOnStartup()
+{
+    return m_checkForUpdatesOnStartup;
 }
 
 bool &SettingsController::alwaysShowSystemTrayIcon()
@@ -158,6 +165,14 @@ void SettingsController::setApplyDefaultProfileOnStartup(const bool &applyDefaul
     emit applyDefaultProfileOnStartupChanged();
 }
 
+void SettingsController::setCheckForUpdatesOnStartup(const bool &checkForUpdatesOnStartup)
+{
+    if(m_checkForUpdatesOnStartup == checkForUpdatesOnStartup) return;
+
+    m_checkForUpdatesOnStartup = checkForUpdatesOnStartup;
+    emit checkForUpdatesOnStartupChanged();
+}
+
 void SettingsController::setAlwaysShowSystemTrayIcon(const bool &alwaysShowSystemTrayIcon)
 {
     if(m_alwaysShowSystemTrayIcon == alwaysShowSystemTrayIcon) return;
@@ -235,6 +250,7 @@ void SettingsController::load()
     setSelectedDefaultProfileIndex(m_profiles->defaultProfileIndex());
     setStartOnBoot(settings.value(u"start_on_boot"_s, false).toBool());
     setApplyDefaultProfileOnStartup(settings.value(u"apply_default_profile_on_startup"_s, false).toBool());
+    setCheckForUpdatesOnStartup(settings.value(u"check_for_updates_on_startup"_s, true).toBool());
     setAlwaysShowSystemTrayIcon(settings.value(u"system_tray/always"_s, true).toBool());
     setCloseToSystemTrayIcon(settings.value(u"system_tray/close_to"_s, true).toBool());
 
@@ -287,6 +303,7 @@ void SettingsController::save()
 
     settings.setValue(u"start_on_boot"_s, m_startOnBoot);
     settings.setValue(u"apply_default_profile_on_startup"_s, m_applyDefaultProfileOnStartup);
+    settings.setValue(u"check_for_updates_on_startup"_s, m_checkForUpdatesOnStartup);
     settings.setValue(u"system_tray/always"_s, m_alwaysShowSystemTrayIcon);
     settings.setValue(u"system_tray/close_to"_s, m_closeToSystemTrayIcon);
 
@@ -294,9 +311,11 @@ void SettingsController::save()
     applyVisualSettings();
 }
 
-void SettingsController::checkForUpdates()
+void SettingsController::checkForUpdates(const bool& quiet)
 {
     setCheckForUpdatesButtonEnabled(false);
+
+    m_checkForUpdatesQuietMode = quiet;
 
     QPointer<QNetworkAccessManager> nam{new QNetworkAccessManager{this}};
     connect(nam, &QNetworkAccessManager::finished, this, &SettingsController::updatesFetched, Qt::SingleShotConnection);
@@ -317,10 +336,13 @@ void SettingsController::updatesFetched(QNetworkReply *reply)
 
     if (reply->error() != QNetworkReply::NoError)
     {
-        emit m_mainWindow->loadEnhancedDialog(EnhancedDialog{
-                                                    tr("Error"),
-                                                    tr("Unable to check for updates. Check your internet connection and try again.")
-                                              });
+        if (!m_checkForUpdatesQuietMode)
+        {
+            emit m_mainWindow->loadEnhancedDialog(EnhancedDialog{
+                                                        tr("Error"),
+                                                        tr("Unable to check for updates. Check your internet connection and try again.")
+                                                  });
+        }
         return;
     }
 
@@ -362,7 +384,7 @@ void SettingsController::updatesFetched(QNetworkReply *reply)
         }
     }
 
-    if (!updateFound)
+    if (!updateFound && !m_checkForUpdatesQuietMode)
     {
         emit m_mainWindow->loadEnhancedDialog(EnhancedDialog{
                                                     tr("Up to date"),

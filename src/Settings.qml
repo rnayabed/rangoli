@@ -310,6 +310,18 @@ Item {
                 }
 
                 SwitchSetting {
+                    displayText: qsTr("Check for updates when Rangoli starts")
+
+                    switchControl {
+                        checked: settingsController.checkForUpdatesOnStartup
+                        onCheckedChanged: {
+                            settingsController.checkForUpdatesOnStartup = switchControl.checked
+                            settingsController.unsavedChanges = true
+                        }
+                    }
+                }
+
+                SwitchSetting {
                     displayText: qsTr("Always show tray icon")
 
                     switchControl {

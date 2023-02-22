@@ -29,8 +29,10 @@ class SettingsController : public QObject
     Q_PROPERTY(bool startOnBootSupported READ startOnBootSupported CONSTANT)
     Q_PROPERTY(bool startOnBoot READ startOnBoot WRITE setStartOnBoot NOTIFY startOnBootChanged)
     Q_PROPERTY(bool applyDefaultProfileOnStartup READ applyDefaultProfileOnStartup WRITE setApplyDefaultProfileOnStartup NOTIFY applyDefaultProfileOnStartupChanged)
+    Q_PROPERTY(bool checkForUpdatesOnStartup READ checkForUpdatesOnStartup WRITE setCheckForUpdatesOnStartup NOTIFY checkForUpdatesOnStartupChanged)
     Q_PROPERTY(bool alwaysShowSystemTrayIcon READ alwaysShowSystemTrayIcon WRITE setAlwaysShowSystemTrayIcon NOTIFY alwaysShowSystemTrayIconChanged)
     Q_PROPERTY(bool closeToSystemTrayIcon READ closeToSystemTrayIcon WRITE setCloseToSystemTrayIcon NOTIFY closeToSystemTrayIconChanged)
+
     Q_PROPERTY(bool unsavedChanges READ unsavedChanges WRITE setUnsavedChanges NOTIFY unsavedChangesChanged)
     Q_PROPERTY(ProfileModel* profiles READ profiles CONSTANT)
     Q_PROPERTY(int selectedDefaultProfileIndex READ selectedDefaultProfileIndex WRITE setSelectedDefaultProfileIndex NOTIFY selectedDefaultProfileIndexChanged)
@@ -49,8 +51,10 @@ public:
     const bool& startOnBootSupported();
     bool& startOnBoot();
     bool& applyDefaultProfileOnStartup();
+    bool& checkForUpdatesOnStartup();
     bool& alwaysShowSystemTrayIcon();
     bool& closeToSystemTrayIcon();
+
     ProfileModel* profiles();
     int& selectedDefaultProfileIndex();
     QString version();
@@ -64,8 +68,10 @@ signals:
     void accentColourChanged();
     void startOnBootChanged();
     void applyDefaultProfileOnStartupChanged();
+    void checkForUpdatesOnStartupChanged();
     void alwaysShowSystemTrayIconChanged();
     void closeToSystemTrayIconChanged();
+
     void unsavedChangesChanged();
     void selectedDefaultProfileIndexChanged();
     void checkForUpdatesButtonEnabledChanged();
@@ -76,8 +82,10 @@ public slots:
     void setAccentColour(const QColor& accentColour);
     void setStartOnBoot(const bool& startOnBoot);
     void setApplyDefaultProfileOnStartup(const bool& applyDefaultProfileOnStartup);
+    void setCheckForUpdatesOnStartup(const bool& checkForUpdatesOnStartup);
     void setAlwaysShowSystemTrayIcon(const bool& alwaysShowSystemTrayIcon);
     void setCloseToSystemTrayIcon(const bool& closeToSystemTrayIcon);
+
     void setUnsavedChanges(const bool& unsavedChanges);
     void setSelectedDefaultProfileIndex(const int& selectedDefaultProfileIndex);
 
@@ -92,7 +100,7 @@ public slots:
     void load();
     void save();
 
-    void checkForUpdates();
+    void checkForUpdates(const bool& quiet = false);
 
     void setCheckForUpdatesButtonEnabled(const bool& checkForUpdatesButtonEnabled);
 
@@ -108,10 +116,13 @@ private:
     QColor m_accentColour;
     bool m_startOnBoot;
     bool m_applyDefaultProfileOnStartup;
+    bool m_checkForUpdatesOnStartup;
     bool m_alwaysShowSystemTrayIcon;
     bool m_closeToSystemTrayIcon;
+
     int m_selectedDefaultProfileIndex;
     bool m_unsavedChanges;
+    bool m_checkForUpdatesQuietMode;
     bool m_checkForUpdatesButtonEnabled;
 
     void applyVisualSettings();
