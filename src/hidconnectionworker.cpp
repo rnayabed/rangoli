@@ -20,6 +20,8 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
+#include "keyboardconfiguratorcontroller.h"
+
 using namespace Qt::Literals::StringLiterals;
 
 HIDConnectionWorker::HIDConnectionWorker(QObject *parent)
@@ -39,11 +41,6 @@ void HIDConnectionWorker::init()
 {
     m_HIDInitSuccessful = ! hid_init();
 
-    if (m_HIDInitSuccessful)
-    {
-        registerAllKeyboards();
-    }
-
     emit initDone(m_HIDInitSuccessful);
 }
 
@@ -53,43 +50,49 @@ void HIDConnectionWorker::refreshKeyboards(QPointer<KeyboardModel> connectedKeyb
 
     struct hid_device_info* devIterator = devs;
 
-    QList<quint16> disconnectedHIDPIDs = connectedKeyboards->keyboardPIDs();
-    QList<quint16> connectedHIDPIDs;
+    QList<KeyboardUSBID> disconnectedHIDPIDs = connectedKeyboards->keyboardUSBIDs();
+    QList<KeyboardUSBID> connectedHIDPIDs;
 
     while (devIterator)
     {
-        if (m_allKeyboardsVID==devIterator->vendor_id && m_allKeyboardsPIDs.contains(devIterator->product_id)
+        auto usbID = KeyboardUSBID{devIterator->vendor_id, devIterator->product_id};
+
+        QFile configFile{QStringLiteral("keyboards/%1/configs/%2.json")
+                    .arg(QString::number(devIterator->vendor_id, 16),
+                         QString::number(devIterator->product_id, 16))};
+
+        if (configFile.exists()
         #ifdef Q_OS_WIN
                 && QString(devIterator->path).contains(u"&Col05"_s, Qt::CaseInsensitive)
         #else
                 && devIterator->usage == 0x0080 && devIterator->usage_page == 0x0001
         #endif
-                && !connectedHIDPIDs.contains(devIterator->product_id))
+                && !connectedHIDPIDs.contains(usbID))
         {
-            connectedHIDPIDs << devIterator->product_id;
+            connectedHIDPIDs << usbID;
 
-            if (disconnectedHIDPIDs.contains(devIterator->product_id))
+            if (disconnectedHIDPIDs.contains(usbID))
             {
-                disconnectedHIDPIDs.removeAll(devIterator->product_id);
+                disconnectedHIDPIDs.removeAll(usbID);
                 continue;
             }
 
-            QFile configFile{QStringLiteral("keyboards/configs/%1.json")
-                        .arg(QString::number(devIterator->product_id, 16))};
-
             if (!configFile.open(QIODevice::ReadOnly))
             {
-                emit fatalErrorOccured(QString(tr("Unable to open configuration file for keyboard with pid '%1'."))
-                                      .arg(QString::number(devIterator->product_id, 16)));
+                emit fatalErrorOccured(QString(tr("Unable to open configuration file of keyboard with VID '%1' and PID '%2'."))
+                                      .arg(QString::number(devIterator->vendor_id, 16),
+                                           QString::number(devIterator->product_id, 16)));
 
                 return;
             }
 
-            if (!QFile(QStringLiteral("keyboards/images/%1.png")
-                        .arg(QString::number(devIterator->product_id, 16))).exists())
+            if (!QFile(QStringLiteral("keyboards/%1/images/%2.png")
+                       .arg(QString::number(devIterator->vendor_id, 16),
+                            QString::number(devIterator->product_id, 16))).exists())
             {
-                emit fatalErrorOccured(QString(tr("Cannot find image for keyboard with pid '%1'."))
-                                      .arg(QString::number(devIterator->product_id, 16)));
+                emit fatalErrorOccured(QString(tr("Cannot find image of keyboard with VID '%1' and PID '%2'."))
+                                      .arg(QString::number(devIterator->vendor_id, 16),
+                                           QString::number(devIterator->product_id, 16)));
 
                 return;
             }
@@ -142,9 +145,8 @@ void HIDConnectionWorker::refreshKeyboards(QPointer<KeyboardModel> connectedKeyb
                 keys << ll;
             }
 
-
             emit keyboardConnected(
-                        Keyboard { devIterator->product_id,
+                        Keyboard { usbID,
                                    QString(devIterator->path), name,
                                    keys, configObj["rgb"].toBool(), keyMapEnabled,
                                    topObj[0].toInt(), topObj[1].toInt(),
@@ -193,33 +195,4 @@ void HIDConnectionWorker::sendData(const QString &path, unsigned char** buffers,
     emit dataSentSuccessfully();
 
     hid_close(handle);
-}
-
-void HIDConnectionWorker::registerAllKeyboards()
-{
-    m_allKeyboardsPIDs.clear();
-
-    QFile listFile{"keyboards/list.json"};
-
-    if (!listFile.open(QIODevice::ReadOnly))
-    {
-        emit fatalErrorOccured(tr("Unable to open keyboards list."));
-
-        return;
-    }
-
-    QByteArray lfBytes = listFile.readAll();
-
-    QJsonDocument listDocument{QJsonDocument::fromJson(lfBytes)};
-
-    QJsonObject listObj = listDocument.object();
-
-    m_allKeyboardsVID = listObj["vid"].toString().toInt(nullptr, 16);
-
-    for (auto&& keyboardObj : listObj["pids"].toArray())
-    {
-        m_allKeyboardsPIDs <<  keyboardObj.toString().toInt(nullptr, 16);
-    }
-
-    listFile.close();
 }

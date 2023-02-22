@@ -485,7 +485,9 @@ void KeyboardConfiguratorController::saveProfile()
 
     settings.endGroup();
 
-    settings.beginGroup(QString::number(selectedKeyboard().pid));
+    settings.beginGroup(QStringLiteral("%1:%2")
+                        .arg(QString::number(selectedKeyboard().id.vid),
+                             QString::number(selectedKeyboard().id.pid)));
 
     settings.setValue(u"brightness"_s, m_brightness);
     settings.setValue(u"animation"_s, m_animation);
@@ -655,7 +657,10 @@ void KeyboardConfiguratorController::loadProfileSettings()
 {
     QSettings settings;
 
-    settings.beginGroup(QStringLiteral("profiles/%1/%2").arg(getProfileID(), QString::number(selectedKeyboard().pid)));
+    settings.beginGroup(QStringLiteral("profiles/%1/%2:%3")
+                        .arg(getProfileID(),
+                             QString::number(selectedKeyboard().id.vid),
+                             QString::number(selectedKeyboard().id.pid)));
 
     setBrightness(settings.value(u"brightness"_s, 5).toUInt());
     setAnimation(settings.value(u"animation"_s, 3).toUInt());

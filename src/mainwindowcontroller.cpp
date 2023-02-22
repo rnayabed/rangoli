@@ -153,13 +153,13 @@ void MainWindowController::init()
 
     connect(&connection, &HIDConnection::keyboardConnected,
             this, [this](const Keyboard& keyboard){
-        m_connectedKeyboards->append(keyboard.pid, keyboard);
+        m_connectedKeyboards->append(keyboard);
         emit adjustOptionsSize(m_connectedKeyboards->rowCount());
     });
 
     connect(&connection, &HIDConnection::keyboardDisconnected,
-            this, [this](const quint16& pid){
-        m_connectedKeyboards->remove(pid);
+            this, [this](const KeyboardUSBID& id){
+        m_connectedKeyboards->remove(id);
         emit adjustOptionsSize(m_connectedKeyboards->rowCount());
     });
 

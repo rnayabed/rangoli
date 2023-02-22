@@ -40,7 +40,7 @@ signals:
     void refreshKeyboards(QPointer<KeyboardModel> connectedKeyboards);
 
     void keyboardConnected(const Keyboard& keyboard);
-    void keyboardDisconnected(const quint16& pid);
+    void keyboardDisconnected(const KeyboardUSBID& id);
 
     void keyboardsScanComplete();
 
