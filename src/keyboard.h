@@ -20,20 +20,22 @@
 #include <QPoint>
 
 #include "key.h"
+#include "keyboardusbid.h"
 
 struct Keyboard
 {
-    Keyboard(const unsigned short& pid,
+    Keyboard(const KeyboardUSBID& id,
              const QString& path, const QString& name,
              const QList<Key>& keys, const bool& rgb, const bool& keyMapEnabled,
              const int& topLeftX, const int& topLeftY,
              const int& bottomRightX, const int& bottomRightY);
     ~Keyboard();
 
-    QString imagePath;
-    unsigned short pid;
+    KeyboardUSBID id;
     QString path;
     QString name;
+    QString imagePath;
+
     QList<Key> keys;
 
     bool rgb;

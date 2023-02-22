@@ -25,7 +25,6 @@
 
 #include "keyboard.h"
 #include "keyboardmodel.h"
-#include "mainwindowcontroller.h"
 
 class HIDConnectionWorker : public QObject
 {
@@ -37,7 +36,7 @@ public:
 signals:
     void initDone(const bool& success);
     void keyboardConnected(const Keyboard& keyboard);
-    void keyboardDisconnected(const quint16& pid);
+    void keyboardDisconnected(const KeyboardUSBID& id);
     void keyboardsScanComplete();
     void dataSentSuccessfully();
     void failedToSendData(const QString& message);
@@ -52,10 +51,6 @@ public slots:
 
 private:
     bool m_HIDInitSuccessful;
-    qint16 m_allKeyboardsVID;
-    QList<quint16> m_allKeyboardsPIDs;
-
-    void registerAllKeyboards();
 };
 
 #endif // HIDCONNECTIONWORKER_H

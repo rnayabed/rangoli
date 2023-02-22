@@ -15,14 +15,15 @@
 
 #include <QDebug>
 
-Keyboard::Keyboard(const unsigned short &pid,
+Keyboard::Keyboard(const KeyboardUSBID &id,
                    const QString &path, const QString &name,
                     const QList<Key>& keys, const bool& rgb, const bool& keyMapEnabled,
                    const int& topLeftX, const int& topLeftY,
                    const int& bottomRightX, const int& bottomRightY)
-    : imagePath{QStringLiteral("file:keyboards/images/%1.png").arg(QString::number(pid, 16))},
-      pid{pid},
+    : id{id},
       path{path}, name{name},
+      imagePath{QStringLiteral("file:keyboards/%1/images/%2.png")
+                .arg(QString::number(id.vid, 16), QString::number(id.pid, 16))},
       keys{keys}, rgb{rgb}, keyMapEnabled{keyMapEnabled},
       topLeftX{topLeftX}, topLeftY{topLeftY},
       bottomRightX{bottomRightX}, bottomRightY{bottomRightY}

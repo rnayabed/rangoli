@@ -18,21 +18,26 @@ KeyboardModel::KeyboardModel(QObject *parent)
     : QAbstractListModel(parent)
 {}
 
-void KeyboardModel::append(const quint16& pid, const Keyboard& keyboard)
+void KeyboardModel::append(const Keyboard& keyboard)
 {
     beginInsertRows(QModelIndex(), m_keyboards.size(), m_keyboards.size());
-    m_keyboardPIDs << pid;
+    m_keyboardUSBIDs << keyboard.id;
     m_keyboards << keyboard;
     endInsertRows();
 }
 
-void KeyboardModel::remove(const quint16& pid)
+void KeyboardModel::remove(const KeyboardUSBID& id)
 {
-    auto index = m_keyboardPIDs.indexOf(pid);
-    beginRemoveRows(QModelIndex(), index, index);
-    m_keyboardPIDs.removeAt(index);
-    m_keyboards.removeAt(index);
-    endRemoveRows();
+    for (int i = 0; i < m_keyboardUSBIDs.size(); i++)
+    {
+        if (m_keyboardUSBIDs.at(i) == id)
+        {
+            beginRemoveRows(QModelIndex(), i, i);
+            m_keyboardUSBIDs.removeAt(i);
+            m_keyboards.removeAt(i);
+            endRemoveRows();
+        }
+    }
 }
 
 int KeyboardModel::rowCount(const QModelIndex &parent) const
@@ -69,9 +74,9 @@ QHash<int, QByteArray> KeyboardModel::roleNames() const
     return roles;
 }
 
-const QList<quint16> &KeyboardModel::keyboardPIDs()
+const QList<KeyboardUSBID> &KeyboardModel::keyboardUSBIDs()
 {
-    return m_keyboardPIDs;
+    return m_keyboardUSBIDs;
 }
 
 const QList<Keyboard> &KeyboardModel::keyboards()

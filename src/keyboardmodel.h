@@ -30,8 +30,8 @@ public:
 
     explicit KeyboardModel(QObject* parent = nullptr);
 
-    void append(const quint16& pid, const Keyboard& keyboard);
-    void remove(const quint16& pid);
+    void append(const Keyboard& keyboard);
+    void remove(const KeyboardUSBID& id);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
@@ -39,11 +39,11 @@ public:
 
     QHash<int, QByteArray> roleNames() const override;
 
-    const QList<quint16>& keyboardPIDs();
+    const QList<KeyboardUSBID>& keyboardUSBIDs();
     const QList<Keyboard>& keyboards();
 
 private:
-    QList<quint16> m_keyboardPIDs;
+    QList<KeyboardUSBID> m_keyboardUSBIDs;
     QList<Keyboard> m_keyboards;
 };
 

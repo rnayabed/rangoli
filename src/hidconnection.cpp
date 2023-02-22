@@ -33,8 +33,8 @@ HIDConnection::HIDConnection(QObject *parent)
     });
 
     connect(m_worker, &HIDConnectionWorker::keyboardDisconnected,
-            this, [this](const int& pid){
-        emit keyboardDisconnected(pid);
+            this, [this](const KeyboardUSBID& id){
+        emit keyboardDisconnected(id);
     });
 
     connect(m_worker, &HIDConnectionWorker::keyboardsScanComplete,

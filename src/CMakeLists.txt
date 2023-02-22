@@ -16,6 +16,7 @@ set(SOURCE_LIST
     resources.qrc
     key.h key.cpp
     keyboard.h keyboard.cpp
+    keyboardusbid.h keyboardusbid.cpp
     profile.h profile.cpp
     mode.h mode.cpp
     hidconnection.h hidconnection.cpp

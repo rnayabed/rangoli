@@ -13,11 +13,11 @@ GNU General Public License for more details.
 
 cmake_minimum_required(VERSION 3.16)
 
-set(VERSION 1.0)
+set(VERSION 2.0)
 
 project(rangoli VERSION ${VERSION} LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_AUTOMOC ON)
