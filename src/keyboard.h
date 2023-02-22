@@ -20,14 +20,7 @@
 #include <QPoint>
 
 #include "key.h"
-
-struct KeyboardUSBID
-{
-    unsigned short vid;
-    unsigned short pid;
-
-    bool operator==(const KeyboardUSBID&) const = default;
-};
+#include "keyboardusbid.h"
 
 struct Keyboard
 {
