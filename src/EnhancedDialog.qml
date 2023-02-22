@@ -41,6 +41,8 @@ Dialog
     closePolicy: Popup.NoAutoClose
     title: controller.title
 
+    width: Math.min(400, implicitWidth)
+
     Label {
         anchors.fill: parent
         wrapMode: Label.Wrap

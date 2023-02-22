@@ -12,11 +12,11 @@
  */
 
 #include "mainwindowcontroller.h"
-#include "settingscontroller.h"
-#include "hidconnection.h"
 #include <QFile>
 #include <QProcess>
 #include <QDesktopServices>
+#include "settingscontroller.h"
+#include "hidconnection.h"
 
 using namespace Qt::Literals::StringLiterals;
 
@@ -187,19 +187,40 @@ void MainWindowController::init()
 
 
 #ifdef Q_OS_LINUX
-    QSettings settings;
-
-    bool udevRulesWritten = settings
-            .value(QStringLiteral("udev_rules_written/%1")
-                   .arg(QString::number(VERSION)),false).toBool();
-
-    if (!QFile::exists(QStringLiteral(LINUX_UDEV_RULES_PATH)) || !udevRulesWritten)
+    if (!QFile::exists(QStringLiteral(LINUX_UDEV_RULES_PATH))
+            || !m_settingsController->udevRulesWritten())
     {
         emit openLinuxUdevPopup();
     }
 #endif
 
-    if(m_settingsController->checkForUpdatesOnStartup())
+    if(m_settingsController->firstTimeUse())
+    {
+        EnhancedDialog d{
+            tr("Check for updates on startup?"),
+            tr("Would you like to check for updates on startup?\n"
+               "No user data is collected whatsoever.\n\n"
+               "You can always change this in settings."),
+            EnhancedDialog::ButtonsType::YES_NO
+        };
+
+        d.setOnAccepted([m_settingsController](){
+            m_settingsController->setCheckForUpdatesOnStartup(true);
+            m_settingsController->checkForUpdates(true);
+        });
+
+        d.setOnRejected([m_settingsController](){
+            m_settingsController->setCheckForUpdatesOnStartup(false);
+        });
+
+        d.setOnClosed([m_settingsController](){
+            m_settingsController->save();
+            m_settingsController->setFirstTimeUse(false);
+        });
+
+        emit loadEnhancedDialog(d);
+    }
+    else if(m_settingsController->checkForUpdatesOnStartup())
     {
         m_settingsController->checkForUpdates(true);
     }
@@ -384,9 +405,10 @@ void MainWindowController::launchLinuxUdevWriter()
                                         tr("udev rules have been applied and reloaded! Enjoy Rangoli!")
                                     });
 
-            QSettings settings;
-            settings.remove(u"udev_rules_written"_s);
-            settings.setValue(QStringLiteral("udev_rules_written/%1").arg(QString::number(VERSION)), true);
+            qvariant_cast<SettingsController*>
+                        (qmlEngine(this)
+                         ->rootContext()
+                         ->contextProperty(u"settingsController"_s))->setUdevRulesWritten(true);
         }
         else if (newExitCode == exitKeyboardReadFailed)
         {

@@ -84,6 +84,32 @@ bool &SettingsController::closeToSystemTrayIcon()
     return m_closeToSystemTrayIcon;
 }
 
+bool SettingsController::udevRulesWritten()
+{
+    QSettings settings;
+    return settings.value(QStringLiteral("udev_rules_written/%1")
+                          .arg(QString::number(VERSION)),false).toBool();
+}
+
+void SettingsController::setUdevRulesWritten(const bool& written)
+{
+    QSettings settings;
+    settings.remove(u"udev_rules_written"_s);
+    settings.setValue(QStringLiteral("udev_rules_written/%1").arg(QString::number(VERSION)), written);
+}
+
+bool SettingsController::firstTimeUse()
+{
+    QSettings settings;
+    return settings.value(u"first_time_use"_s,true).toBool();
+}
+
+void SettingsController::setFirstTimeUse(const bool &firstTimeUse)
+{
+    QSettings settings;
+    settings.setValue(u"first_time_use"_s, firstTimeUse);
+}
+
 ProfileModel *SettingsController::profiles()
 {
     return m_profiles.get();
@@ -250,7 +276,7 @@ void SettingsController::load()
     setSelectedDefaultProfileIndex(m_profiles->defaultProfileIndex());
     setStartOnBoot(settings.value(u"start_on_boot"_s, false).toBool());
     setApplyDefaultProfileOnStartup(settings.value(u"apply_default_profile_on_startup"_s, false).toBool());
-    setCheckForUpdatesOnStartup(settings.value(u"check_for_updates_on_startup"_s, true).toBool());
+    setCheckForUpdatesOnStartup(settings.value(u"check_for_updates_on_startup"_s, false).toBool());
     setAlwaysShowSystemTrayIcon(settings.value(u"system_tray/always"_s, true).toBool());
     setCloseToSystemTrayIcon(settings.value(u"system_tray/close_to"_s, true).toBool());
 

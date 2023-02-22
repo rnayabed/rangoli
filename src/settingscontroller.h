@@ -55,6 +55,12 @@ public:
     bool& alwaysShowSystemTrayIcon();
     bool& closeToSystemTrayIcon();
 
+    bool udevRulesWritten();
+    void setUdevRulesWritten(const bool& written);
+
+    bool firstTimeUse();
+    void setFirstTimeUse(const bool& firstTimeUse);
+
     ProfileModel* profiles();
     int& selectedDefaultProfileIndex();
     QString version();

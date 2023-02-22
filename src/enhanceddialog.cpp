@@ -61,32 +61,21 @@ void EnhancedDialog::setButtonsType(const ButtonsType &buttonsType)
     m_buttonsType = buttonsType;
 }
 
-void EnhancedDialog::wait()
-{
-    //m_eventLoop.exec();
-}
-
 void EnhancedDialog::onClosed()
 {
     if(m_onClosed)
         m_onClosed();
-
-    //m_eventLoop.exit();
 }
 
 void EnhancedDialog::onAccepted()
 {
     if(m_onAccepted)
         m_onAccepted();
-
-    //m_eventLoop.exit();
 }
 
 void EnhancedDialog::onRejected()
 {
     if(m_onRejected)
         m_onRejected();
-
-    //m_eventLoop.exit();
 }
 

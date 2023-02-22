@@ -45,7 +45,6 @@ public:
     void setOnAccepted(std::function<void()> onAccepted);
     void setOnRejected(std::function<void()> onRejected);
     void setButtonsType(const EnhancedDialog::ButtonsType& buttonsType);
-    void wait();
 
 public slots:
     void onClosed();
