@@ -36,7 +36,6 @@ add_compile_definitions(
     AUTHOR_UPI="9903299105@upi"
     AUTHOR_EMAIL="debayansutradhar3@gmail.com"
     GITHUB_RELEASES="https://api.github.com/repos/rnayabed/rangoli/releases"
-    KEYBOARDS_LIST_PATH="keyboards/list.json"
     LINUX_UDEV_RULE_WRITER_NAME="${LINUX_UDEV_RULE_WRITER_NAME}"
     LINUX_UDEV_RULES_PATH="/etc/udev/rules.d/71-rangoli.rules"
     LINUX_TERMINAL="xterm"

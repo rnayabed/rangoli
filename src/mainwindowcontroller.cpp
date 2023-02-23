@@ -329,7 +329,7 @@ void MainWindowController::launchLinuxUdevWriter()
     }
 
     QString exitOK{u"0"_s};
-    QString exitKeyboardReadFailed{u"1"_s};
+    QString exitKeyboardsReadFailed{u"1"_s};
     QString exitRuleWriteFailed{u"2"_s};
 
     QString oldID;
@@ -354,7 +354,7 @@ void MainWindowController::launchLinuxUdevWriter()
 
     QPointer<QProcess> udevWriter{new QProcess{this}};
     connect(udevWriter, &QProcess::finished, this,
-            [this, exitFile, exitOK, exitKeyboardReadFailed, exitRuleWriteFailed, oldID]
+            [this, exitFile, exitOK, exitKeyboardsReadFailed, exitRuleWriteFailed, oldID]
             (int exitCode, QProcess::ExitStatus exitStatus) {
         Q_UNUSED(exitStatus)
         Q_UNUSED(exitCode)
@@ -410,11 +410,11 @@ void MainWindowController::launchLinuxUdevWriter()
                          ->rootContext()
                          ->contextProperty(u"settingsController"_s))->setUdevRulesWritten(true);
         }
-        else if (newExitCode == exitKeyboardReadFailed)
+        else if (newExitCode == exitKeyboardsReadFailed)
         {
             emit loadEnhancedDialog(EnhancedDialog {
                                         tr("Error"),
-                                        tr("Malformed output from udev writer.")
+                                        tr("Failed to read keyboards information")
                                     });
         }
         else if (newExitCode == exitRuleWriteFailed)
@@ -458,9 +458,9 @@ void MainWindowController::launchLinuxUdevWriter()
                           QStringLiteral("echo -n \"\\033]0;%1\\007\" && sudo ./%2 %3 %4 %5 %6 %7 %8")
                           .arg(tr("Rangoli - Create udev Rules"),
                                QStringLiteral(LINUX_UDEV_RULE_WRITER_NAME),
-                               QStringLiteral(KEYBOARDS_LIST_PATH),
+                               QStringLiteral("%1/keyboards").arg(QDir::currentPath()),
                                QStringLiteral(LINUX_UDEV_RULES_PATH),
-                               exitFile, exitOK, exitKeyboardReadFailed, exitRuleWriteFailed));
+                               exitFile, exitOK, exitKeyboardsReadFailed, exitRuleWriteFailed));
 }
 
 void MainWindowController::setLinuxUdevPopupProceedButtonEnabled(const bool &linuxUdevPopupProceedButtonEnabled)
