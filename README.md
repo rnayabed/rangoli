@@ -73,6 +73,12 @@ Full list of supported keyboards can be found [here](https://github.com/rnayabed
 
 ### Compile, build and run
 
+It's important to checkout the repository with submodules. If `hidapi/` directory is empty, run this to populate it:
+
+```
+git submodule update --init --recursive
+```
+
 #### Linux / MacOS
 
 ```
