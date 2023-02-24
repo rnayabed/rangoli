@@ -42,7 +42,7 @@ try:
                 k_p = f'{p}/{k_f}'
                 if os.path.isfile(k_p) and k_f.endswith('.json'):
                     pid = k_f[:k_f.index('.json')]
-                    content += f'KERNEL=="hidraw*", ATTRS{{idVendor}}=="{vid}", ATTRS{{idProduct}}=="{("0" * (4 - len(pid))) + pid}", TAG+="uaccess"\n'
+                    content += f'KERNEL=="hidraw*", ATTRS{{idVendor}}=="{("0" * (4 - len(vid))) + vid}", ATTRS{{idProduct}}=="{("0" * (4 - len(pid))) + pid}", TAG+="uaccess"\n'
 except:
     exit(exit_keyboards_read_failed)
 
