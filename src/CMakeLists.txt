@@ -64,6 +64,8 @@ set_target_properties(rangoli PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
+
+# Add extra compiler flags supported by GCC
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     target_compile_options(rangoli PRIVATE -Wpessimizing-move -Wpedantic)
 endif()
@@ -71,23 +73,32 @@ endif()
 target_compile_options(rangoli PRIVATE -Wall -Wextra -Werror)
 
 target_link_libraries(rangoli
-    PRIVATE Qt6::Quick
+    PRIVATE Qt6::Quick Qt6::Svg
     PRIVATE hidapi::hidapi)
 
 install(TARGETS rangoli
-    BUNDLE DESTINATION .
+    BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
+
+# Move keyboards folder to build/install directory
 add_custom_command(
     TARGET rangoli POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
     "${CMAKE_SOURCE_DIR}/keyboards"
     "${CMAKE_CURRENT_BINARY_DIR}/keyboards")
 
-install(DIRECTORY "${CMAKE_SOURCE_DIR}/keyboards"
-    DESTINATION "${CMAKE_INSTALL_PREFIX}/bin")
+if (APPLE)
+    install(DIRECTORY "${CMAKE_SOURCE_DIR}/keyboards"
+        DESTINATION ${CMAKE_INSTALL_PREFIX})
+else()
+    install(DIRECTORY "${CMAKE_SOURCE_DIR}/keyboards"
+        DESTINATION ${CMAKE_INSTALL_BINDIR})
+endif()
 
-if (UNIX AND NOT APPLE)
+
+# Linux requires additional udev writer script
+if (CMAKE_SYSTEM_NAME MATCHES "Linux")
     add_custom_command(
         TARGET rangoli POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
@@ -95,9 +106,11 @@ if (UNIX AND NOT APPLE)
         "${CMAKE_CURRENT_BINARY_DIR}")
 
     install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/${LINUX_UDEV_RULE_WRITER_NAME}"
-        DESTINATION "${CMAKE_INSTALL_PREFIX}/bin")
+        DESTINATION ${CMAKE_INSTALL_BINDIR})
 endif()
 
+
+# Use Qt Deployment API. Not yet supported on Linux
 if (WIN32 OR APPLE)
     qt_generate_deploy_qml_app_script(
         TARGET rangoli
