@@ -73,13 +73,16 @@ Full list of supported keyboards can be found [here](https://github.com/rnayabed
 
 ### Compile, build and run
 
-It's important to checkout the repository with submodules. If `hidapi/` directory is empty, run this to populate it:
+Rangoli uses [hidapi](https://github.com/libusb/hidapi). It has been included as a submodule.
+Therefore, you need to clone the repository with `--recurse-submodules`.
+
+In case you forget to do that, you need to run the following command:
 
 ```
-git submodule update --init --recursive
+git submodule update --init
 ```
 
-#### Linux / MacOS
+### Linux / MacOS
 
 ```
 cmake -B build -G Ninja -S . -DCMAKE_BUILD_TYPE=Release
