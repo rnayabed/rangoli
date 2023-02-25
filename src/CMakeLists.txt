@@ -98,7 +98,7 @@ endif()
 
 
 # Linux requires additional udev writer script
-if (UNIX AND NOT APPLE)
+if (CMAKE_SYSTEM_NAME MATCHES "Linux")
     add_custom_command(
         TARGET rangoli POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy

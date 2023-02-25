@@ -14,7 +14,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Dialogs
-import QtQuick.Layouts
+import QtQuick.Layouts // QTBUG-111187
 import QtQuick.Controls.Material
 import QtQuick.Controls.Material.impl
 

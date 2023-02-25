@@ -17,7 +17,6 @@ import QtQuick.Controls.Material
 import QtQuick.Controls.Material.impl
 import Qt.labs.platform
 import QtQml.Models
-import QtQml.WorkerScript
 
 import Rangoli
 
