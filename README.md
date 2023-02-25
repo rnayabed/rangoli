@@ -71,10 +71,14 @@ Full list of supported keyboards can be found [here](https://github.com/rnayabed
 - GCC >= 9.4.0
 - Ninja >= 1.10.2
 
-### Compile, build and run
+### Clone
 
 Rangoli uses [hidapi](https://github.com/libusb/hidapi). It has been included as a submodule.
 Therefore, you need to clone the repository with `--recurse-submodules`.
+
+```
+git clone --recurse-submodules https://github.com/rnayabed/rangoli.git
+```
 
 In case you forget to do that, you need to run the following command:
 
@@ -82,7 +86,7 @@ In case you forget to do that, you need to run the following command:
 git submodule update --init
 ```
 
-### Linux / MacOS
+### Compile for Linux / MacOS
 
 ```
 cmake -B build -G Ninja -S . -DCMAKE_BUILD_TYPE=Release
@@ -90,7 +94,7 @@ cmake --build build
 ./build/src/rangoli
 ```
 
-### Windows
+### Compile for Windows
 
 ```
 cmake -B build -G Ninja -S . -DCMAKE_BUILD_TYPE=Release
