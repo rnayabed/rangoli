@@ -62,7 +62,7 @@ jobs:
           chmod a+x installer/packages/${INSTALLER_PACKAGE_NAME}/data/bin/udev-rule-writer.sh
       - name: Cleanup directories
         run: |
-          rm -rf installer/packages/${INSTALLER_PACKAGE_NAME}/data/lib
+          rm -rf installer/packages/${INSTALLER_PACKAGE_NAME}/data/lib64
       - name: Create output directory
         run: |
           mkdir installer/output
@@ -183,7 +183,6 @@ jobs:
           tools: 'tools_ninja tools_ifw'          
       - name: Build
         run: |
-
           export PATH=$PATH:${IQTA_TOOLS}/Ninja/
 
           cmake -B build -S . -G Ninja \
@@ -195,7 +194,7 @@ jobs:
           cmake --install build
       - name: Cleanup directories
         run: |
-          rm -rf installer/packages/${INSTALLER_PACKAGE_NAME}/data/lib
+          rm -rf installer/packages/${INSTALLER_PACKAGE_NAME}/data/lib64
           rm -rf installer/packages/${INSTALLER_PACKAGE_NAME}/data/translations
       - name: Create output directory
         run: |
