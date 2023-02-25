@@ -199,12 +199,6 @@ jobs:
       - name: Create output directory
         run: |
           mkdir installer/output
-      - name: Create portable
-        run: |
-          cd installer/packages/${INSTALLER_PACKAGE_NAME}/
-          mv data rangoli-portable-macos
-          zip -r ${GITHUB_WORKSPACE}/installer/output/rangoli-portable-macos.zip rangoli-portable-macos
-          mv rangoli-portable-macos data
       - name: Create installer
         run: |
           ${IQTA_TOOLS}/QtInstallerFramework/${QT_IFW_VERSION}/bin/binarycreator \
@@ -212,8 +206,13 @@ jobs:
           -p installer/packages \
           -c installer/config/config.xml \
           rangoli-installer-macos.app
-          zip -r rangoli-installer-macos.app.zip rangoli-installer-macos.app
+          zip -ry rangoli-installer-macos.app.zip rangoli-installer-macos.app
           mv rangoli-installer-macos.app.zip installer/output/
+      - name: Create portable
+        run: |
+          cd installer/packages/${INSTALLER_PACKAGE_NAME}/
+          mv data rangoli-portable-macos
+          zip -ry ${GITHUB_WORKSPACE}/installer/output/rangoli-portable-macos.zip rangoli-portable-macos
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
