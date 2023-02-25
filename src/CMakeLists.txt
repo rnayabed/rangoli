@@ -73,7 +73,7 @@ endif()
 target_compile_options(rangoli PRIVATE -Wall -Wextra -Werror)
 
 target_link_libraries(rangoli
-    PRIVATE Qt6::Quick
+    PRIVATE Qt6::Quick Qt6::Svg
     PRIVATE hidapi::hidapi)
 
 install(TARGETS rangoli
