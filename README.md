@@ -49,16 +49,14 @@ Therefore, instead of changing the keyboard firmware, this software pretends to 
 - Per key LED Brightness, Animation and Sleep
 
 ## Planned features
+- Macros
 - Music Mode
 - Custom RGB Patterns
 
 ## Features that will not be worked on
-- Macros. This is something that can be done directly on OS level. There are tools like [AutoHotkey](https://www.autohotkey.com/) and [AutoKey](https://github.com/autokey/autokey) that does this far better than RK Software itself.
 - Keyboard Firmware update. I was not able to reverse engineer this aspect of the RK Software because the function itself is broken.
 
 ## Supported Keyboards
-
-Rangoli has been tested to be compliant with RK Software version 3.9.
 
 Full list of supported keyboards can be found [here](https://github.com/rnayabed/rangoli/blob/master/supported-keyboards.md).
 
@@ -68,7 +66,7 @@ Full list of supported keyboards can be found [here](https://github.com/rnayabed
 
 - Qt >= 6.4
 - CMake >= 3.16
-- GCC >= 9.4.0
+- GCC >= 9.4.0 / Clang >= 5
 - Ninja >= 1.10.2
 
 ### Clone
