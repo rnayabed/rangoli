@@ -64,7 +64,6 @@ set_target_properties(rangoli PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
-
 # Add extra compiler flags supported by GCC
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     target_compile_options(rangoli PRIVATE -Wpessimizing-move -Wpedantic)
