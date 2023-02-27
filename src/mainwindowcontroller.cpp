@@ -192,7 +192,7 @@ void MainWindowController::init()
                        tr("If you are using the portable version, you need to "
                           "whitelist the app from quarantine by running "
                           "the following command:\n"
-                          "xattr -dr com.apple.qurantine <path to rangoli.app>\n\n"
+                          "xattr -dr com.apple.quarantine <path to rangoli.app>\n\n"
                           "If you are using Rangoli as an installed applcation, "
                           "you need to re-install it."));
 #else

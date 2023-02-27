@@ -277,8 +277,8 @@ void SettingsController::load()
     setStartOnBoot(settings.value(u"start_on_boot"_s, false).toBool());
     setApplyDefaultProfileOnStartup(settings.value(u"apply_default_profile_on_startup"_s, false).toBool());
     setCheckForUpdatesOnStartup(settings.value(u"check_for_updates_on_startup"_s, false).toBool());
-    setAlwaysShowSystemTrayIcon(settings.value(u"system_tray/always"_s, true).toBool());
-    setCloseToSystemTrayIcon(settings.value(u"system_tray/close_to"_s, true).toBool());
+    setAlwaysShowSystemTrayIcon(settings.value(u"system_tray_icon/always"_s, true).toBool());
+    setCloseToSystemTrayIcon(settings.value(u"system_tray_icon/close_to"_s, true).toBool());
 
     setUnsavedChanges(false);
     applyVisualSettings();
@@ -330,8 +330,8 @@ void SettingsController::save()
     settings.setValue(u"start_on_boot"_s, m_startOnBoot);
     settings.setValue(u"apply_default_profile_on_startup"_s, m_applyDefaultProfileOnStartup);
     settings.setValue(u"check_for_updates_on_startup"_s, m_checkForUpdatesOnStartup);
-    settings.setValue(u"system_tray/always"_s, m_alwaysShowSystemTrayIcon);
-    settings.setValue(u"system_tray/close_to"_s, m_closeToSystemTrayIcon);
+    settings.setValue(u"system_tray_icon/always"_s, m_alwaysShowSystemTrayIcon);
+    settings.setValue(u"system_tray_icon/close_to"_s, m_closeToSystemTrayIcon);
 
     setUnsavedChanges(false);
     applyVisualSettings();
