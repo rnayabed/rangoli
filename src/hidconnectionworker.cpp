@@ -46,7 +46,7 @@ void HIDConnectionWorker::init()
 
 void HIDConnectionWorker::refreshKeyboards(QPointer<KeyboardModel> connectedKeyboards)
 {
-    struct hid_device_info* devs = hid_enumerate(0x258A, 0x0);
+    struct hid_device_info* devs = hid_enumerate(0x0, 0x0);
 
     struct hid_device_info* devIterator = devs;
 
