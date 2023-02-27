@@ -32,8 +32,13 @@ bool KeyCodeModelProxy::filterAcceptsRow(int source_row, const QModelIndex &sour
         return false;
     }
 
-#ifndef Q_OS_WINDOWS
+#if defined(Q_OS_LINUX)
     if (keyCode == KeyCode::Code::Shortcut_Explorer)
+    {
+        return false;
+    }
+#elif defined(Q_OS_MACOS)
+    if (KeyCode::isShortcutKey(keyCode))
     {
         return false;
     }

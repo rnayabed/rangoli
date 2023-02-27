@@ -362,13 +362,20 @@ Item {
 
                         width: 140
 
-                        model: [
-                            qsTr("All"),
-                            qsTr("Keyboard Keys"),
-                            qsTr("Combination Keys"),
-                            qsTr("Multimedia"),
-                            qsTr("Shortcut")
-                        ]
+                        model: ListModel {
+                            ListElement { text: qsTr("All") }
+                            ListElement { text: qsTr("Keyboard Keys") }
+                            ListElement { text: qsTr("Combination Keys") }
+                            ListElement { text: qsTr("Multimedia") }
+
+                            Component.onCompleted: {
+                                if (Qt.platform.os !== "osx")
+                                {
+                                    append({ text: qsTr("Shortcut") })
+                                }
+                            }
+                        }
+
 
                         onCurrentIndexChanged: keyboardConfiguratorController.keyCodesProxy.setCurrentFilter(currentIndex)
                     }
