@@ -174,7 +174,17 @@ void HIDConnectionWorker::sendData(const QString &path, unsigned char** buffers,
 
     if (!handle)
     {
-        emit failedToSendData(tr("Failed to open keyboard device."));
+#ifdef Q_OS_MACOS
+        emit failedToSendData(tr("Insufficient Permissions.\n"
+                                 "You need to provide access to input devices. "
+                                 "This can be done by going to "
+                                 "Settings > Security & Privacy > Privacy > "
+                                 "Input Monitoring > Select Rangoli or add it's entry.\n\n"
+                                 "You will need to restart Rangoli for changes to take effect."));
+#else
+        emit failedToSendData(tr("Failed to open keyboard device. "
+                                 "Make sure you have sufficient permissions."));
+#endif
         return;
     }
 
@@ -183,7 +193,8 @@ void HIDConnectionWorker::sendData(const QString &path, unsigned char** buffers,
         if (hid_send_feature_report(handle, buffers[i], KeyboardConfiguratorController::BufferSize)
                 != KeyboardConfiguratorController::BufferSize)
         {
-            emit failedToSendData(tr("Failed to send feature report to keyboard."));
+            emit failedToSendData(tr("Failed to send feature report to keyboard. "
+                                     "Make sure you have sufficient permissions."));
             return;
         }
 
