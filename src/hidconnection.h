@@ -49,8 +49,6 @@ signals:
     void dataSentSuccessfully();
     void failedToSendData(const QString& message);
 
-    void fatalErrorOccured(const QString& message);
-
     void exit();
 
 

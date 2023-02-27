@@ -146,13 +146,11 @@ void MainWindowController::init()
         }
         else
         {
-            showFatalError(tr("Unable to initialise HID API. "
-                              "Please check if you have permissions and restart Rangoli. "
+            showFatalError(tr("Unable to initialise HID API"),
+                           tr("Please check if you have permissions and restart Rangoli. "
                               "The program will now exit."));
         }
     }, Qt::SingleShotConnection);
-
-    connect(&connection, &HIDConnection::fatalErrorOccured, this, &MainWindowController::showFatalError);
 
     connect(&connection, &HIDConnection::keyboardConnected,
             this, [this](const Keyboard& keyboard){
@@ -186,8 +184,27 @@ void MainWindowController::init()
         }, Qt::SingleShotConnection);
     }
 
-    connection.start();
+    QDir keyboards{u"keyboards"_s};
+    if (!keyboards.exists())
+    {
+#ifdef Q_OS_MACOS
+        showFatalError(tr("Keyboards folder not found"),
+                       tr("If you are using the portable version, you need to "
+                          "whitelist the app from quarantine by running "
+                          "the following command:\n"
+                          "xattr -dr com.apple.qurantine <path to rangoli.app>\n\n"
+                          "If you are using Rangoli as an installed applcation, "
+                          "you need to re-install it."));
+#else
+        showFatalError(tr("Keyboards folder not found"),
+                       tr("If you are using Rangoli as an installed applcation, "
+                          "you need to re-install it. Otherwise, please download "
+                          "Rangoli again."));
+#endif
+        return;
+    }
 
+    connection.start();
 
 #ifdef Q_OS_LINUX
     if (!QFile::exists(QStringLiteral(LINUX_UDEV_RULES_PATH))
@@ -486,9 +503,10 @@ void MainWindowController::openSupportedKeyboardsList()
     QDesktopServices::openUrl(QUrl(QStringLiteral(SUPPORTED_KEYBOARDS)));
 }
 
-void MainWindowController::showFatalError(const QString &message)
+void MainWindowController::showFatalError(const QString& title, const QString& message)
 {
-    EnhancedDialog d{tr("Fatal error occurred"), message};
+    EnhancedDialog d{title, message};
+
     d.setOnAccepted([this](){
         setCloseToSystemTrayIcon(false);
         quit();

@@ -42,19 +42,8 @@ int main(int argc, char *argv[])
 
     app.setWindowIcon(QIcon(Icons::get(Icons::Rangoli).remove(0,3)));
 
-
 #ifdef Q_OS_MACOS
-    QDir root {QStringLiteral("%1/../..").arg(app.applicationDirPath())};
-    if (root.dirName().endsWith(u".app"_s))
-    {
-        qDebug() << "Executed directly!";
-        QDir::setCurrent(root.absoluteFilePath(".."));
-    }
-    else
-    {
-        qDebug() << "Executed app bundle!";
-        QDir::setCurrent(app.applicationDirPath());
-    }
+    QDir::setCurrent(QStringLiteral("%1/../../..").arg(app.applicationDirPath()));
 #else
     QDir::setCurrent(app.applicationDirPath());
 #endif

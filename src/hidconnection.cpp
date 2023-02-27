@@ -55,11 +55,6 @@ HIDConnection::HIDConnection(QObject *parent)
         emit failedToSendData(message);
     });
 
-    connect(m_worker, &HIDConnectionWorker::fatalErrorOccured,
-            this, [this](const QString& message){
-        emit fatalErrorOccured(message);
-    });
-
     connect(this, &HIDConnection::exit,
             m_worker, &HIDConnectionWorker::exit);
 }

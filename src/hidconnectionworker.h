@@ -39,7 +39,6 @@ signals:
     void keyboardsScanComplete();
     void dataSentSuccessfully();
     void failedToSendData(const QString& message);
-    void fatalErrorOccured(const QString& message);
 
 public slots:
     void init();

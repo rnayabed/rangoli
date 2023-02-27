@@ -123,7 +123,7 @@ public slots:
     void openSupportedKeyboardsList();
 
 private slots:
-    void showFatalError(const QString& message);
+    void showFatalError(const QString& title, const QString& message);
 
 private:
     QPointer<KeyboardModel> m_connectedKeyboards;

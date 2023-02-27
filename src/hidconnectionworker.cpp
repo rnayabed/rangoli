@@ -59,8 +59,8 @@ void HIDConnectionWorker::refreshKeyboards(QPointer<KeyboardModel> connectedKeyb
         auto usbID = KeyboardUSBID{devIterator->vendor_id, devIterator->product_id};
 
         QFile configFile{QStringLiteral("keyboards/%1/configs/%2.json")
-                    .arg(QString::number(devIterator->vendor_id, 16),
-                         QString::number(devIterator->product_id, 16))};
+                    .arg(QString::number(usbID.vid, 16),
+                         QString::number(usbID.pid, 16))};
 
         if (configFile.exists()
         #ifdef Q_OS_WIN
@@ -80,20 +80,30 @@ void HIDConnectionWorker::refreshKeyboards(QPointer<KeyboardModel> connectedKeyb
 
             if (!configFile.open(QIODevice::ReadOnly))
             {
-                emit fatalErrorOccured(QString(tr("Unable to open configuration file of keyboard with VID '%1' and PID '%2'."))
-                                      .arg(QString::number(devIterator->vendor_id, 16),
-                                           QString::number(devIterator->product_id, 16)));
+                MainWindowController::showEnhancedDialog(
+                            this,
+                            EnhancedDialog {
+                                tr("Error"),
+                                tr("Unable to read configuration file of keyboard with VID '%1' and PID '%2'.")
+                                          .arg(QString::number(usbID.vid, 16),
+                                               QString::number(usbID.pid, 16))
+                            });
 
                 return;
             }
 
             if (!QFile(QStringLiteral("keyboards/%1/images/%2.png")
-                       .arg(QString::number(devIterator->vendor_id, 16),
-                            QString::number(devIterator->product_id, 16))).exists())
+                       .arg(QString::number(usbID.vid, 16),
+                            QString::number(usbID.pid, 16))).exists())
             {
-                emit fatalErrorOccured(QString(tr("Cannot find image of keyboard with VID '%1' and PID '%2'."))
-                                      .arg(QString::number(devIterator->vendor_id, 16),
-                                           QString::number(devIterator->product_id, 16)));
+                MainWindowController::showEnhancedDialog(
+                            this,
+                            EnhancedDialog {
+                                tr("Error"),
+                                tr("Unable to find image of keyboard with VID '%1' and PID '%2'.")
+                                          .arg(QString::number(usbID.vid, 16),
+                                               QString::number(usbID.pid, 16))
+                            });
 
                 return;
             }
