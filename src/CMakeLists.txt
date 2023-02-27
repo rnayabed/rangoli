@@ -38,8 +38,12 @@ set(SOURCE_LIST
     startatboot.h startatboot.cpp
 )
 
+set(MACOS_APP_ICON "${CMAKE_SOURCE_DIR}/icons/rangoli.icns")
+
 if (WIN32)
     list(APPEND SOURCE_LIST icon_windows.rc)
+elseif(APPLE)
+    list(APPEND SOURCE_LIST ${MACOS_APP_ICON})
 endif()
 
 qt_add_executable(rangoli ${SOURCE_LIST})
@@ -57,11 +61,18 @@ qt_add_qml_module(rangoli
 )
 
 set_target_properties(rangoli PROPERTIES
-    MACOSX_BUNDLE_GUI_IDENTIFIER io.github.rnayabed.rangoli
+    MACOSX_BUNDLE_BUNDLE_NAME Rangoli
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
+    MACOSX_BUNDLE_COPYRIGHT "Debayan Sutradhar"
+    MACOSX_BUNDLE_GUI_IDENTIFIER io.github.rnayabed.rangoli
+    MACOSX_BUNDLE_ICON_FILE rangoli.icns
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
+)
+
+set_source_files_properties(${MACOS_APP_ICON} PROPERTIES
+    MACOSX_PACKAGE_LOCATION "Resources"
 )
 
 # Add extra compiler flags supported by GCC
