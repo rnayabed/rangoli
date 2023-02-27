@@ -35,6 +35,15 @@ void MainWindowController::showEnhancedDialog(QObject* object, const EnhancedDia
              ->contextProperty(u"mainWindowController"_s))->loadEnhancedDialog(dialog);
 }
 
+QString MainWindowController::macOSPermissionNotice()
+{
+    return tr("You need to provide access to input devices. "
+              "This can be done by going to "
+              "Settings > Security & Privacy > Privacy > "
+              "Input Monitoring > Select Rangoli or add it's entry.\n\n"
+              "You will need to restart Rangoli for changes to take effect.");
+}
+
 const bool &MainWindowController::interruptClose()
 {
     return m_interruptClose;
@@ -190,6 +199,11 @@ void MainWindowController::init()
 
     if(m_settingsController->firstTimeUse())
     {
+
+#ifdef Q_OS_MACOS
+        emit loadEnhancedDialog(EnhancedDialog{tr("Notice"), macOSPermissionNotice()});
+#endif
+
         EnhancedDialog d{
             tr("Check for updates on startup?"),
             tr("Would you like to check for updates on startup?\n"

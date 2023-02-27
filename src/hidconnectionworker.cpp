@@ -21,6 +21,7 @@
 #include <QJsonArray>
 
 #include "keyboardconfiguratorcontroller.h"
+#include "mainwindowcontroller.h"
 
 using namespace Qt::Literals::StringLiterals;
 
@@ -175,12 +176,8 @@ void HIDConnectionWorker::sendData(const QString &path, unsigned char** buffers,
     if (!handle)
     {
 #ifdef Q_OS_MACOS
-        emit failedToSendData(tr("Insufficient Permissions.\n"
-                                 "You need to provide access to input devices. "
-                                 "This can be done by going to "
-                                 "Settings > Security & Privacy > Privacy > "
-                                 "Input Monitoring > Select Rangoli or add it's entry.\n\n"
-                                 "You will need to restart Rangoli for changes to take effect."));
+        emit failedToSendData(tr("Insufficient Permissions.\n%1")
+                              .arg(MainWindowController::macOSPermissionNotice()));
 #else
         emit failedToSendData(tr("Failed to open keyboard device. "
                                  "Make sure you have sufficient permissions."));

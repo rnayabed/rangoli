@@ -58,6 +58,8 @@ public:
         Dark
     };
 
+    static QString macOSPermissionNotice();
+
     const bool& interruptClose();
 
     const int& toolTipDelay();
