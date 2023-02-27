@@ -51,7 +51,6 @@ signals:
 
     void exit();
 
-
 public slots:
     void start();
     void stop();

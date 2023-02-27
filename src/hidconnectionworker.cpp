@@ -37,6 +37,7 @@ void HIDConnectionWorker::init()
     emit initDone(m_HIDInitSuccessful);
 }
 
+#include <QThread>
 void HIDConnectionWorker::exit()
 {
     if (m_HIDInitSuccessful)

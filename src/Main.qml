@@ -182,7 +182,7 @@ ApplicationWindow {
                 onTriggered: {
                     mainWindowController.closeToSystemTrayIcon = false
                     mainWindowController.interruptClose = false
-                    Qt.quit()
+                    mainWindowController.quit()
                 }
             }
         }
