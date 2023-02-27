@@ -49,7 +49,6 @@ class MainWindowController : public QObject
 
 public:
     explicit MainWindowController(QObject *parent = nullptr);
-    ~MainWindowController();
 
     static void showEnhancedDialog(QObject* object, const EnhancedDialog &dialog);
 

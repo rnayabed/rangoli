@@ -51,6 +51,9 @@ signals:
 
     void fatalErrorOccured(const QString& message);
 
+    void exit();
+
+
 public slots:
     void start();
     void stop();

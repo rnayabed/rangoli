@@ -27,12 +27,6 @@ MainWindowController::MainWindowController(QObject *parent)
       m_toolTipDelay{1000}, m_toolTipTimeout{15000}, m_linuxUdevPopupProceedButtonEnabled{true}
 {}
 
-MainWindowController::~MainWindowController()
-{
-    HIDConnection::getInstance().stop();
-    m_connectedKeyboards.clear();
-}
-
 void MainWindowController::showEnhancedDialog(QObject* object, const EnhancedDialog &dialog)
 {
     emit qvariant_cast<MainWindowController*>
@@ -229,6 +223,8 @@ void MainWindowController::init()
 void MainWindowController::quit()
 {
     setInterruptClose(false);
+    HIDConnection::getInstance().stop();
+    m_connectedKeyboards.clear();
     emit close();
 }
 

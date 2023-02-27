@@ -59,6 +59,9 @@ HIDConnection::HIDConnection(QObject *parent)
             this, [this](const QString& message){
         emit fatalErrorOccured(message);
     });
+
+    connect(this, &HIDConnection::exit,
+            m_worker, &HIDConnectionWorker::exit);
 }
 
 HIDConnection &HIDConnection::getInstance()
@@ -76,9 +79,9 @@ void HIDConnection::stop()
 {
     if (m_thread.isRunning())
     {
+        emit exit();
         m_thread.quit();
         m_thread.wait();
-        delete m_worker;
     }
 }
 

@@ -31,7 +31,6 @@ class HIDConnectionWorker : public QObject
     Q_OBJECT
 public:
     explicit HIDConnectionWorker(QObject *parent = nullptr);
-    ~HIDConnectionWorker();
 
 signals:
     void initDone(const bool& success);
@@ -44,6 +43,7 @@ signals:
 
 public slots:
     void init();
+    void exit();
 
     void refreshKeyboards(QPointer<KeyboardModel> connectedKeyboards);
 

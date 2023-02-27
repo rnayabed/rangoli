@@ -29,19 +29,19 @@ HIDConnectionWorker::HIDConnectionWorker(QObject *parent)
 {
 }
 
-HIDConnectionWorker::~HIDConnectionWorker()
-{
-    if (m_HIDInitSuccessful)
-    {
-        hid_exit();
-    }
-}
-
 void HIDConnectionWorker::init()
 {
     m_HIDInitSuccessful = ! hid_init();
 
     emit initDone(m_HIDInitSuccessful);
+}
+
+void HIDConnectionWorker::exit()
+{
+    if (m_HIDInitSuccessful)
+    {
+        hid_exit();
+    }
 }
 
 void HIDConnectionWorker::refreshKeyboards(QPointer<KeyboardModel> connectedKeyboards)
