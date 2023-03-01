@@ -84,21 +84,17 @@ In case you forget to do that, you need to run the following command:
 git submodule update --init
 ```
 
-### Compile for Linux / MacOS
+### Compile 
 
 ```
 cmake -B build -G Ninja -S . -DCMAKE_BUILD_TYPE=Release
-cmake --build build
-./build/src/rangoli
+cmake --build build --parallel
 ```
 
-### Compile for Windows
-
-```
-cmake -B build -G Ninja -S . -DCMAKE_BUILD_TYPE=Release
-cmake --build build
-.\build\src\rangoli.exe
-```
+### Run
+- Linux: `./build/src/rangoli`
+- Windows: `.\build\src\rangoli.exe`
+- MacOS: `open ./build/src/rangoli.app`
 
 ## Bugs and Support
 
