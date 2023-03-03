@@ -29,7 +29,7 @@ SettingsController::SettingsController(QObject *parent)
       m_alwaysShowSystemTrayIcon{false},
       m_closeToSystemTrayIcon{false},
       m_selectedDefaultProfileIndex{0},
-      m_unsavedChanges{false},
+      m_unsavedChanges{true},
       m_checkForUpdatesQuietMode{false},
       m_checkForUpdatesButtonEnabled{true}
 {}
@@ -161,6 +161,7 @@ void SettingsController::init()
     });
 
     load();
+    applyVisualSettings();
 }
 
 void SettingsController::setSelectedThemeIndex(const int &selectedThemeIndex)
@@ -287,7 +288,6 @@ void SettingsController::load()
     setCloseToSystemTrayIcon(settings.value(u"system_tray_icon/close_to"_s, true).toBool());
 
     setUnsavedChanges(false);
-    applyVisualSettings();
 }
 
 void SettingsController::save()
@@ -443,7 +443,7 @@ void SettingsController::updatesFetched(QNetworkReply *reply)
 
 void SettingsController::applyVisualSettings()
 {
-    qDebug() << "Apply visual settings to Main Window";
+    qDebug() << "Apply visual settings to main window";
 
     emit m_mainWindow->setAccentColour(m_accentColour);
     m_mainWindow->setTheme(m_selectedThemeIndex);
