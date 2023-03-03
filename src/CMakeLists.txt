@@ -12,30 +12,32 @@ GNU General Public License for more details.
 ]]
 
 set(SOURCE_LIST
-    main.cpp
-    resources.qrc
-    key.h key.cpp
-    keyboard.h keyboard.cpp
-    keyboardusbid.h keyboardusbid.cpp
-    profile.h profile.cpp
-    mode.h mode.cpp
+    customcolours.h customcolours.cpp
+    customlightmodekeys.h customlightmodekeys.cpp
+    custommappedkeys.h custommappedkeys.cpp
+    enhanceddialog.h enhanceddialog.cpp
     hidconnection.h hidconnection.cpp
     hidconnectionworker.h hidconnectionworker.cpp
-    keycode.h
-    enhanceddialog.h enhanceddialog.cpp
     icons.h icons.cpp
-    mainwindowcontroller.h mainwindowcontroller.cpp
-    keyboardmodel.h keyboardmodel.cpp
+    key.h key.cpp
+    keyboard.h keyboard.cpp
     keyboardconfiguratorcontroller.h keyboardconfiguratorcontroller.cpp
-    customlightmodekeys.h customlightmodekeys.cpp
-    modemodel.h modemodel.cpp
-    profilemodel.h profilemodel.cpp
-    settingscontroller.h settingscontroller.cpp
-    customcolours.h customcolours.cpp
-    custommappedkeys.h custommappedkeys.cpp
+    keyboardmodel.h keyboardmodel.cpp
+    keyboardusbid.h keyboardusbid.cpp
+    keycode.h
     keycodemodel.h keycodemodel.cpp
     keycodemodelproxy.h keycodemodelproxy.cpp
+    main.cpp
+    mainwindowcontroller.h mainwindowcontroller.cpp
+    messagehandler.h messagehandler.cpp
+    mode.h mode.cpp
+    modemodel.h modemodel.cpp
+    profile.h profile.cpp
+    profilemodel.h profilemodel.cpp
+    settingscontroller.h settingscontroller.cpp
     startatboot.h startatboot.cpp
+
+    resources.qrc
 )
 
 set(MACOS_APP_ICON "${CMAKE_SOURCE_DIR}/icons/rangoli.icns")
@@ -50,7 +52,7 @@ qt_add_executable(rangoli ${SOURCE_LIST})
 
 qt_add_qml_module(rangoli
     URI Rangoli
-    VERSION 1.0
+    VERSION ${VERSION}
     QML_FILES
         Main.qml
         EnhancedDialog.qml
