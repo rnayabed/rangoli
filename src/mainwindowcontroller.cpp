@@ -249,6 +249,12 @@ void MainWindowController::init()
     {
         m_settingsController->checkForUpdates(true);
     }
+
+    qInfo() << "Test Info!";
+    qDebug() << "Test Debug!";
+    qWarning() << "Test Warning!";
+   // qCritical() << "Test Critical!";
+   // qFatal("Test Fatal!");
 }
 
 void MainWindowController::quit()

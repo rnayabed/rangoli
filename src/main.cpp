@@ -26,12 +26,22 @@
 
 using namespace Qt::Literals::StringLiterals;
 
+void messageHandler(QtMsgType, const QMessageLogContext &, const QString &);
+void closeLogger();
+
+QFile logFile{QStringLiteral("%1/rangoli.log").arg(QDir::homePath())};
+QTextStream logStream;
+
 int main(int argc, char *argv[])
 {
     MainWindowController mainWindowController;
     KeyboardConfiguratorController keyboardConfiguratorController;
     SettingsController settingsController;
 
+    logFile.open(QIODevice::WriteOnly);
+    logStream.setDevice(&logFile);
+
+    qInstallMessageHandler(messageHandler);
     QGuiApplication app(argc, argv);
 
     app.setOrganizationName(u"rnayabed"_s);
@@ -50,6 +60,8 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
+    QObject::connect(&engine, &QQmlApplicationEngine::quit, closeLogger);
+
     engine.setContextForObject(&mainWindowController, engine.rootContext());
     engine.rootContext()->setContextProperty(u"mainWindowController"_s, &mainWindowController);
 
@@ -62,4 +74,38 @@ int main(int argc, char *argv[])
     engine.load(u"qrc:/Rangoli/Main.qml"_s);
 
     return app.exec();
+}
+
+void closeLogger()
+{
+    qInfo() << "Exit! Bye!";
+    logFile.close();
+}
+
+void messageHandler(QtMsgType messageType, const QMessageLogContext &context, const QString &message)
+{
+    Q_UNUSED(context)
+
+    logStream << QDateTime::currentDateTime().toString(u"[dd/MM/yyyy] [hh:mm:ss] "_s);
+
+    switch (messageType)
+    {
+    case QtInfoMsg:
+        logStream << u"[INFO] : "_s;
+        break;
+    case QtDebugMsg:
+        logStream << u"[DEBUG] : "_s;
+        break;
+    case QtWarningMsg:
+        logStream << u"[WARNING] : "_s;
+        break;
+    case QtCriticalMsg:
+        logStream << u"[CRITICAL] : "_s;
+        break;
+    case QtFatalMsg:
+        logStream << u"[FATAL] : "_s;
+        break;
+    }
+
+    logStream << message << Qt::endl;
 }
