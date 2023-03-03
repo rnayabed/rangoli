@@ -56,4 +56,5 @@ void MessageHandler::handler(QtMsgType messageType, const QMessageLogContext &co
     }
 
     m_logStream << message << Qt::endl;
+    m_stdStream << message << Qt::endl;
 }

@@ -22,7 +22,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
+
 set(LINUX_UDEV_RULE_WRITER_NAME "udev-rule-writer.sh")
+
+set(MACOSX_BUNDLE_COPYRIGHT "Debayan Sutradhar")
+set(MACOSX_BUNDLE_GUI_IDENTIFIER io.github.rnayabed.rangoli)
 
 add_compile_definitions(
     VERSION=${VERSION}
@@ -36,9 +40,13 @@ add_compile_definitions(
     AUTHOR_UPI="9903299105@upi"
     AUTHOR_EMAIL="debayansutradhar3@gmail.com"
     GITHUB_RELEASES="https://api.github.com/repos/rnayabed/rangoli/releases"
+
     LINUX_UDEV_RULE_WRITER_NAME="${LINUX_UDEV_RULE_WRITER_NAME}"
     LINUX_UDEV_RULES_PATH="/etc/udev/rules.d/71-rangoli.rules"
     LINUX_TERMINAL="xterm"
+
+    MACOSX_BUNDLE_COPYRIGHT="${MACOSX_BUNDLE_COPYRIGHT}"
+    MACOSX_BUNDLE_GUI_IDENTIFIER="${MACOSX_BUNDLE_GUI_IDENTIFIER}"
 
     DEFAULT_ACCENT_RED=229
     DEFAULT_ACCENT_GREEN=21

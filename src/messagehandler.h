@@ -36,6 +36,7 @@ private:
                 .arg(QDir::homePath())};
 
     inline static QTextStream m_logStream{&m_logFile};
+    inline static QTextStream m_stdStream{stdout};
 };
 
 

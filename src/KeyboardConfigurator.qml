@@ -98,12 +98,7 @@ Item {
         function show(index, name)
         {
             this.index = index
-
-            if (this.index > -1)
-            {
-                profileNameTextField.text = name
-            }
-
+            profileNameTextField.text = name
             open()
         }
 

@@ -38,15 +38,15 @@ int main(int argc, char *argv[])
         qCritical("Unable to start logging to file!");
     }
 
-    qInfo() << "Start";
+    qInfo() << "Rangoli" << VERSION;
 
     if (QQuickWindow::graphicsApi() == QSGRendererInterface::Software)
     {
-        qWarning() << "Using Software Graphics API";
+        qInfo() << "Graphics: Software";
     }
     else
     {
-        qInfo() << "Using Hardware accelerated Graphics API";
+        qInfo() << "Graphics: Hardware";
     }
 
     MainWindowController mainWindowController;
@@ -54,6 +54,8 @@ int main(int argc, char *argv[])
     SettingsController settingsController;
 
     QGuiApplication app(argc, argv);
+
+    qInfo() << "Platform: " << app.platformName();
 
     app.setOrganizationName(u"rnayabed"_s);
     app.setOrganizationDomain(u"rnayabed.github.io"_s);
