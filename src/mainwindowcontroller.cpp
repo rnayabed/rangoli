@@ -118,9 +118,14 @@ void MainWindowController::init()
     m_startToSystemTrayIcon = QCoreApplication::arguments().contains(u"start_to_system_tray_icon"_s);
 
     if (m_startToSystemTrayIcon)
+    {
+        qInfo() << "Asked to start to System Tray Icon";
         emit hide();
+    }
     else
+    {
         emit show();
+    }
 
     m_profiles->registerProfiles();
 
@@ -176,6 +181,8 @@ void MainWindowController::init()
                 this, [this](){
             QSettings settings;
 
+            qInfo() << "Apply default profile";
+
             for (int i = 0 ; i < m_connectedKeyboards->keyboards().size(); i++)
             {
                 m_keyboardConfiguratorController->load(i);
@@ -187,6 +194,8 @@ void MainWindowController::init()
     QDir keyboards{u"keyboards"_s};
     if (!keyboards.exists())
     {
+        qCritical() << "Keyboards folder not found";
+
 #ifdef Q_OS_MACOS
         showFatalError(tr("Keyboards folder not found"),
                        tr("If you are using the portable version, you need to "
@@ -201,6 +210,7 @@ void MainWindowController::init()
                           "you need to re-install it. Otherwise, please download "
                           "Rangoli again."));
 #endif
+
         return;
     }
 
@@ -210,12 +220,14 @@ void MainWindowController::init()
     if (!QFile::exists(QStringLiteral(LINUX_UDEV_RULES_PATH))
             || !m_settingsController->udevRulesWritten())
     {
+        qInfo() << "Show Linux udev prompt";
         emit openLinuxUdevPopup();
     }
 #endif
 
     if(m_settingsController->firstTimeUse())
     {
+        qInfo() << "First time use";
 
 #ifdef Q_OS_MACOS
         emit loadEnhancedDialog(EnhancedDialog{tr("Notice"), macOSPermissionNotice()});
@@ -293,8 +305,11 @@ void MainWindowController::closeInterrupted()
         return;
     }
 
+
     if (!m_confirmQuitDialogVisible)
     {
+        qInfo() << "Show unsaved changes prompt";
+
         m_confirmQuitDialogVisible = true;
 
         EnhancedDialog d(tr("Warning"),
@@ -312,14 +327,17 @@ void MainWindowController::setTheme(const int& theme)
 {
     if (theme == Theme::System)
     {
+        qInfo() << "Set System theme";
         emit setSystemTheme();
     }
     else if (theme == Theme::Light)
     {
+        qInfo() << "Set Light theme";
         emit setLightTheme();
     }
     else if (theme == Theme::Dark)
     {
+        qInfo() << "Set Dark theme";
         emit setDarkTheme();
     }
 }
@@ -342,6 +360,8 @@ void MainWindowController::setCloseToSystemTrayIcon(const bool &closeToSystemTra
 
 void MainWindowController::launchLinuxUdevWriter()
 {
+    qInfo() << "Launch Linux udev writer";
+
     setLinuxUdevPopupProceedButtonEnabled(false);
 
     if (!QFile::exists(QStringLiteral(LINUX_UDEV_RULE_WRITER_NAME)))
@@ -360,13 +380,14 @@ void MainWindowController::launchLinuxUdevWriter()
     QString exitRuleWriteFailed{u"2"_s};
 
     QString oldID;
-    QString exitFile{QStringLiteral("%1_OUTPUT").arg(QStringLiteral(LINUX_UDEV_RULE_WRITER_NAME))};
-    QFile oldOutput{exitFile};
+    QString outputPath{QStringLiteral("%1_OUTPUT").arg(QStringLiteral(LINUX_UDEV_RULE_WRITER_NAME))};
+    QFile oldOutput{outputPath};
 
     if (oldOutput.exists())
     {
         if (!oldOutput.open(QIODevice::ReadOnly))
         {
+            qCritical() << "Failed to old output" << outputPath;
             emit loadEnhancedDialog(EnhancedDialog {
                                         tr("Error"),
                                         tr("Unable to read old ID.")
@@ -377,21 +398,24 @@ void MainWindowController::launchLinuxUdevWriter()
         }
 
         oldID = oldOutput.readAll().split(':').at(0);
+
+        oldOutput.close();
     }
 
     QPointer<QProcess> udevWriter{new QProcess{this}};
     connect(udevWriter, &QProcess::finished, this,
-            [this, exitFile, exitOK, exitKeyboardsReadFailed, exitRuleWriteFailed, oldID]
+            [this, outputPath, exitOK, exitKeyboardsReadFailed, exitRuleWriteFailed, oldID]
             (int exitCode, QProcess::ExitStatus exitStatus) {
         Q_UNUSED(exitStatus)
         Q_UNUSED(exitCode)
 
         setLinuxUdevPopupProceedButtonEnabled(true);
 
-        QFile output{exitFile};
+        QFile output{outputPath};
 
         if (!output.open(QIODevice::ReadOnly))
         {
+            qCritical() << "Failed to new output" << outputPath;
             emit loadEnhancedDialog(EnhancedDialog {
                                         tr("Error"),
                                         tr("The udev rules writer failed to run. Did you provide incorrect password?")
@@ -399,9 +423,17 @@ void MainWindowController::launchLinuxUdevWriter()
             return;
         }
 
-        QList<QByteArray> outputs{output.readAll().split(':')};
+        QByteArray outRaw = output.readAll();
+        qDebug() << "Output File raw:" << outRaw;
+
+        output.close();
+
+        QList<QByteArray> outputs{outRaw.split(':')};
+        qDebug() << "Outputs length:" << outputs.length();
 
         QString newID = outputs.at(0);
+        qDebug() << "New ID:" << newID;
+        qDebug() << "Old ID:" << oldID;
 
         if (newID == oldID)
         {
@@ -422,6 +454,7 @@ void MainWindowController::launchLinuxUdevWriter()
         }
 
         QString newExitCode = outputs.at(1);
+        qDebug() << "New exit code:" << newExitCode;
 
         if (newExitCode == exitOK)
         {
@@ -439,6 +472,8 @@ void MainWindowController::launchLinuxUdevWriter()
         }
         else if (newExitCode == exitKeyboardsReadFailed)
         {
+            qCritical() << "Failed to read keyboards information";
+
             emit loadEnhancedDialog(EnhancedDialog {
                                         tr("Error"),
                                         tr("Failed to read keyboards information")
@@ -446,6 +481,8 @@ void MainWindowController::launchLinuxUdevWriter()
         }
         else if (newExitCode == exitRuleWriteFailed)
         {
+            qCritical() << "Malformed output from udev writer";
+
             emit loadEnhancedDialog(EnhancedDialog {
                                         tr("Error"),
                                         tr("Malformed output from udev writer.")
@@ -453,6 +490,8 @@ void MainWindowController::launchLinuxUdevWriter()
         }
         else
         {
+            qCritical() << "Malformed exit code from udev writer";
+
             emit loadEnhancedDialog(EnhancedDialog {
                                         tr("Error"),
                                         tr("Malformed exit code from udev writer.")
@@ -464,6 +503,8 @@ void MainWindowController::launchLinuxUdevWriter()
             [this](QProcess::ProcessError error){
 
         setLinuxUdevPopupProceedButtonEnabled(true);
+
+        qCritical() << "Failed to start" << LINUX_TERMINAL << ". Error Code:" << error;
 
         if (error == QProcess::FailedToStart)
         {
@@ -487,7 +528,7 @@ void MainWindowController::launchLinuxUdevWriter()
                                QStringLiteral(LINUX_UDEV_RULE_WRITER_NAME),
                                QStringLiteral("%1/keyboards").arg(QDir::currentPath()),
                                QStringLiteral(LINUX_UDEV_RULES_PATH),
-                               exitFile, exitOK, exitKeyboardsReadFailed, exitRuleWriteFailed));
+                               outputPath, exitOK, exitKeyboardsReadFailed, exitRuleWriteFailed));
 }
 
 void MainWindowController::setLinuxUdevPopupProceedButtonEnabled(const bool &linuxUdevPopupProceedButtonEnabled)
@@ -506,6 +547,8 @@ void MainWindowController::openSupportedKeyboardsList()
 void MainWindowController::showFatalError(const QString& title, const QString& message)
 {
     EnhancedDialog d{title, message};
+
+    qCritical() << message;
 
     d.setOnAccepted([this](){
         setCloseToSystemTrayIcon(false);

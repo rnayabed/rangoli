@@ -443,7 +443,7 @@ void SettingsController::updatesFetched(QNetworkReply *reply)
 
 void SettingsController::applyVisualSettings()
 {
-    qDebug() << "Apply visual settings to main window";
+    qDebug() << "Apply visual settings to Main Window";
 
     emit m_mainWindow->setAccentColour(m_accentColour);
     m_mainWindow->setTheme(m_selectedThemeIndex);
