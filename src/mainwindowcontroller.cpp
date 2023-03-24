@@ -144,18 +144,19 @@ void MainWindowController::init()
 
     HIDConnection& connection = HIDConnection::getInstance();
 
-    connect(&connection, &HIDConnection::initDone, this, [this](const bool& success){
-        if (success)
-        {
-            refreshKeyboards();
-        }
-        else
-        {
-            showFatalError(tr("Unable to initialise HID API"),
-                           tr("Please check if you have permissions and restart Rangoli. "
-                              "The program will now exit."));
-        }
+    connect(&connection, &HIDConnection::HIDColInitFailed, this, [this](){
+        showFatalError(tr("Unable to open HID Cols Config file"),
+                       tr("The program will now exit."));
     }, Qt::SingleShotConnection);
+
+    connect(&connection, &HIDConnection::HIDAPIInitFailed, this, [this](){
+        showFatalError(tr("Unable to initialise HID API"),
+                       tr("Please check if you have permissions and restart Rangoli. "
+                          "The program will now exit."));
+    }, Qt::SingleShotConnection);
+
+    connect(&connection, &HIDConnection::initSuccessful, this, &MainWindowController::refreshKeyboards,
+            Qt::SingleShotConnection);
 
     connect(&connection, &HIDConnection::keyboardConnected,
             this, [this](const Keyboard& keyboard){

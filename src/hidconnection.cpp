@@ -20,8 +20,16 @@ HIDConnection::HIDConnection(QObject *parent)
 
     connect(&m_thread, &QThread::started, m_worker, &HIDConnectionWorker::init);
 
-    connect(m_worker, &HIDConnectionWorker::initDone, this, [this](const bool& success){
-        emit initDone(success);
+    connect(m_worker, &HIDConnectionWorker::HIDColInitFailed, this, [this](){
+        emit HIDColInitFailed();
+    });
+
+    connect(m_worker, &HIDConnectionWorker::HIDAPIInitFailed, this, [this](){
+        emit HIDAPIInitFailed();
+    });
+
+    connect(m_worker, &HIDConnectionWorker::initSuccessful, this, [this](){
+        emit initSuccessful();
     });
 
     connect(this, &HIDConnection::refreshKeyboards,

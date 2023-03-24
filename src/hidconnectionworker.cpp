@@ -17,7 +17,6 @@
 #include <QVariantList>
 
 #include <QJsonDocument>
-#include <QJsonObject>
 #include <QJsonArray>
 
 #include "keyboardconfiguratorcontroller.h"
@@ -26,7 +25,7 @@
 using namespace Qt::Literals::StringLiterals;
 
 HIDConnectionWorker::HIDConnectionWorker(QObject *parent)
-    : QObject{parent}
+    : QObject{parent}, m_HIDInitSuccessful{false}
 {
 }
 
@@ -34,9 +33,22 @@ void HIDConnectionWorker::init()
 {
     qDebug() << "Init HID Connection Worker";
 
-    m_HIDInitSuccessful = ! hid_init();
+#ifdef Q_OS_WINDOWS
+    if (!initHIDCol())
+    {
+        emit HIDColInitFailed();
+        return;
+    }
+#endif
 
-    emit initDone(m_HIDInitSuccessful);
+    m_HIDInitSuccessful = ! hid_init();
+    if (!m_HIDInitSuccessful)
+    {
+        emit HIDAPIInitFailed();
+        return;
+    }
+
+    emit initSuccessful();
 }
 
 void HIDConnectionWorker::exit()
@@ -60,8 +72,14 @@ void HIDConnectionWorker::refreshKeyboards(QPointer<KeyboardModel> connectedKeyb
     QList<KeyboardUSBID> disconnectedHIDPIDs = connectedKeyboards->keyboardUSBIDs();
     QList<KeyboardUSBID> connectedHIDPIDs;
 
+#ifdef Q_OS_WIN
+    QString defaultCol = m_hidColConfig["default"].toString();
+#endif
+
     while (devIterator)
     {
+        qDebug() << "HID Device found: " << devIterator->path;
+
         auto usbID = KeyboardUSBID{devIterator->vendor_id, devIterator->product_id};
 
         QFile configFile{QStringLiteral("keyboards/%1/configs/%2.json")
@@ -69,11 +87,15 @@ void HIDConnectionWorker::refreshKeyboards(QPointer<KeyboardModel> connectedKeyb
                          QString::number(usbID.pid, 16))};
 
         if (configFile.exists()
-        #ifdef Q_OS_WIN
-                && QString(devIterator->path).contains(u"&Col05"_s, Qt::CaseInsensitive)
-        #else
+#ifdef Q_OS_WIN
+                && QString(devIterator->path).contains(QStringLiteral("&Col%1")
+                                                       .arg(m_hidColConfig[QStringLiteral("%1:%2")
+                                                            .arg(QString::number(usbID.vid, 16),
+                                                                 QString::number(usbID.pid, 16))].toString(defaultCol)),
+                                                       Qt::CaseInsensitive)
+#else
                 && devIterator->usage == 0x0080 && devIterator->usage_page == 0x0001
-        #endif
+#endif
                 && !connectedHIDPIDs.contains(usbID))
         {
             connectedHIDPIDs << usbID;
@@ -120,6 +142,8 @@ void HIDConnectionWorker::refreshKeyboards(QPointer<KeyboardModel> connectedKeyb
             }
 
             QJsonDocument configDocument{QJsonDocument::fromJson(configFile.readAll())};
+
+            configFile.close();
 
             QJsonObject configObj = configDocument.object();
 
@@ -173,8 +197,6 @@ void HIDConnectionWorker::refreshKeyboards(QPointer<KeyboardModel> connectedKeyb
                                    keys, configObj["rgb"].toBool(), keyMapEnabled,
                                    topObj[0].toInt(), topObj[1].toInt(),
                                    bottomObj[0].toInt(), bottomObj[1].toInt() });
-
-            configFile.close();
         }
 
         devIterator = devIterator->next;
@@ -230,4 +252,22 @@ void HIDConnectionWorker::sendData(const QString &path, unsigned char** buffers,
     emit dataSentSuccessfully();
 
     hid_close(handle);
+}
+
+bool HIDConnectionWorker::initHIDCol()
+{
+    QFile hidColConfigFile{u"keyboards/hid-col.json"_s};
+
+    if (!hidColConfigFile.open(QIODevice::ReadOnly))
+    {
+        return false;
+    }
+
+    QJsonDocument configDocument{QJsonDocument::fromJson(hidColConfigFile.readAll())};
+
+    hidColConfigFile.close();
+
+    m_hidColConfig = configDocument.object();
+
+    return true;
 }

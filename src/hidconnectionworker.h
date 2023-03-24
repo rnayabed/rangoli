@@ -20,7 +20,7 @@
 #include <QXmlStreamReader>
 #include <QPointer>
 #include <hidapi.h>
-
+#include <QJsonObject>
 #include <list>
 
 #include "keyboard.h"
@@ -33,7 +33,10 @@ public:
     explicit HIDConnectionWorker(QObject *parent = nullptr);
 
 signals:
-    void initDone(const bool& success);
+    void HIDColInitFailed();
+    void HIDAPIInitFailed();
+    void initSuccessful();
+
     void keyboardConnected(const Keyboard& keyboard);
     void keyboardDisconnected(const KeyboardUSBID& id);
     void keyboardsScanComplete();
@@ -50,6 +53,9 @@ public slots:
 
 private:
     bool m_HIDInitSuccessful;
+    QJsonObject m_hidColConfig;
+
+    bool initHIDCol();
 };
 
 #endif // HIDCONNECTIONWORKER_H
