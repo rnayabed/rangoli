@@ -198,6 +198,8 @@ void KeyboardConfiguratorController::load(const int &keyboardIndex)
 {
     m_selectedKeyboardIndex = keyboardIndex;
 
+    qInfo() << "Load keyboard" << selectedKeyboard().id;
+
     emit loadName(selectedKeyboard().name);
     emit loadImage(selectedKeyboard().imagePath);
 
@@ -472,6 +474,8 @@ void KeyboardConfiguratorController::setBufferKey(unsigned char *buffer, const i
 
 void KeyboardConfiguratorController::saveProfile()
 {
+    qInfo() << "Save profile" << profiles()->profileName(selectedProfileIndex());;
+
     QSettings settings;
 
     settings.beginGroup(QStringLiteral("profiles/%1").arg(getProfileID()));
@@ -489,12 +493,18 @@ void KeyboardConfiguratorController::saveProfile()
                         .arg(QString::number(selectedKeyboard().id.vid),
                              QString::number(selectedKeyboard().id.pid)));
 
+    qDebug() << "Brightness:" << m_brightness;
+    qDebug() << "Animation:" << m_animation;
+    qDebug() << "Sleep:" << m_sleep;
+    qDebug() << "Mode:" << m_selectedLightModeIndex;
+    qDebug() << "Random Colour:" << m_randomColours;
+    qDebug() << "Selected Colour:" << m_selectedColour;
+
     settings.setValue(u"brightness"_s, m_brightness);
     settings.setValue(u"animation"_s, m_animation);
     settings.setValue(u"sleep"_s, m_sleep);
-    settings.setValue(u"mode"_s, m_selectedLightModeIndex);
-
-    settings.setValue(u"random_colour"_s, m_randomColours);
+    settings.setValue(u"selected_light_mode_index"_s, m_selectedLightModeIndex);
+    settings.setValue(u"random_colours"_s, m_randomColours);
     settings.setValue(u"selected_colour"_s, m_selectedColour);
 
     settings.remove(u"custom_light_mode_keys"_s);
@@ -540,6 +550,8 @@ void KeyboardConfiguratorController::saveProfile()
 
 void KeyboardConfiguratorController::saveToKeyboard()
 {
+    qInfo() << "Save to keyboard" << selectedKeyboard().id;
+
     setSavingChanges(true);
 
     unsigned char** buffers = new unsigned char* [1 + CustomLightModeBuffersSize + KeyMapBuffersSize];
@@ -655,6 +667,8 @@ void KeyboardConfiguratorController::saveToKeyboard()
 
 void KeyboardConfiguratorController::loadProfileSettings()
 {
+    qInfo() << "Load settings from profile" << profiles()->profileName(selectedProfileIndex());
+
     QSettings settings;
 
     settings.beginGroup(QStringLiteral("profiles/%1/%2:%3")
@@ -665,9 +679,9 @@ void KeyboardConfiguratorController::loadProfileSettings()
     setBrightness(settings.value(u"brightness"_s, 5).toUInt());
     setAnimation(settings.value(u"animation"_s, 3).toUInt());
     setSleep(settings.value(u"sleep"_s, 5).toUInt());
-    setSelectedLightModeIndex(settings.value(u"mode"_s, m_modes->neonStreamIndex()).toUInt());
+    setSelectedLightModeIndex(settings.value(u"selected_light_mode_index"_s, m_modes->neonStreamIndex()).toUInt());
 
-    setRandomColours(settings.value(u"random_colour"_s, true).toBool());
+    setRandomColours(settings.value(u"random_colours"_s, true).toBool());
     setSelectedColour(settings.value(u"selected_colour"_s, QColor(Qt::white)).value<QColor>());
 
     settings.beginGroup(u"custom_light_mode_keys"_s);
@@ -725,6 +739,8 @@ void KeyboardConfiguratorController::loadProfileSettings()
 
 void KeyboardConfiguratorController::loadProfileCustomColours()
 {
+    qInfo() << "Load colours from profile" << profiles()->profileName(selectedProfileIndex());
+
     QSettings settings;
 
     QList<QColor> newColours;

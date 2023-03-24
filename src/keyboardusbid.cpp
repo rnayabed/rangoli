@@ -12,8 +12,18 @@
  */
 
 #include "keyboardusbid.h"
+#include <QDebug>
 
 bool KeyboardUSBID::operator==(const KeyboardUSBID& other) const
 {
     return vid == other.vid && pid == other.pid;
+}
+
+QDebug& operator<<(QDebug& debug, const KeyboardUSBID& id)
+{
+    debug.nospace();
+    debug << Qt::hex << id.vid
+          << ":"
+          << Qt::hex << id.pid;
+    return debug;
 }

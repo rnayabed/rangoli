@@ -29,6 +29,8 @@ set(MACOSX_BUNDLE_COPYRIGHT "Debayan Sutradhar")
 set(MACOSX_BUNDLE_GUI_IDENTIFIER io.github.rnayabed.rangoli)
 
 add_compile_definitions(
+    DISABLE_QDEBUG=false
+
     VERSION=${VERSION}
     GIT_REPOSITORY="https://github.com/rnayabed/rangoli"
     SUPPORTED_KEYBOARDS="https://github.com/rnayabed/rangoli/blob/master/supported-keyboards.md"

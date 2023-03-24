@@ -278,7 +278,10 @@ void SettingsController::load()
     QSettings settings;
 
     setSelectedThemeIndex(settings.value(u"theme"_s, MainWindowController::Theme::System).toInt());
-    setAccentColour(settings.value(u"accent_colour"_s, QColor(DEFAULT_ACCENT_RED, DEFAULT_ACCENT_GREEN, DEFAULT_ACCENT_BLUE)).value<QColor>());
+    setAccentColour(settings.value(u"accent_colour"_s, QColor(
+                                       DEFAULT_ACCENT_RED,
+                                       DEFAULT_ACCENT_GREEN,
+                                       DEFAULT_ACCENT_BLUE)).value<QColor>());
 
     setSelectedDefaultProfileIndex(m_profiles->defaultProfileIndex());
     setStartOnBoot(settings.value(u"start_on_boot"_s, false).toBool());

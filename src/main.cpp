@@ -55,7 +55,8 @@ int main(int argc, char *argv[])
 
     QGuiApplication app(argc, argv);
 
-    qInfo() << "Platform: " << app.platformName();
+    qInfo() << "Platform:" << app.platformName();
+    qInfo() << "Qt" << qVersion();
 
     app.setOrganizationName(u"rnayabed"_s);
     app.setOrganizationDomain(u"rnayabed.github.io"_s);

@@ -32,6 +32,8 @@ HIDConnectionWorker::HIDConnectionWorker(QObject *parent)
 
 void HIDConnectionWorker::init()
 {
+    qDebug() << "Init HID Connection Worker";
+
     m_HIDInitSuccessful = ! hid_init();
 
     emit initDone(m_HIDInitSuccessful);
@@ -39,6 +41,8 @@ void HIDConnectionWorker::init()
 
 void HIDConnectionWorker::exit()
 {
+    qDebug() << "Exit HID Connection Worker";
+
     if (m_HIDInitSuccessful)
     {
         hid_exit();
@@ -47,6 +51,8 @@ void HIDConnectionWorker::exit()
 
 void HIDConnectionWorker::refreshKeyboards(QPointer<KeyboardModel> connectedKeyboards)
 {
+    qInfo() << "Refresh keyboards";
+
     struct hid_device_info* devs = hid_enumerate(0x0, 0x0);
 
     struct hid_device_info* devIterator = devs;
@@ -65,7 +71,7 @@ void HIDConnectionWorker::refreshKeyboards(QPointer<KeyboardModel> connectedKeyb
         if (configFile.exists()
         #ifdef Q_OS_WIN
                 && QString(devIterator->path).contains(u"&Col05"_s, Qt::CaseInsensitive)
-        #else
+        #else   // FIXME: should not be hardcoded
                 && devIterator->usage == 0x0080 && devIterator->usage_page == 0x0001
         #endif
                 && !connectedHIDPIDs.contains(usbID))
@@ -74,17 +80,20 @@ void HIDConnectionWorker::refreshKeyboards(QPointer<KeyboardModel> connectedKeyb
 
             if (disconnectedHIDPIDs.contains(usbID))
             {
+                qDebug() << "Remove" << usbID << "from disconnected hidpids";
                 disconnectedHIDPIDs.removeAll(usbID);
                 continue;
             }
 
             if (!configFile.open(QIODevice::ReadOnly))
             {
+                qCritical() << "Unable to open config file for" << usbID;
+
                 MainWindowController::showEnhancedDialog(
                             this,
                             EnhancedDialog {
                                 tr("Error"),
-                                tr("Unable to read configuration file of keyboard with VID '%1' and PID '%2'.")
+                                tr("Unable to open configuration file of keyboard with VID '%1' and PID '%2'.")
                                           .arg(QString::number(usbID.vid, 16),
                                                QString::number(usbID.pid, 16))
                             });
@@ -96,6 +105,8 @@ void HIDConnectionWorker::refreshKeyboards(QPointer<KeyboardModel> connectedKeyb
                        .arg(QString::number(usbID.vid, 16),
                             QString::number(usbID.pid, 16))).exists())
             {
+                qCritical() << "Unable to find image for" << usbID;
+
                 MainWindowController::showEnhancedDialog(
                             this,
                             EnhancedDialog {
@@ -179,12 +190,16 @@ void HIDConnectionWorker::refreshKeyboards(QPointer<KeyboardModel> connectedKeyb
     emit keyboardsScanComplete();
 }
 
-void HIDConnectionWorker::sendData(const QString &path, unsigned char** buffers, int bufferLength)
+void HIDConnectionWorker::sendData(const QString &path, unsigned char** buffers, int buffersLength)
 {
+    qInfo() << "Sending" << buffersLength << "feature reports to keyboard at HID path" << path;
+    qDebug() << "Each buffer is of size" << KeyboardConfiguratorController::BufferSize;
+
     hid_device* handle = hid_open_path(qPrintable(path));
 
     if (!handle)
     {
+        qCritical() << "Unable to open device";
 #ifdef Q_OS_MACOS
         emit failedToSendData(tr("Insufficient Permissions.\n%1")
                               .arg(MainWindowController::macOSPermissionNotice()));
@@ -195,11 +210,13 @@ void HIDConnectionWorker::sendData(const QString &path, unsigned char** buffers,
         return;
     }
 
-    for(int i = 0; i < bufferLength; i++)
+    for(int i = 0; i < buffersLength; i++)
     {
         if (hid_send_feature_report(handle, buffers[i], KeyboardConfiguratorController::BufferSize)
                 != KeyboardConfiguratorController::BufferSize)
         {
+            qCritical() << "Unable to send report" << i;
+
             emit failedToSendData(tr("Failed to send feature report to keyboard. "
                                      "Make sure you have sufficient permissions."));
             return;

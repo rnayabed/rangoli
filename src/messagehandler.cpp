@@ -34,6 +34,9 @@ void MessageHandler::handler(QtMsgType messageType, const QMessageLogContext &co
 {
     Q_UNUSED(context)
 
+    if (messageType == QtDebugMsg && DISABLE_QDEBUG)
+        return;
+
     m_logStream << QDateTime::currentDateTime().toString(u"[dd/MM/yyyy] [hh:mm:ss] "_s);
 
     switch (messageType)

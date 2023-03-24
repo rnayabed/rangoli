@@ -46,7 +46,7 @@ public slots:
 
     void refreshKeyboards(QPointer<KeyboardModel> connectedKeyboards);
 
-    void sendData(const QString& path, unsigned char** buffers, int bufferLength);
+    void sendData(const QString& path, unsigned char** buffers, int buffersLength);
 
 private:
     bool m_HIDInitSuccessful;

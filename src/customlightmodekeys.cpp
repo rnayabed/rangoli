@@ -56,6 +56,8 @@ QHash<int, QByteArray> CustomLightModeKeys::roleNames() const
 
 void CustomLightModeKeys::add(const int &keyIndex, const QColor &colour)
 {
+    qInfo() << "Set" << colour << "for key index" << keyIndex;
+
     beginResetModel();
     m_keys[keyIndex] = colour;
     m_keyIndexes << keyIndex;
@@ -69,14 +71,21 @@ void CustomLightModeKeys::addIfNotExists(const int &keyIndex, const QColor &colo
     }
 }
 
+void CustomLightModeKeys::remove(const int &keyIndex)
+{
+    qInfo() << "Remove colour for key index" << keyIndex;
+
+    beginResetModel();
+    m_keys.remove(keyIndex);
+    m_keyIndexes.removeOne(keyIndex);
+    endResetModel();
+}
+
 void CustomLightModeKeys::toggle(const int& keyIndex, const QColor &colour)
 {
     if (m_keys.contains(keyIndex))
     {
-        beginResetModel();
-        m_keys.remove(keyIndex);
-        m_keyIndexes.removeOne(keyIndex);
-        endResetModel();
+        remove(keyIndex);
     }
     else
     {
@@ -101,6 +110,7 @@ const QHash<int, QColor> &CustomLightModeKeys::keys()
 
 void CustomLightModeKeys::clear()
 {
+    qInfo() << "Clear custom colours for all key indexes";
     beginResetModel();
     m_keys.clear();
     m_keyIndexes.clear();

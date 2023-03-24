@@ -46,6 +46,7 @@ public:
 
     void add(const int& keyIndex, const QColor &colour);
     void addIfNotExists(const int& keyIndex, const QColor &colour);
+    void remove(const int& keyIndex);
     void toggle(const int& keyIndex, const QColor &colour);
     void toggle(const int& keyIndex);
 
