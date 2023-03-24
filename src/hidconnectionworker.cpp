@@ -71,7 +71,7 @@ void HIDConnectionWorker::refreshKeyboards(QPointer<KeyboardModel> connectedKeyb
         if (configFile.exists()
         #ifdef Q_OS_WIN
                 && QString(devIterator->path).contains(u"&Col05"_s, Qt::CaseInsensitive)
-        #else   // FIXME: should not be hardcoded
+        #else
                 && devIterator->usage == 0x0080 && devIterator->usage_page == 0x0001
         #endif
                 && !connectedHIDPIDs.contains(usbID))
