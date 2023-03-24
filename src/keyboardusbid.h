@@ -1,6 +1,7 @@
 #ifndef KEYBOARDUSBID_H
 #define KEYBOARDUSBID_H
 
+#include <QDebug>
 struct KeyboardUSBID
 {
     unsigned short vid;
@@ -8,5 +9,7 @@ struct KeyboardUSBID
 
     bool operator==(const KeyboardUSBID& other) const;
 };
+
+QDebug& operator<<(QDebug& debug, const KeyboardUSBID& id);
 
 #endif // KEYBOARDUSBID_H

@@ -26,9 +26,11 @@ Item {
     signal returnToHome()
 
     Component.onCompleted: {
-        if (settingsController.unsavedChanges) settingsController.load()
-
         donateButton.configureText()
+    }
+
+    onReturnToHome: {
+        if (settingsController.unsavedChanges) settingsController.load()
     }
 
     onWidthChanged: donateButton.configureText()

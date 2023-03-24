@@ -49,7 +49,6 @@ QVariant ProfileModel::data(const QModelIndex &index, int role) const
         return m_profiles.at(index.row()).name;
     }
 
-
     return QVariant();
 }
 
@@ -76,6 +75,7 @@ bool ProfileModel::setData(const QModelIndex &index, const QVariant &value, int 
 
 int ProfileModel::createNewProfile(const QString& name)
 {
+    qInfo() << "Create profile" << name;
     QSettings settings;
 
     settings.beginGroup(u"profiles"_s);
@@ -96,10 +96,11 @@ int ProfileModel::createNewProfile(const QString& name)
 
 void ProfileModel::setProfileName(const qsizetype &row, const QString &name)
 {
+    qInfo() << "Change profile" << row << "name to" << name;
+
     setData(index(row, 0), name, ProfileModel::NameRole);
 
     QSettings settings;
-
     settings.beginGroup(u"profiles"_s);
 
     const Profile& p = m_profiles.at(row);
@@ -110,10 +111,13 @@ void ProfileModel::setProfileName(const qsizetype &row, const QString &name)
 
 void ProfileModel::deleteProfile(const qsizetype &row)
 {
+    const Profile& profile = m_profiles.at(row);
+
+    qInfo() << "Delete profile" << profile.name << "(" << profile.id <<")";
     QSettings settings;
 
     settings.beginGroup(u"profiles"_s);
-    settings.remove(m_profiles.at(row).id);
+    settings.remove(profile.id);
     settings.endGroup();
 
     beginRemoveRows(QModelIndex(), row, row);
@@ -125,7 +129,6 @@ void ProfileModel::deleteProfile(const qsizetype &row)
         m_defaultProfileIndex--;
         emit defaultProfileIndexChanged();
     }
-
 }
 
 QHash<int, QByteArray> ProfileModel::roleNames() const
@@ -145,6 +148,8 @@ int& ProfileModel::defaultProfileIndex()
 
 void ProfileModel::registerProfiles()
 {
+    qInfo() << "Register profiles";
+
     QSettings settings;
 
     m_defaultProfileIndex = 0;
@@ -172,9 +177,9 @@ void ProfileModel::registerProfiles()
         }
     }
 
-
     if (m_profiles.size() == 0)
     {
+        qInfo() << "No profiles found. Create default profile";
         createNewProfile(tr("Default Profile"));
     }
 

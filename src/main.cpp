@@ -23,23 +23,46 @@
 #include "mainwindowcontroller.h"
 #include "settingscontroller.h"
 #include "icons.h"
+#include "messagehandler.h"
 
 using namespace Qt::Literals::StringLiterals;
 
 int main(int argc, char *argv[])
 {
+    if (MessageHandler::init())
+    {
+        qInstallMessageHandler(MessageHandler::handler);
+    }
+    else
+    {
+        qCritical("Unable to start logging to file!");
+    }
+
+    qInfo() << "Rangoli" << VERSION;
+
+    if (QQuickWindow::graphicsApi() == QSGRendererInterface::Software)
+    {
+        qInfo() << "Graphics: Software";
+    }
+    else
+    {
+        qInfo() << "Graphics: Hardware";
+    }
+
     MainWindowController mainWindowController;
     KeyboardConfiguratorController keyboardConfiguratorController;
     SettingsController settingsController;
 
     QGuiApplication app(argc, argv);
 
+    qInfo() << "Platform:" << app.platformName();
+    qInfo() << "Qt" << qVersion();
+
     app.setOrganizationName(u"rnayabed"_s);
     app.setOrganizationDomain(u"rnayabed.github.io"_s);
     app.setApplicationName(u"rangoli"_s);
     app.setApplicationDisplayName(u"Rangoli"_s);
     app.setApplicationVersion(QString::number(VERSION));
-
     app.setWindowIcon(QIcon(Icons::get(Icons::Rangoli).remove(0,3)));
 
 #ifdef Q_OS_MACOS
@@ -49,6 +72,8 @@ int main(int argc, char *argv[])
 #endif
 
     QQmlApplicationEngine engine;
+
+    QObject::connect(&engine, &QQmlApplicationEngine::quit, MessageHandler::close);
 
     engine.setContextForObject(&mainWindowController, engine.rootContext());
     engine.rootContext()->setContextProperty(u"mainWindowController"_s, &mainWindowController);

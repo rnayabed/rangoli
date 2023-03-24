@@ -29,7 +29,7 @@ SettingsController::SettingsController(QObject *parent)
       m_alwaysShowSystemTrayIcon{false},
       m_closeToSystemTrayIcon{false},
       m_selectedDefaultProfileIndex{0},
-      m_unsavedChanges{false},
+      m_unsavedChanges{true},
       m_checkForUpdatesQuietMode{false},
       m_checkForUpdatesButtonEnabled{true}
 {}
@@ -93,6 +93,8 @@ bool SettingsController::udevRulesWritten()
 
 void SettingsController::setUdevRulesWritten(const bool& written)
 {
+    qInfo() << "Set udev_rules_written to" << written << "for version" << VERSION;
+
     QSettings settings;
     settings.remove(u"udev_rules_written"_s);
     settings.setValue(QStringLiteral("udev_rules_written/%1").arg(QString::number(VERSION)), written);
@@ -106,6 +108,8 @@ bool SettingsController::firstTimeUse()
 
 void SettingsController::setFirstTimeUse(const bool &firstTimeUse)
 {
+    qInfo() << "Set first_time_use to" << firstTimeUse;
+
     QSettings settings;
     settings.setValue(u"first_time_use"_s, firstTimeUse);
 }
@@ -157,6 +161,7 @@ void SettingsController::init()
     });
 
     load();
+    applyVisualSettings();
 }
 
 void SettingsController::setSelectedThemeIndex(const int &selectedThemeIndex)
@@ -268,10 +273,15 @@ void SettingsController::emailAuthor()
 
 void SettingsController::load()
 {
+    qInfo() << "Load settings";
+
     QSettings settings;
 
     setSelectedThemeIndex(settings.value(u"theme"_s, MainWindowController::Theme::System).toInt());
-    setAccentColour(settings.value(u"accent_colour"_s, QColor(DEFAULT_ACCENT_RED, DEFAULT_ACCENT_GREEN, DEFAULT_ACCENT_BLUE)).value<QColor>());
+    setAccentColour(settings.value(u"accent_colour"_s, QColor(
+                                       DEFAULT_ACCENT_RED,
+                                       DEFAULT_ACCENT_GREEN,
+                                       DEFAULT_ACCENT_BLUE)).value<QColor>());
 
     setSelectedDefaultProfileIndex(m_profiles->defaultProfileIndex());
     setStartOnBoot(settings.value(u"start_on_boot"_s, false).toBool());
@@ -281,11 +291,12 @@ void SettingsController::load()
     setCloseToSystemTrayIcon(settings.value(u"system_tray_icon/close_to"_s, true).toBool());
 
     setUnsavedChanges(false);
-    applyVisualSettings();
 }
 
 void SettingsController::save()
 {
+    qInfo() << "Save settings";
+
     QSettings settings;
 
     settings.setValue(u"theme"_s, m_selectedThemeIndex);
@@ -339,6 +350,9 @@ void SettingsController::save()
 
 void SettingsController::checkForUpdates(const bool& quiet)
 {
+    qInfo() << "Check for updates";
+    qDebug() << "quiet:" << quiet;
+
     setCheckForUpdatesButtonEnabled(false);
 
     m_checkForUpdatesQuietMode = quiet;
@@ -362,6 +376,7 @@ void SettingsController::updatesFetched(QNetworkReply *reply)
 
     if (reply->error() != QNetworkReply::NoError)
     {
+        qCritical() << "Failed to retrieve updates. Error: " << reply->errorString();
         if (!m_checkForUpdatesQuietMode)
         {
             emit m_mainWindow->loadEnhancedDialog(EnhancedDialog{
@@ -384,11 +399,15 @@ void SettingsController::updatesFetched(QNetworkReply *reply)
 
         if (!obj["prerelease"].toBool() && !obj["draft"].toBool())
         {
-            QString tagName = obj["tag_name"].toString();
+            QString tag = obj["tag_name"].toString();
+            qDebug() << "Tag found" << tag;
+
             bool ok;
-            float version = tagName.toFloat(&ok);
+            float version = tag.toFloat(&ok);
             if (ok && version > VERSION)
             {
+                qInfo() << "Update found";
+
                 EnhancedDialog d{
                     tr("Update available"),
                     tr("Version %1 is available for download. Open release page?").arg(version),
@@ -407,6 +426,10 @@ void SettingsController::updatesFetched(QNetworkReply *reply)
 
                 break;
             }
+            else if(!ok)
+            {
+                qDebug() << "Failed to convert tag to version. Ignore";
+            }
         }
     }
 
@@ -423,6 +446,8 @@ void SettingsController::updatesFetched(QNetworkReply *reply)
 
 void SettingsController::applyVisualSettings()
 {
+    qDebug() << "Apply visual settings to Main Window";
+
     emit m_mainWindow->setAccentColour(m_accentColour);
     m_mainWindow->setTheme(m_selectedThemeIndex);
     m_mainWindow->setAlwaysShowSystemTrayIcon(m_alwaysShowSystemTrayIcon);

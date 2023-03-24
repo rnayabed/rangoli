@@ -85,6 +85,10 @@ void CustomMappedKeys::setSelectedKeyIndex(const int &keyIndex)
 
 void CustomMappedKeys::add(const KeyCode::Code &code)
 {
+    qInfo() << "Add custom mapped key"
+            << KeyCode::Names[code]
+            << "for key index" << m_selectedKeyIndex;
+
     beginResetModel();
     if (m_keys.contains(m_selectedKeyIndex))
     {
@@ -111,6 +115,10 @@ void CustomMappedKeys::add(const KeyCode::Code &code)
 
 void CustomMappedKeys::remove(const int& index)
 {
+    qInfo() << "Remove custom mapped key"
+            << KeyCode::Names[m_keys[m_selectedKeyIndex].at(index)]
+            << "for key index" << m_selectedKeyIndex;
+
     beginResetModel();
 
     m_keys[m_selectedKeyIndex].removeAt(index);
@@ -125,6 +133,7 @@ void CustomMappedKeys::remove(const int& index)
 
 void CustomMappedKeys::clear()
 {
+    qInfo() << "Clear all custom mapped keys for key index" << m_selectedKeyIndex;
     beginResetModel();
     m_keys.remove(m_selectedKeyIndex);
     m_keyIndexes.removeOne(m_selectedKeyIndex);
@@ -133,6 +142,7 @@ void CustomMappedKeys::clear()
 
 void CustomMappedKeys::clearAll()
 {
+    qInfo() << "Clear all custom mapped keys for all key indexes";
     beginResetModel();
     m_keys.clear();
     m_keyIndexes.clear();

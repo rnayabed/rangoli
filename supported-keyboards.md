@@ -1,6 +1,12 @@
 # Supported Keyboards
 
-Rangoli currently supports 88 keyboards. If you cannot find your keyboard in this list, please create an [issue](https://github.com/rnayabed/rangoli/issues/new) to bring it to my attention.
+**Rangoli currently only supports boards with vendor ID `0x258a`.**
+
+It looks like the protocol used for keyboards with VID other than `0x258a` is totally different. Thankfully, for `0x0c45` boards, the reporter of that [issue](https://github.com/rnayabed/rangoli/issues/13) has provided packet captures with detailed context, so you are free to reverse engineer the protocol yourself. At the time of writing this, I really find myself unmotivated to work on it especially because I find it much more obfuscated than the protocol used for `0x258` boards. Thankfully, a vast majority of the models in the market are `0x258` protocol based and Rangoli supports most of the RK keyboards in the market.
+
+Note that some keyboards have similar names but [totally different Vendor and Product IDs](https://github.com/rnayabed/rangoli/issues/14).
+
+If you cannot find your keyboard in this list, or it is listed here yet you are still unable to configure it, please create an [issue](https://github.com/rnayabed/rangoli/issues/new) to bring it to my attention.
 
 | Name                           | PID  |
 | ------------------------------ | ---- |

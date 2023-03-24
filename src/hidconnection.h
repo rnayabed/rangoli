@@ -35,7 +35,9 @@ private:
     QPointer<HIDConnectionWorker> m_worker;
 
 signals:
-    void initDone(const bool& success);
+    void HIDColInitFailed();
+    void HIDAPIInitFailed();
+    void initSuccessful();
 
     void refreshKeyboards(QPointer<KeyboardModel> connectedKeyboards);
 

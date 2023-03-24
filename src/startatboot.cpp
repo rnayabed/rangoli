@@ -22,18 +22,28 @@ using namespace Qt::Literals::StringLiterals;
 
 bool StartAtBoot::createStarter()
 {
+    qInfo() << "Create starter";
+
 #if defined(Q_OS_LINUX)
     QDir serviceDir{QStringLiteral("%1/.local/share/systemd/user/").arg(QDir::homePath())};
 
+    qInfo() << "systemd services path:" << serviceDir.absolutePath();
+
     if (!serviceDir.exists())
     {
+        qInfo() << "Create path because it does not exist";
         if (!serviceDir.mkpath("."))
         {
+            qCritical() << "Failed to create systemd service file path";
             return false;
         }
     }
 
-    QFile service{serviceDir.absoluteFilePath(u"rangoli.service"_s)};
+    QString servicePath = serviceDir.absoluteFilePath(u"rangoli.service"_s);
+
+    qInfo() << "Create service" << servicePath;
+
+    QFile service{servicePath};
 
     if (service.open(QIODevice::WriteOnly))
     {
@@ -51,6 +61,8 @@ bool StartAtBoot::createStarter()
 
         service.close();
 
+        qInfo() << "Refresh systemd";
+
         QPointer<QProcess> daemonReload{new QProcess};
         QObject::connect(daemonReload, &QProcess::finished, StartAtBoot::linuxSystemDDaemonReloadFinished);
         QObject::connect(daemonReload, &QProcess::finished, daemonReload, &QProcess::deleteLater);
@@ -61,10 +73,15 @@ bool StartAtBoot::createStarter()
     }
     else
     {
+        qCritical() << "Failed to create systemd service";
         return false;
     }
+
 #elif defined(Q_OS_WIN)
-    QFile starter{QStringLiteral("%1/Microsoft/Windows/Start Menu/Programs/Startup/rangoli.vbs").arg(qgetenv("APPDATA"))};
+    QString starterPath{QStringLiteral("%1/Microsoft/Windows/Start Menu/Programs/Startup/rangoli.vbs").arg(qgetenv("APPDATA"))};
+    QFile starter{starterPath};
+
+    qInfo() << "Create script" << starterPath;
 
     if (starter.open(QIODevice::WriteOnly))
     {
@@ -78,12 +95,16 @@ bool StartAtBoot::createStarter()
     }
     else
     {
+        qCritical() << "Failed to create script";
         return false;
     }
-#elif defined(Q_OS_MACOS)
-    QString plistPath{QStringLiteral("%1/Library/LaunchAgents/io.github.rnayabed.rangoli.plist").arg(QDir::homePath())};
 
+#elif defined(Q_OS_MACOS)
+    QString plistPath{QStringLiteral("%1/Library/LaunchAgents/%2.plist")
+                .arg(QDir::homePath(), MACOSX_BUNDLE_GUI_IDENTIFIER)};
     QFile plist{plistPath};
+
+    qInfo() << "Create plist" << plistPath;
 
     if (plist.open(QIODevice::WriteOnly))
     {
@@ -94,7 +115,7 @@ bool StartAtBoot::createStarter()
               "<plist version=\"1.0\">\n"
               "  <dict>\n"
               "    <key>Label</key>\n"
-              "    <string>io.github.rnayabed.rangoli</string>\n"
+              "    <string>"_s<< MACOSX_BUNDLE_GUI_IDENTIFIER << u"</string>\n"
               "    <key>Program</key>\n"
               "    <string>"_s << QCoreApplication::arguments().at(0) << u"</string>\n"
               "    <key>ProgramArguments</key>\n"
@@ -106,6 +127,8 @@ bool StartAtBoot::createStarter()
 
         plist.close();
 
+        qInfo() << "Load plist";
+
         QPointer<QProcess> load{new QProcess};
         QObject::connect(load, &QProcess::finished, StartAtBoot::macOSLaunchCtlLoadFinished);
         QObject::connect(load, &QProcess::finished, load, &QProcess::deleteLater);
@@ -115,6 +138,7 @@ bool StartAtBoot::createStarter()
     }
     else
     {
+        qCritical() << "Failed to create plist";
         return false;
     }
 #endif
@@ -123,22 +147,46 @@ bool StartAtBoot::createStarter()
 
 bool StartAtBoot::deleteStarter()
 {
+    qInfo() << "Delete starter";
+
 #if defined(Q_OS_LINUX)
-    bool result = QFile{QStringLiteral("%1/.local/share/systemd/user/rangoli.service").arg(QDir::homePath())}.remove();
+    QString servicePath{QStringLiteral("%1/.local/share/systemd/user/rangoli.service").arg(QDir::homePath())};
+    bool result = QFile{servicePath}.remove();
+
+    if (!result)
+    {
+        qInfo() << "Failed to delete service" << servicePath;
+    }
+
+    qInfo() << "Refresh systemd";
 
     QPointer<QProcess> systemDReload{new QProcess};
     QObject::connect(systemDReload, &QProcess::finished, systemDReload, &QProcess::deleteLater);
     systemDReload->start(u"systemctl --user daemon-reload"_s);
 
     return result;
-#elif defined(Q_OS_WIN)
-    QFile starter{QStringLiteral("%1/Microsoft/Windows/Start Menu/Programs/Startup/rangoli.vbs").arg(qgetenv("APPDATA"))};
 
-    return starter.remove();
+#elif defined(Q_OS_WIN)
+    QString starterPath{QStringLiteral("%1/Microsoft/Windows/Start Menu/Programs/Startup/rangoli.vbs").arg(qgetenv("APPDATA"))};
+    bool result = QFile{starterPath}.remove();
+
+    if (!result)
+    {
+        qInfo() << "Failed to delete script" << starterPath;
+    }
+
+    return result;
+
 #elif defined(Q_OS_MACOS)
-    QString plistPath{QStringLiteral("%1/Library/LaunchAgents/io.github.rnayabed.rangoli.plist").arg(QDir::homePath())};
+    QString plistPath{QStringLiteral("%1/Library/LaunchAgents/%2.plist")
+                .arg(QDir::homePath(), MACOSX_BUNDLE_GUI_IDENTIFIER)};
 
     bool result = QFile{plistPath}.remove();
+
+    if (!result)
+    {
+        qInfo() << "Failed to delete plist" << plistPath;
+    }
 
     QPointer<QProcess> unload{new QProcess};
     QObject::connect(unload, &QProcess::finished, unload, &QProcess::deleteLater);
@@ -154,6 +202,8 @@ void StartAtBoot::linuxSystemDDaemonReloadFinished(int exitCode, QProcess::ExitS
     Q_UNUSED(exitCode)
     Q_UNUSED(exitStatus)
 
+    qInfo() << "Enable systemd service";
+
     QPointer<QProcess> enableService{new QProcess};
     QObject::connect(enableService, &QProcess::finished, enableService, &QProcess::deleteLater);
     enableService->start(u"systemctl --user enable rangoli.service"_s);
@@ -166,5 +216,5 @@ void StartAtBoot::macOSLaunchCtlLoadFinished(int exitCode, QProcess::ExitStatus 
 
     QPointer<QProcess> stop{new QProcess};
     QObject::connect(stop, &QProcess::finished, stop, &QProcess::deleteLater);
-    stop->start(u"launchctl stop io.github.rnayabed.rangoli"_s);
+    stop->start(QStringLiteral("launchctl stop %1").arg(MACOSX_BUNDLE_GUI_IDENTIFIER));
 }

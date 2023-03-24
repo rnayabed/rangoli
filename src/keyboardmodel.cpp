@@ -20,6 +20,8 @@ KeyboardModel::KeyboardModel(QObject *parent)
 
 void KeyboardModel::append(const Keyboard& keyboard)
 {
+    qInfo() << "Add keyboard" << keyboard.id;
+
     beginInsertRows(QModelIndex(), m_keyboards.size(), m_keyboards.size());
     m_keyboardUSBIDs << keyboard.id;
     m_keyboards << keyboard;
@@ -28,6 +30,8 @@ void KeyboardModel::append(const Keyboard& keyboard)
 
 void KeyboardModel::remove(const KeyboardUSBID& id)
 {
+    qInfo() << "Remove keyboard" << id;
+
     for (int i = 0; i < m_keyboardUSBIDs.size(); i++)
     {
         if (m_keyboardUSBIDs.at(i) == id)
@@ -36,8 +40,11 @@ void KeyboardModel::remove(const KeyboardUSBID& id)
             m_keyboardUSBIDs.removeAt(i);
             m_keyboards.removeAt(i);
             endRemoveRows();
+            return;
         }
     }
+
+    qCritical() << "Keyboard not found";
 }
 
 int KeyboardModel::rowCount(const QModelIndex &parent) const
