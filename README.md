@@ -49,11 +49,11 @@ Therefore, instead of changing the keyboard firmware, this software pretends to 
 - Per key LED Brightness, Animation and Sleep
 
 ## Planned features
-- Macros
 - Music Mode
 - Custom RGB Patterns
 
 ## Features that will not be worked on
+- Macros. This is something that can be done directly on OS level. There are tools like [AutoHotkey](https://www.autohotkey.com/) and [AutoKey](https://github.com/autokey/autokey) that does this far better than RK Software itself.
 - Keyboard Firmware update. I was not able to reverse engineer this aspect of the RK Software because the function itself is broken.
 
 ## Supported Keyboards
