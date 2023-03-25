@@ -5,7 +5,7 @@
 
 *Free, Open Source, Lightweight, Cross-platform Software for Royal Kludge Keyboards*
 
-![version](https://img.shields.io/badge/Version-1.0-green)
+![version](https://img.shields.io/badge/Version-2.0-green)
 ![Total Downloads](https://img.shields.io/github/downloads/rnayabed/rangoli/total?label=Total%20Downloads)
 [![Tip Me via PayPal](https://img.shields.io/badge/PayPal-Tip%20me-blue.svg?logo=paypal)](https://www.paypal.me/rnayabed)
 [![Tip Me via Ko-Fi](https://img.shields.io/badge/Ko--Fi-Tip%20me-red.svg?logo=kofi)](https://ko-fi.com/rnayabed)
