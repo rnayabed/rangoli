@@ -2,8 +2,8 @@
 <Package>
     <DisplayName>Rangoli</DisplayName>
     <Description>Install Rangoli on your system</Description>
-    <Version>1.0</Version>
-    <ReleaseDate>2023-02-11</ReleaseDate>
+    <Version>2.0</Version>
+    <ReleaseDate>2023-03-25</ReleaseDate>
     <Licenses>
         <License name="GNU General Public License Version 3.0" file="license.txt" />
     </Licenses>
