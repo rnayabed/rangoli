@@ -10,9 +10,9 @@ Note that some keyboards have similar names but [totally different Vendor and Pr
 
 If you cannot find your keyboard in this list, or it is listed here yet you are still unable to configure it, please create an [issue](https://github.com/rnayabed/rangoli/issues/new) to bring it to my attention.
 
-| Name                           | PID  | Supported          | Notes |
-| ------------------------------ | ---- | ------------------ | ----- |
-| RK-H81RGB                      | 0102 | <center>❌</center> | #17   |
+| Name                           | PID  | Supported | Notes |
+| ------------------------------ | :--: | :-------: | :---: |
+| RK-H81RGB                      | 0102 | ❌        | [#17](https://github.com/rnayabed/rangoli/issues/17) |
 | RK68 N ISO Return Bluetooth    | 0103 | <center>✔</center> |       |
 | RK68RGB N Wired                | 010a | <center>✔</center> |       |
 | RK84RGB N Wired                | 010d | <center>✔</center> |       |
@@ -31,7 +31,7 @@ If you cannot find your keyboard in this list, or it is listed here yet you are 
 | RK987 Single Color             | 0054 | <center>✔</center> |       |
 | RK-61                          | 0055 | <center>✔</center> |       |
 | RK100RGB                       | 0056 | <center>✔</center> |       |
-| RK857 Single                   | 0057 | <center>❌</center> | #16   |
+| RK857 Single                   | 0057 | <center>❌</center> | [#16](https://github.com/rnayabed/rangoli/issues/16) |
 | RK SINK104                     | 0058 | <center>✔</center> |       |
 | RK84RGB                        | 0059 | <center>✔</center> |       |
 | RK71RGB                        | 005a | <center>✔</center> |       |
@@ -41,7 +41,7 @@ If you cannot find your keyboard in this list, or it is listed here yet you are 
 | RK68RGB Bluetooth Dual Mode    | 005e | <center>✔</center> |       |
 | RK61                           | 0060 | <center>✔</center> |       |
 | RK68RGB Wired                  | 0064 | <center>✔</center> |       |
-| RK61RGB ISO Return             | 0065 | <center>❌</center> | #12   |
+| RK61RGB ISO Return             | 0065 | <center>❌</center> | [#12](https://github.com/rnayabed/rangoli/issues/12) |
 | RK61ISO Return                 | 0066 | <center>✔</center> |       |
 | RK100PRO                       | 0067 | <center>✔</center> |       |
 | RK987RGB Wired                 | 0068 | <center>✔</center> |       |
@@ -69,7 +69,7 @@ If you cannot find your keyboard in this list, or it is listed here yet you are 
 | RK96                           | 00a4 | <center>✔</center> |       |
 | RK71RGB N                      | 00a5 | <center>✔</center> |       |
 | RK932                          | 00a6 | <center>✔</center> |       |
-| RK68ISO Return                 | 00a9 | <center>❌</center> | #11   |
+| RK68ISO Return                 | 00a9 | <center>❌</center> | [#11](https://github.com/rnayabed/rangoli/issues/11) |
 | RK750-100RGB                   | 00aa | <center>✔</center> |       |
 | RK98Wired-100KRGB              | 00b3 | <center>✔</center> |       |
 | RK71RGB N BT                   | 00b5 | <center>✔</center> |       |
