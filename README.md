@@ -56,6 +56,9 @@ Therefore, instead of changing the keyboard firmware, this software pretends to 
 - Macros. This is something that can be done directly on OS level. There are tools like [AutoHotkey](https://www.autohotkey.com/) and [AutoKey](https://github.com/autokey/autokey) that does this far better than RK Software itself.
 - Keyboard Firmware update. I was not able to reverse engineer this aspect of the RK Software because the function itself is broken.
 
+## Disclaimer
+**Rangoli is NOT official software. I am not affiliated to Royal Kludge and only maintain this software in my free time. There is no gurantee that it will work with your keyboard. I only own a single RK keyboard (RK71RGB N Wired), reverse engineered it's protocol and assumed that all keyboards that I could find in the official software use the same protocol. There is no documentation available for RK Software protocol. If your keyboard does not work, please create a bug report.**
+
 ## Supported Keyboards
 
 Full list of supported keyboards can be found [here](https://github.com/rnayabed/rangoli/blob/master/supported-keyboards.md).

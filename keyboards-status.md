@@ -1,4 +1,4 @@
-# Supported Keyboards
+# Keyboards Status
 
 Below you can check if your keyboard is supported.
 
