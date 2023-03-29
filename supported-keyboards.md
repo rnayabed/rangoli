@@ -13,90 +13,90 @@ If you cannot find your keyboard in this list, or it is listed here yet you are 
 | Name                           | PID  | Supported | Notes |
 | ------------------------------ | :--: | :-------: | :---: |
 | RK-H81RGB                      | 0102 | ❌        | [#17](https://github.com/rnayabed/rangoli/issues/17) |
-| RK68 N ISO Return Bluetooth    | 0103 | <center>✔</center> |       |
-| RK68RGB N Wired                | 010a | <center>✔</center> |       |
-| RK84RGB N Wired                | 010d | <center>✔</center> |       |
-| RK987RGB 2.4G N                | 01ff | <center>✔</center> |       |
-| RK100                          | 002a | <center>✔</center> |       |
-| RK-68Plus                      | 0048 | <center>✔</center> |       |
-| RK-G68                         | 0049 | <center>✔</center> |       |
-| RK61RGB Wired                  | 004a | <center>✔</center> |       |
-| RK100RGB Wireless              | 004b | <center>✔</center> |       |
-| RK87RGB                        | 004c | <center>✔</center> |       |
-| RK71RGB Wired                  | 004d | <center>✔</center> |       |
-| RK71                           | 004e | <center>✔</center> |       |
-| G87RGB Wired                   | 004f | <center>✔</center> |       |
-| RK837                          | 0052 | <center>✔</center> |       |
-| RK960                          | 0053 | <center>✔</center> |       |
-| RK987 Single Color             | 0054 | <center>✔</center> |       |
-| RK-61                          | 0055 | <center>✔</center> |       |
-| RK100RGB                       | 0056 | <center>✔</center> |       |
-| RK857 Single                   | 0057 | <center>❌</center> | [#16](https://github.com/rnayabed/rangoli/issues/16) |
-| RK SINK104                     | 0058 | <center>✔</center> |       |
-| RK84RGB                        | 0059 | <center>✔</center> |       |
-| RK71RGB                        | 005a | <center>✔</center> |       |
-| RK987RGB                       | 005b | <center>✔</center> |       |
-| RK-G68RGB-UK                   | 005c | <center>✔</center> |       |
-| RK857                          | 005d | <center>✔</center> |       |
-| RK68RGB Bluetooth Dual Mode    | 005e | <center>✔</center> |       |
-| RK61                           | 0060 | <center>✔</center> |       |
-| RK68RGB Wired                  | 0064 | <center>✔</center> |       |
-| RK61RGB ISO Return             | 0065 | <center>❌</center> | [#12](https://github.com/rnayabed/rangoli/issues/12) |
-| RK61ISO Return                 | 0066 | <center>✔</center> |       |
-| RK100PRO                       | 0067 | <center>✔</center> |       |
-| RK987RGB Wired                 | 0068 | <center>✔</center> |       |
-| RK71RGB Wireless               | 0069 | <center>✔</center> |       |
-| RK71 Bluetooth Dual Mode       | 006a | <center>✔</center> |       |
-| RK87(882)                      | 006b | <center>✔</center> |       |
-| RK68Plus                       | 006f | <center>✔</center> |       |
-| RK98 RGB                       | 0070 | <center>✔</center> |       |
-| RK87(882) Wired                | 0074 | <center>✔</center> |       |
-| G68RGB ISO Return              | 0075 | <center>✔</center> |       |
-| RK87                           | 0078 | <center>✔</center> |       |
-| RK68Pro                        | 0079 | <center>✔</center> |       |
-| RK61 RGB Bluetooth Dual Mode   | 007a | <center>✔</center> |       |
-| RK896                          | 007b | <center>✔</center> |       |
-| RK87T RGBWired                 | 007c | <center>✔</center> |       |
-| G87RGB Wired                   | 007d | <center>✔</center> |       |
-| RK96 RGB                       | 0089 | <center>✔</center> |       |
-| RK68 Bluetooth Dual Mode       | 008b | <center>✔</center> |       |
-| RK61RGB ISO ReturnWired        | 008c | <center>✔</center> |       |
-| RK68 a switch                  | 008e | <center>✔</center> |       |
-| RK920RGB                       | 008f | <center>✔</center> |       |
-| RK89RGB                        | 009c | <center>✔</center> |       |
-| RK92RGB N                      | 009e | <center>✔</center> |       |
-| 68RGB Wired                    | 00a2 | <center>✔</center> |       |
-| RK96                           | 00a4 | <center>✔</center> |       |
-| RK71RGB N                      | 00a5 | <center>✔</center> |       |
-| RK932                          | 00a6 | <center>✔</center> |       |
-| RK68ISO Return                 | 00a9 | <center>❌</center> | [#11](https://github.com/rnayabed/rangoli/issues/11) |
-| RK750-100RGB                   | 00aa | <center>✔</center> |       |
-| RK98Wired-100KRGB              | 00b3 | <center>✔</center> |       |
-| RK71RGB N BT                   | 00b5 | <center>✔</center> |       |
-| RK61 Bluetooth Dual Mode       | 00b8 | <center>✔</center> |       |
-| RK857 Single                   | 00c0 | <center>✔</center> |       |
-| RK98-100KRGB N                 | 00c1 | <center>✔</center> |       |
-| K87RGB N                       | 00c3 | <center>✔</center> |       |
-| RK87RGB N Wired                | 00c4 | <center>✔</center> |       |
-| RK858 (61)                     | 00c6 | <center>✔</center> |       |
-| RK84N RGB                      | 00c8 | <center>✔</center> |       |
-| RK61 N RGB Bluetooth Dual Mode | 00c9 | <center>✔</center> |       |
-| RK89                           | 00cd | <center>✔</center> |       |
-| RK838 RGB                      | 00d6 | <center>✔</center> |       |
-| RK98Wired-100K N RGB           | 00d8 | <center>✔</center> |       |
-| RK61plus RGB N                 | 00da | <center>✔</center> |       |
-| RK883RGB N Wired               | 00de | <center>✔</center> |       |
-| RK100RGB N                     | 00e0 | <center>✔</center> |       |
-| RK61RGB N                      | 00e1 | <center>✔</center> |       |
-| RKG68RGB N                     | 00e7 | <center>✔</center> |       |
-| RK71RGB N Wired                | 00ea | <center>✔</center> |       |
-| RK61RGB N ISO Return           | 00ec | <center>✔</center> |       |
-| RK61 N RGB Bluetooth Dual Mode | 00ed | <center>✔</center> |       |
-| RK-H87RGB                      | 00ef | <center>✔</center> |       |
-| RK84Pro N RGB                  | 00f3 | <center>✔</center> |       |
-| RK84 RGB ISO Return            | 00f4 | <center>✔</center> |       |
-| RK-R87RGB Wired                | 00f6 | <center>✔</center> |       |
-| RK-R87 Wired                   | 00f7 | <center>✔</center> |       |
-| RK61plus RGB                   | 00f8 | <center>✔</center> |       |
-| RK987RGB N                     | 00f9 | <center>✔</center> |       |
-| RK68RGB N Bluetooth Dual Mode  | 00ff | <center>✔</center> |       |
+| RK68 N ISO Return Bluetooth    | 0103 | ✔        |       |
+| RK68RGB N Wired                | 010a | ✔        |       |
+| RK84RGB N Wired                | 010d | ✔        |       |
+| RK987RGB 2.4G N                | 01ff | ✔        |       |
+| RK100                          | 002a | ✔        |       |
+| RK-68Plus                      | 0048 | ✔        |       |
+| RK-G68                         | 0049 | ✔        |       |
+| RK61RGB Wired                  | 004a | ✔        |       |
+| RK100RGB Wireless              | 004b | ✔        |       |
+| RK87RGB                        | 004c | ✔        |       |
+| RK71RGB Wired                  | 004d | ✔        |       |
+| RK71                           | 004e | ✔        |       |
+| G87RGB Wired                   | 004f | ✔        |       |
+| RK837                          | 0052 | ✔        |       |
+| RK960                          | 0053 | ✔        |       |
+| RK987 Single Color             | 0054 | ✔        |       |
+| RK-61                          | 0055 | ✔        |       |
+| RK100RGB                       | 0056 | ✔        |       |
+| RK857 Single                   | 0057 | ❌        | [#16](https://github.com/rnayabed/rangoli/issues/16) |
+| RK SINK104                     | 0058 | ✔        |       |
+| RK84RGB                        | 0059 | ✔        |       |
+| RK71RGB                        | 005a | ✔        |       |
+| RK987RGB                       | 005b | ✔        |       |
+| RK-G68RGB-UK                   | 005c | ✔        |       |
+| RK857                          | 005d | ✔        |       |
+| RK68RGB Bluetooth Dual Mode    | 005e | ✔        |       |
+| RK61                           | 0060 | ✔        |       |
+| RK68RGB Wired                  | 0064 | ✔        |       |
+| RK61RGB ISO Return             | 0065 | ❌        | [#12](https://github.com/rnayabed/rangoli/issues/12) |
+| RK61ISO Return                 | 0066 | ✔        |       |
+| RK100PRO                       | 0067 | ✔        |       |
+| RK987RGB Wired                 | 0068 | ✔        |       |
+| RK71RGB Wireless               | 0069 | ✔        |       |
+| RK71 Bluetooth Dual Mode       | 006a | ✔        |       |
+| RK87(882)                      | 006b | ✔        |       |
+| RK68Plus                       | 006f | ✔        |       |
+| RK98 RGB                       | 0070 | ✔        |       |
+| RK87(882) Wired                | 0074 | ✔        |       |
+| G68RGB ISO Return              | 0075 | ✔        |       |
+| RK87                           | 0078 | ✔        |       |
+| RK68Pro                        | 0079 | ✔        |       |
+| RK61 RGB Bluetooth Dual Mode   | 007a | ✔        |       |
+| RK896                          | 007b | ✔        |       |
+| RK87T RGBWired                 | 007c | ✔        |       |
+| G87RGB Wired                   | 007d | ✔        |       |
+| RK96 RGB                       | 0089 | ✔        |       |
+| RK68 Bluetooth Dual Mode       | 008b | ✔        |       |
+| RK61RGB ISO ReturnWired        | 008c | ✔        |       |
+| RK68 a switch                  | 008e | ✔        |       |
+| RK920RGB                       | 008f | ✔        |       |
+| RK89RGB                        | 009c | ✔        |       |
+| RK92RGB N                      | 009e | ✔        |       |
+| 68RGB Wired                    | 00a2 | ✔        |       |
+| RK96                           | 00a4 | ✔        |       |
+| RK71RGB N                      | 00a5 | ✔        |       |
+| RK932                          | 00a6 | ✔        |       |
+| RK68ISO Return                 | 00a9 | ❌        | [#11](https://github.com/rnayabed/rangoli/issues/11) |
+| RK750-100RGB                   | 00aa | ✔        |       |
+| RK98Wired-100KRGB              | 00b3 | ✔        |       |
+| RK71RGB N BT                   | 00b5 | ✔        |       |
+| RK61 Bluetooth Dual Mode       | 00b8 | ✔        |       |
+| RK857 Single                   | 00c0 | ✔        |       |
+| RK98-100KRGB N                 | 00c1 | ✔        |       |
+| K87RGB N                       | 00c3 | ✔        |       |
+| RK87RGB N Wired                | 00c4 | ✔        |       |
+| RK858 (61)                     | 00c6 | ✔        |       |
+| RK84N RGB                      | 00c8 | ✔        |       |
+| RK61 N RGB Bluetooth Dual Mode | 00c9 | ✔        |       |
+| RK89                           | 00cd | ✔        |       |
+| RK838 RGB                      | 00d6 | ✔        |       |
+| RK98Wired-100K N RGB           | 00d8 | ✔        |       |
+| RK61plus RGB N                 | 00da | ✔        |       |
+| RK883RGB N Wired               | 00de | ✔        |       |
+| RK100RGB N                     | 00e0 | ✔        |       |
+| RK61RGB N                      | 00e1 | ✔        |       |
+| RKG68RGB N                     | 00e7 | ✔        |       |
+| RK71RGB N Wired                | 00ea | ✔        |       |
+| RK61RGB N ISO Return           | 00ec | ✔        |       |
+| RK61 N RGB Bluetooth Dual Mode | 00ed | ✔        |       |
+| RK-H87RGB                      | 00ef | ✔        |       |
+| RK84Pro N RGB                  | 00f3 | ✔        |       |
+| RK84 RGB ISO Return            | 00f4 | ✔        |       |
+| RK-R87RGB Wired                | 00f6 | ✔        |       |
+| RK-R87 Wired                   | 00f7 | ✔        |       |
+| RK61plus RGB                   | 00f8 | ✔        |       |
+| RK987RGB N                     | 00f9 | ✔        |       |
+| RK68RGB N Bluetooth Dual Mode  | 00ff | ✔        |       |
