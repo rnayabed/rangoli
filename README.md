@@ -31,7 +31,7 @@ There are efforts to get 3rd party firmware like [QMK](https://qmk.fm/) to run o
 
 I decided to try another approach to this problem. I reverse engineered the protocol these keyboards use with their default firmware. I did this by using [Wireshark](https://www.wireshark.org/) to capture and observe USB packets sent from my PC to my keyboard after editing settings in the RK Software.
 
-Therefore, instead of changing the keyboard firmware, this software pretends to be "RK Software". There is no risk of bricking your keyboard. It is plug and play!
+Therefore, instead of changing the keyboard firmware, this software pretends to be "RK Software".It is plug and play!
 
 ## Pros over RK Software
 - Free and Open Source.
@@ -57,7 +57,10 @@ Therefore, instead of changing the keyboard firmware, this software pretends to 
 - Keyboard Firmware update. I was not able to reverse engineer this aspect of the RK Software because the function itself is broken.
 
 ## Disclaimer
-**Rangoli is NOT official software. I am not affiliated to Royal Kludge and only maintain this software in my free time. There is no gurantee that it will work with your keyboard. I only own a single RK keyboard (RK71RGB N Wired), reverse engineered it's protocol and assumed that all keyboards that I could find in the official software use the same protocol. There is no documentation available for RK Software protocol. If your keyboard does not work, please create a bug report.**
+
+**Rangoli is NOT official software. It is a hobby project.**
+
+There is no guarantee that it will work with your keyboard. There is no official documentation for the RK Software protocol, so I had to reverse engineer it based on the RK71RGB N Keyboard. Other keyboards are not guaranteed to work. I am not responsible if you brick your keyboard. 
 
 ## Supported Keyboards
 
