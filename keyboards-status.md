@@ -101,8 +101,8 @@ Note that some keyboards have similar names but [different Vendor and Product ID
 | RK61plus RGB                   | 00f8 | ✔      |       |
 | RK987RGB N                     | 00f9 | ✔      |       |
 | RK68RGB N Bluetooth Dual Mode  | 00ff | ✔      |       |
-| RK857 Single                   | 0057 | ❗      | [#16](https://github.com/rnayabed/rangoli/issues/16) |
-| RK61RGB ISO Return             | 0065 | ❗      | [#12](https://github.com/rnayabed/rangoli/issues/12) |
+| RK857 Single                   | 0057 | ❗      | [Key Map does not work](https://github.com/rnayabed/rangoli/issues/16) |
+| RK61RGB ISO Return             | 0065 | ❗      | [Red & Green Colour Values Swapped](https://github.com/rnayabed/rangoli/issues/12) |
 | RK-H81RGB                      | 0102 | ❌      | [#17](https://github.com/rnayabed/rangoli/issues/17) |
 | RK68ISO Return                 | 00a9 | ❌      | [#11](https://github.com/rnayabed/rangoli/issues/11) |
 | RK84RGB                        | 0059 | ❌      | [#19](https://github.com/rnayabed/rangoli/issues/19)      |
