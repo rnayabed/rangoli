@@ -18,6 +18,8 @@
 
 ### [Screenshots](https://github.com/rnayabed/rangoli/blob/master/screenshots/README.md#screenshots)
 
+### [Keyboards Support Status List](https://github.com/rnayabed/rangoli/blob/master/keyboards-list.md)
+
 ### [Download latest release](https://github.com/rnayabed/rangoli/releases/latest)
 
 **If you enjoy using Rangoli, please consider [donating](https://github.com/rnayabed/rangoli#donate)**
@@ -61,10 +63,6 @@ Therefore, instead of changing the keyboard firmware, this software pretends to 
 **Rangoli is NOT official software. It is a hobby project.**
 
 There is no guarantee that it will work with your keyboard. There is no official documentation for the RK Software protocol, so I had to reverse engineer it based on the RK71RGB N Keyboard. Other keyboards are not guaranteed to work. I am not responsible if you brick your keyboard. 
-
-## Supported Keyboards
-
-Full list of supported keyboards can be found [here](https://github.com/rnayabed/rangoli/blob/master/supported-keyboards.md).
 
 ## Compile and Run from source
 
