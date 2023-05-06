@@ -18,6 +18,8 @@
 
 ### [Screenshots](https://github.com/rnayabed/rangoli/blob/master/screenshots/README.md#screenshots)
 
+### [Keyboards Support Status List](https://github.com/rnayabed/rangoli/blob/master/keyboards-list.md)
+
 ### [Download latest release](https://github.com/rnayabed/rangoli/releases/latest)
 
 **If you enjoy using Rangoli, please consider [donating](https://github.com/rnayabed/rangoli#donate)**
@@ -31,7 +33,7 @@ There are efforts to get 3rd party firmware like [QMK](https://qmk.fm/) to run o
 
 I decided to try another approach to this problem. I reverse engineered the protocol these keyboards use with their default firmware. I did this by using [Wireshark](https://www.wireshark.org/) to capture and observe USB packets sent from my PC to my keyboard after editing settings in the RK Software.
 
-Therefore, instead of changing the keyboard firmware, this software pretends to be "RK Software". There is no risk of bricking your keyboard. It is plug and play!
+Therefore, instead of changing the keyboard firmware, this software pretends to be "RK Software".It is plug and play!
 
 ## Pros over RK Software
 - Free and Open Source.
@@ -56,9 +58,11 @@ Therefore, instead of changing the keyboard firmware, this software pretends to 
 - Macros. This is something that can be done directly on OS level. There are tools like [AutoHotkey](https://www.autohotkey.com/) and [AutoKey](https://github.com/autokey/autokey) that does this far better than RK Software itself.
 - Keyboard Firmware update. I was not able to reverse engineer this aspect of the RK Software because the function itself is broken.
 
-## Supported Keyboards
+## Disclaimer
 
-Full list of supported keyboards can be found [here](https://github.com/rnayabed/rangoli/blob/master/supported-keyboards.md).
+**Rangoli is NOT official software. It is a hobby project.**
+
+There is no guarantee that it will work with your keyboard. There is no official documentation for the RK Software protocol, so I had to reverse engineer it based on the RK71RGB N Keyboard. Other keyboards are not guaranteed to work. I am not responsible if you brick your keyboard. 
 
 ## Compile and Run from source
 
