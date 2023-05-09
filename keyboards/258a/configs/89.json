@@ -1,6 +1,9 @@
 {
     "pid":"89",
     "name":"RK96 RGB",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":true,
     "top":[16, 12],
     "bottom":[947, 299],

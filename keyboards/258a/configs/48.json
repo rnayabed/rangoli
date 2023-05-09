@@ -1,6 +1,9 @@
 {
     "pid":"48",
     "name":"RK-68Plus",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":false,
     "top":[18, 54],
     "bottom":[699, 246],

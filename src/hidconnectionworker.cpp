@@ -147,6 +147,13 @@ void HIDConnectionWorker::refreshKeyboards(QPointer<KeyboardModel> connectedKeyb
 
             QJsonObject configObj = configDocument.object();
 
+            if (!configObj["enabled"].toBool())
+            {
+                devIterator = devIterator->next;
+                continue;
+            }
+
+
             QString name = configObj["name"].toString();
 
             QJsonArray topObj = configObj["top"].toArray();
@@ -154,49 +161,58 @@ void HIDConnectionWorker::refreshKeyboards(QPointer<KeyboardModel> connectedKeyb
             QJsonArray bottomObj = configObj["bottom"].toArray();
 
             QList<Key> keys;
-            bool keyMapEnabled = true;
 
-            QJsonArray keyObjs = configObj["keys"].toArray();
+            bool keyMapEnabled = configObj["keyMapEnabled"].toBool();
 
-            for (auto&& keyObjRef : keyObjs)
+            if (keyMapEnabled)
             {
-                QJsonObject keyObj = keyObjRef.toObject();
+                QJsonArray keyObjs = configObj["keys"].toArray();
 
-                QJsonArray keyTopObj = keyObj["top"].toArray();
-                QJsonArray keyBottomObj = keyObj["bottom"].toArray();
-
-                auto keyCodeStr = keyObj["keyCode"].toString();
-                auto bufferIndex = keyObj["bIndex"].toInt();
-
-                KeyCode::Code keyCode = KeyCode::CodeStrings[keyCodeStr];
-
-                if (keyCode == KeyCode::Code::Key_Invalid)
+                for (auto&& keyObjRef : keyObjs)
                 {
-                    qDebug() << "Ignoring invalid key code" << keyCodeStr
-                             << "with buffer index" << bufferIndex
-                             << "in keyboard" << name;
-                    continue;
+                    QJsonObject keyObj = keyObjRef.toObject();
+
+                    QJsonArray keyTopObj = keyObj["top"].toArray();
+                    QJsonArray keyBottomObj = keyObj["bottom"].toArray();
+
+                    auto keyCodeStr = keyObj["keyCode"].toString();
+                    auto bufferIndex = keyObj["bIndex"].toInt();
+
+                    KeyCode::Code keyCode = KeyCode::CodeStrings[keyCodeStr];
+
+                    if (keyCode == KeyCode::Code::Key_Invalid)
+                    {
+                        qDebug() << "Ignoring invalid key code" << keyCodeStr
+                                 << "with buffer index" << bufferIndex
+                                 << "in keyboard" << name;
+                        continue;
+                    }
+
+                    if (KeyCode::isUnknownKey(keyCode))
+                    {
+                        keyMapEnabled = false;
+                    }
+
+                    Key ll{bufferIndex,
+                           keyCode,
+                           keyTopObj[0].toInt(), keyTopObj[1].toInt(),
+                           keyBottomObj[0].toInt(), keyBottomObj[1].toInt()};
+
+                    keys << ll;
                 }
-
-                if (KeyCode::isUnknownKey(keyCode))
-                {
-                    keyMapEnabled = false;
-                }
-
-                Key ll{bufferIndex,
-                            keyCode,
-                            keyTopObj[0].toInt(), keyTopObj[1].toInt(),
-                            keyBottomObj[0].toInt(), keyBottomObj[1].toInt()};
-
-                keys << ll;
             }
 
             emit keyboardConnected(
-                        Keyboard { usbID,
-                                   QString(devIterator->path), name,
-                                   keys, configObj["rgb"].toBool(), keyMapEnabled,
-                                   topObj[0].toInt(), topObj[1].toInt(),
-                                   bottomObj[0].toInt(), bottomObj[1].toInt() });
+                Keyboard {
+                    usbID,
+                    QString(devIterator->path),
+                    name, keys,
+                    keyMapEnabled,
+                    configObj["lightEnabled"].toBool(),
+                    configObj["rgb"].toBool(),
+                    topObj[0].toInt(), topObj[1].toInt(),
+                    bottomObj[0].toInt(), bottomObj[1].toInt()
+                });
         }
 
         devIterator = devIterator->next;

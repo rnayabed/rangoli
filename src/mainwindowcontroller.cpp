@@ -540,9 +540,9 @@ void MainWindowController::setLinuxUdevPopupProceedButtonEnabled(const bool &lin
     emit linuxUdevPopupProceedButtonEnabledChanged();
 }
 
-void MainWindowController::openSupportedKeyboardsList()
+void MainWindowController::openKeyboardsSupportStatusList()
 {
-    QDesktopServices::openUrl(QUrl(QStringLiteral(SUPPORTED_KEYBOARDS)));
+    QDesktopServices::openUrl(QUrl(QStringLiteral(KEYBOARDS_SUPPORT_STATUS_LIST)));
 }
 
 void MainWindowController::showFatalError(const QString& title, const QString& message)

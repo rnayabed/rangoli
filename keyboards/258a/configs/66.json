@@ -1,6 +1,9 @@
 {
     "pid":"66",
     "name":"RK61ISO Return",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":false,
     "top":[6, 7],
     "bottom":[702, 232],
@@ -57,15 +60,15 @@
         { "bIndex":52, "keyCode":"Key_Comma", "top":[448, 150], "bottom":[478, 183] },
         { "bIndex":58, "keyCode":"Key_Dot", "top":[495, 150], "bottom":[525, 183] },
         { "bIndex":64, "keyCode":"Key_Slash", "top":[542, 150], "bottom":[572, 183] },
-        { "bIndex":82, "keyCode":"Key_Right_Shift", "top":[590, 150], "bottom":[702, 183] },
+        { "bIndex":76, "keyCode":"Key_Right_Shift", "top":[590, 150], "bottom":[702, 183] },
         { "bIndex":5, "keyCode":"Key_Left_Control", "top":[9, 197], "bottom":[49, 230] },
         { "bIndex":11, "keyCode":"Key_Left_Super", "top":[67, 197], "bottom":[107, 230] },
         { "bIndex":17, "keyCode":"Key_Left_Alt", "top":[127, 197], "bottom":[167, 230] },
         { "bIndex":35, "keyCode":"Key_Space", "top":[186, 198], "bottom":[465, 231] },
         { "bIndex":53, "keyCode":"Key_Right_Alt", "top":[484, 198], "bottom":[524, 231] },
-        { "bIndex":83, "keyCode":"Key_Fn", "top":[661, 198], "bottom":[701, 231] },
+        { "bIndex":77, "keyCode":"Key_Fn", "top":[661, 198], "bottom":[701, 231] },
         { "bIndex":65, "keyCode":"Key_Right_Control", "top":[602, 199], "bottom":[642, 232] },
-        { "bIndex":76, "keyCode":"Key_Left_Shift_Split", "top":[68, 150], "bottom":[98, 183] },
+        { "bIndex":82, "keyCode":"Key_Left_Shift_Split", "top":[68, 150], "bottom":[98, 183] },
         { "bIndex":81, "keyCode":"Key_Enter", "top":[664, 104], "bottom":[694, 137] }
     ]
 }

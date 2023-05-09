@@ -1,6 +1,9 @@
 {
     "pid":"d6",
-    "name":"RK838 RGB",
+    "name":"RK Round RGB",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":true,
     "top":[61, 90],
     "bottom":[800, 312],

@@ -1,6 +1,9 @@
 {
     "pid":"e1",
     "name":"RK61RGB N",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":true,
     "top":[6, 7],
     "bottom":[702, 232],

@@ -1,6 +1,9 @@
 {
     "pid":"8f",
     "name":"RK920RGB",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":true,
     "top":[21, 17],
     "bottom":[1009, 294],

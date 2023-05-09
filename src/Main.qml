@@ -13,8 +13,8 @@
 
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Controls.Material 2.15
-import QtQuick.Controls.Material.impl 2.15
+import QtQuick.Controls.Material
+import QtQuick.Controls.Material.impl
 import Qt.labs.platform
 import QtQml.Models
 
@@ -30,6 +30,8 @@ ApplicationWindow {
     minimumHeight: 300
 
     id: window
+
+    Material.background: Material.theme == Material.Light ? "#fafafa" : "#1c1b1f"
 
     Connections {
         target: mainWindowController
@@ -269,7 +271,7 @@ ApplicationWindow {
             Label {
                 anchors.verticalCenter: parent.verticalCenter
 
-                text: qsTr("Connect a Royal Kludge Keyboard to get started!");
+                text: qsTr("Connect a supported Royal Kludge Keyboard to get started!");
 
                 font.pixelSize: 15
             }
@@ -397,6 +399,8 @@ ApplicationWindow {
         margins: 10
         modal: true
 
+        Material.roundedScale: GlobalProps.roundedScale
+
         Column {
             spacing: 10
 
@@ -419,16 +423,16 @@ Please report an issue if your keyboard is unsupported, or is supported but unde
 
                 spacing: 10
 
-                Button {
-                    text: qsTr("Open Supported Keyboards List")
+                EnhancedButton {
+                    text: qsTr("Open Keyboards Support Status List")
 
                     flat: true
                     highlighted: true
 
-                    onClicked: mainWindowController.openSupportedKeyboardsList()
+                    onClicked: mainWindowController.openKeyboardsSupportStatusList()
                 }
 
-                Button {
+                EnhancedButton {
                     text: qsTr("Report Issue")
 
                     flat: true
@@ -437,7 +441,7 @@ Please report an issue if your keyboard is unsupported, or is supported but unde
                     onClicked: settingsController.reportIssue()
                 }
 
-                Button {
+                EnhancedButton {
                     text: qsTr("OK")
 
                     flat: true

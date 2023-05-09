@@ -22,6 +22,8 @@ Dialog
     id: dialog
     property var controller
 
+    Material.roundedScale: GlobalProps.roundedScale
+
     Component.onCompleted: {
         switch (controller.buttonsType) {
         case 0:

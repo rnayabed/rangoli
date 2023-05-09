@@ -1,6 +1,9 @@
 {
     "pid":"4e",
     "name":"RK71",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":false,
     "top":[12, 43],
     "bottom":[707, 247],

@@ -1,6 +1,9 @@
 {
     "pid":"1ff",
     "name":"RK987RGB 2.4G N",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":true,
     "top":[38, 25],
     "bottom":[732, 267],

@@ -15,8 +15,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Dialogs
 import QtQuick.Layouts // QTBUG-111187
-import QtQuick.Controls.Material 2.15
-import QtQuick.Controls.Material.impl 2.15
+import QtQuick.Controls.Material
+import QtQuick.Controls.Material.impl
 
 import Rangoli
 
@@ -88,6 +88,8 @@ Item {
         margins: 10
         modal: true
 
+        Material.roundedScale: GlobalProps.roundedScale
+
         property int index: -1
 
         function showNew()
@@ -129,7 +131,7 @@ Item {
 
                 spacing: 10
 
-                Button {
+                EnhancedButton {
                     text: qsTr("Save")
                     flat: true
                     highlighted: true
@@ -154,7 +156,7 @@ Item {
                     }
                 }
 
-                Button {
+                EnhancedButton {
                     text: qsTr("Close")
                     flat: true
                     highlighted: true
@@ -171,6 +173,8 @@ Item {
         anchors.centerIn: parent
         margins: 10
         modal: true
+
+        Material.roundedScale: GlobalProps.roundedScale
 
         Column {
             spacing: 10
@@ -263,7 +267,7 @@ Item {
                 }
             }
 
-            Button {
+            EnhancedButton {
                 anchors.right: parent.right
 
                 text: qsTr("Close")
@@ -281,6 +285,8 @@ Item {
         anchors.centerIn: parent
         margins: 10
         modal: true
+
+        Material.roundedScale: GlobalProps.roundedScale
 
         Item {
             anchors.fill: parent
@@ -401,7 +407,7 @@ Item {
                                 }
 
                                 delegate: Row {
-                                    Button {
+                                    EnhancedButton {
                                         flat: true
 
                                         width: configureKeyMapKeyCodesListView.width -
@@ -491,7 +497,7 @@ Item {
 
                 spacing: 10
 
-                Button {
+                EnhancedButton {
                     text: qsTr("Reset to default")
                     flat: true
                     highlighted: true
@@ -504,7 +510,7 @@ Item {
                     }
                 }
 
-                Button {
+                EnhancedButton {
                     text: qsTr("Close")
                     flat: true
                     highlighted: true
@@ -525,12 +531,15 @@ Item {
         margins: 10
         modal: true
 
+        Material.roundedScale: GlobalProps.roundedScale
+
         width: Math.min(kbConfigurator.width - (margins * 2), 400)
 
         Column {
             spacing: 10
 
             width: parent.width
+
 
             Label {
                 text: qsTr("Unsupported ... for now")
@@ -551,7 +560,7 @@ You can create an issue on GitHub, and I can guide you through the steps to accq
 
                 spacing: 10
 
-                Button {
+                EnhancedButton {
                     text: qsTr("Report Issue")
                     flat: true
                     highlighted: true
@@ -559,7 +568,7 @@ You can create an issue on GitHub, and I can guide you through the steps to accq
                     onClicked: settingsController.reportIssue()
                 }
 
-                Button {
+                EnhancedButton {
                     text: qsTr("Close")
                     flat: true
                     highlighted: true
@@ -585,7 +594,7 @@ You can create an issue on GitHub, and I can guide you through the steps to accq
         color: (Material.theme == Material.Light) ? "#e6e6e6" : "#444444"
 
 
-        Button {
+        EnhancedButton {
             id: lightModeButton
             anchors.top: parent.top
             width: parent.width
@@ -615,7 +624,7 @@ You can create an issue on GitHub, and I can guide you through the steps to accq
             ToolTip.timeout: mainWindowController.toolTipTimeout
         }
 
-        Button {
+        EnhancedButton {
             id: keyRemapModeButton
             anchors.top: lightModeButton.bottom
             width: parent.width
@@ -645,7 +654,7 @@ You can create an issue on GitHub, and I can guide you through the steps to accq
             ToolTip.timeout: mainWindowController.toolTipTimeout
         }
 
-        Button {
+        EnhancedButton {
             id: homeButton
             anchors.bottom: settingsButton.top
             width: parent.width
@@ -669,7 +678,7 @@ You can create an issue on GitHub, and I can guide you through the steps to accq
             ToolTip.timeout: mainWindowController.toolTipTimeout
         }
 
-        Button {
+        EnhancedButton {
             id: settingsButton
             anchors.bottom: parent.bottom
             width: parent.width
@@ -725,7 +734,7 @@ You can create an issue on GitHub, and I can guide you through the steps to accq
                 policy: ScrollBar.AsNeeded
             }
 
-            delegate: Button {
+            delegate: EnhancedButton {
                 id: lightModeMenuOption
 
                 topInset: 0
@@ -1121,13 +1130,13 @@ You can create an issue on GitHub, and I can guide you through the steps to accq
 
                             visible: keyboardConfiguratorController.isCustomLightModeSelected
 
-                            Button {
+                            EnhancedButton {
                                 text: qsTr("Select all")
 
                                 onClicked: keyboardConfiguratorController.selectAllKeysForCustomMode()
                             }
 
-                            Button {
+                            EnhancedButton {
                                 text: qsTr("Unselect all")
 
                                 onClicked: keyboardConfiguratorController.unselectAllKeysForCustomMode()
@@ -1377,7 +1386,7 @@ You can create an issue on GitHub, and I can guide you through the steps to accq
                             }
                         }
 
-                        Button {
+                        EnhancedButton {
                             id: pickColourButton
 
                             text: qsTr("Pick Colour")
@@ -1466,7 +1475,7 @@ You can create an issue on GitHub, and I can guide you through the steps to accq
                         text: qsTr("Click a key to edit")
                     }
 
-                    Button {
+                    EnhancedButton {
                         text: qsTr("Reset to default")
 
                         onClicked: {

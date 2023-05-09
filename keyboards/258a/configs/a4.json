@@ -1,6 +1,9 @@
 {
     "pid":"a4",
     "name":"RK96",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":false,
     "top":[16, 12],
     "bottom":[947, 299],

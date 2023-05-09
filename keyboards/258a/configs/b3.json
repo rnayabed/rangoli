@@ -1,6 +1,9 @@
 {
     "pid":"b3",
     "name":"RK98Wired-100KRGB",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":true,
     "top":[21, 18],
     "bottom":[826, 285],

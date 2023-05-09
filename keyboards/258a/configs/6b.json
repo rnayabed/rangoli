@@ -1,6 +1,9 @@
 {
     "pid":"6b",
     "name":"RK87(882)",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":false,
     "top":[38, 25],
     "bottom":[732, 267],

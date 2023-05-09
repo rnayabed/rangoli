@@ -1,6 +1,9 @@
 {
     "pid":"b8",
     "name":"RK61 Bluetooth Dual Mode",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":false,
     "top":[6, 7],
     "bottom":[702, 232],

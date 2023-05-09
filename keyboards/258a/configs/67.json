@@ -1,6 +1,9 @@
 {
     "pid":"67",
     "name":"RK100PRO",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":true,
     "top":[11, 9],
     "bottom":[838, 265],

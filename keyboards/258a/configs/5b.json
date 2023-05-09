@@ -1,6 +1,9 @@
 {
     "pid":"5b",
     "name":"RK987RGB",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":true,
     "top":[38, 25],
     "bottom":[732, 267],

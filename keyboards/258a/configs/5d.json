@@ -1,6 +1,9 @@
 {
     "pid":"5d",
     "name":"RK857",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":true,
     "top":[22, 17],
     "bottom":[702, 271],

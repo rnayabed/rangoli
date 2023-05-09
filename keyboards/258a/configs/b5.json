@@ -1,6 +1,9 @@
 {
     "pid":"b5",
     "name":"RK71RGB N BT",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":true,
     "top":[12, 43],
     "bottom":[707, 247],

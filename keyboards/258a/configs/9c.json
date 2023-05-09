@@ -1,6 +1,9 @@
 {
     "pid":"9c",
     "name":"RK89RGB",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":true,
     "top":[24, 19],
     "bottom":[838, 298],

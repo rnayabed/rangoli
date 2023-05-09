@@ -1,6 +1,9 @@
 {
     "pid":"53",
     "name":"RK960",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":false,
     "top":[34, 34],
     "bottom":[992, 287],

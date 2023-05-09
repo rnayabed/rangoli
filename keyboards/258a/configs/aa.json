@@ -1,6 +1,9 @@
 {
     "pid":"aa",
     "name":"RK750-100RGB",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":true,
     "top":[21, 18],
     "bottom":[826, 285],

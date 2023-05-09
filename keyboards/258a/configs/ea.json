@@ -1,6 +1,9 @@
 {
     "pid":"ea",
     "name":"RK71RGB N Wired",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":true,
     "top":[12, 43],
     "bottom":[707, 247],

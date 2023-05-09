@@ -87,7 +87,7 @@ Item {
             font.pixelSize: 20
         }
 
-        Button {
+        EnhancedButton {
             id: donateButton
 
             anchors {
@@ -364,7 +364,7 @@ Item {
                         text: qsTr("Rangoli Version %1").arg(settingsController.version)
                     }
 
-                    Button {
+                    EnhancedButton {
                         id: checkForUpdatesButton
 
                         anchors {
@@ -536,7 +536,7 @@ Item {
             border.color: "#979797"
         }
 
-        Button {
+        EnhancedButton {
             id: cdsPickButton
 
             anchors {

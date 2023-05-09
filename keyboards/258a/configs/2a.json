@@ -1,6 +1,9 @@
 {
     "pid":"2a",
     "name":"RK100",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":false,
     "top":[11, 9],
     "bottom":[838, 265],

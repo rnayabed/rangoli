@@ -1,6 +1,9 @@
 {
     "pid":"65",
     "name":"RK61RGB ISO Return",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":false,
     "rgb":true,
     "top":[6, 7],
     "bottom":[702, 232],

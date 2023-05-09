@@ -26,7 +26,10 @@ struct Keyboard
 {
     Keyboard(const KeyboardUSBID& id,
              const QString& path, const QString& name,
-             const QList<Key>& keys, const bool& rgb, const bool& keyMapEnabled,
+             const QList<Key>& keys,
+             const bool& keyMapEnabled,
+             const bool& lightEnabled,
+             const bool& rgb,
              const int& topLeftX, const int& topLeftY,
              const int& bottomRightX, const int& bottomRightY);
     ~Keyboard();
@@ -38,8 +41,9 @@ struct Keyboard
 
     QList<Key> keys;
 
-    bool rgb;
     bool keyMapEnabled;
+    bool lightEnabled;
+    bool rgb;
 
     int topLeftX;
     int topLeftY;

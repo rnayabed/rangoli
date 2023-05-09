@@ -1,6 +1,9 @@
 {
     "pid":"70",
     "name":"RK98 RGB",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":true,
     "top":[20, 15],
     "bottom":[846, 287],

@@ -1,6 +1,9 @@
 {
     "pid":"103",
     "name":"RK68 N ISO Return Bluetooth",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":true,
     "top":[10, 11],
     "bottom":[710, 232],

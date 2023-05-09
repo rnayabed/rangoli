@@ -1,6 +1,9 @@
 {
     "pid":"ef",
     "name":"RK-H87RGB",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":true,
     "top":[20, 78],
     "bottom":[826, 350],

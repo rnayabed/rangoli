@@ -1,6 +1,9 @@
 {
     "pid":"78",
     "name":"RK87",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":true,
     "top":[38, 25],
     "bottom":[732, 267],

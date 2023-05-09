@@ -1,6 +1,9 @@
 {
     "pid":"4b",
     "name":"RK100RGB Wireless",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":true,
     "top":[11, 9],
     "bottom":[838, 265],

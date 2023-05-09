@@ -1,6 +1,9 @@
 {
     "pid":"59",
     "name":"RK84RGB",
+    "enabled":false,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":true,
     "top":[22, 17],
     "bottom":[702, 271],

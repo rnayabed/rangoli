@@ -1,6 +1,9 @@
 {
     "pid":"c6",
-    "name":"RK858 (61)",
+    "name":"RK858£¨61£©",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":true,
     "top":[18, 16],
     "bottom":[694, 236],

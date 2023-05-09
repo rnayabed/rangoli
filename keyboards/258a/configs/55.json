@@ -1,6 +1,9 @@
 {
     "pid":"55",
     "name":"RK-61",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":true,
     "top":[6, 7],
     "bottom":[702, 232],

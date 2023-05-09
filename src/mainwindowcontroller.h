@@ -120,7 +120,7 @@ public slots:
 
     void setLinuxUdevPopupProceedButtonEnabled(const bool& linuxUdevPopupProceedButtonEnabled);
 
-    void openSupportedKeyboardsList();
+    void openKeyboardsSupportStatusList();
 
 private slots:
     void showFatalError(const QString& title, const QString& message);

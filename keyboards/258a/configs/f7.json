@@ -1,6 +1,9 @@
 {
     "pid":"f7",
     "name":"RK-R87 Wired",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":false,
     "top":[37, 23],
     "bottom":[730, 266],

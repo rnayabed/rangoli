@@ -1,6 +1,9 @@
 {
     "pid":"a9",
     "name":"RK68ISO Return",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":true,
     "top":[10, 11],
     "bottom":[710, 232],

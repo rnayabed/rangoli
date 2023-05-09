@@ -15,18 +15,21 @@
 
 #include <QDebug>
 
-Keyboard::Keyboard(const KeyboardUSBID &id,
-                   const QString &path, const QString &name,
-                    const QList<Key>& keys, const bool& rgb, const bool& keyMapEnabled,
+Keyboard::Keyboard(const KeyboardUSBID& id,
+                   const QString& path, const QString& name,
+                   const QList<Key>& keys,
+                   const bool& keyMapEnabled,
+                   const bool& lightEnabled,
+                   const bool& rgb,
                    const int& topLeftX, const int& topLeftY,
                    const int& bottomRightX, const int& bottomRightY)
     : id{id},
-      path{path}, name{name},
-      imagePath{QStringLiteral("file:keyboards/%1/images/%2.png")
-                .arg(QString::number(id.vid, 16), QString::number(id.pid, 16))},
-      keys{keys}, rgb{rgb}, keyMapEnabled{keyMapEnabled},
-      topLeftX{topLeftX}, topLeftY{topLeftY},
-      bottomRightX{bottomRightX}, bottomRightY{bottomRightY}
+    path{path}, name{name},
+    imagePath{QStringLiteral("file:keyboards/%1/images/%2.png")
+                  .arg(QString::number(id.vid, 16), QString::number(id.pid, 16))},
+    keys{keys}, keyMapEnabled{keyMapEnabled}, lightEnabled{lightEnabled}, rgb{rgb},
+    topLeftX{topLeftX}, topLeftY{topLeftY},
+    bottomRightX{bottomRightX}, bottomRightY{bottomRightY}
 {}
 
 Keyboard::~Keyboard()

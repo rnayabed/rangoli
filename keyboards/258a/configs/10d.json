@@ -1,6 +1,9 @@
 {
     "pid":"10d",
     "name":"RK84RGB N Wired",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":true,
     "top":[22, 17],
     "bottom":[702, 271],

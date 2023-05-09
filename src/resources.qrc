@@ -1,37 +1,25 @@
-<!--
- Copyright (C) 2023 Debayan Sutradhar (rnayabed) (debayansutradhar3@gmail.com)
-
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
--->
-
 <RCC>
-   <qresource prefix="/">
-       <file>qtquickcontrols2.conf</file>
-
-       <file>../icons/add.svg</file>
-       <file>../icons/arrow_back.svg</file>
-       <file>../icons/bug_report.svg</file>
-       <file>../icons/delete.svg</file>
-       <file>../icons/donate.svg</file>
-       <file>../icons/done.svg</file>
-       <file>../icons/edit.svg</file>
-       <file>../icons/git.svg</file>
-       <file>../icons/help.svg</file>
-       <file>../icons/home.svg</file>
-       <file>../icons/keyboard.svg</file>
-       <file>../icons/light.svg</file>
-       <file>../icons/rangoli.svg</file>
-       <file>../icons/refresh.svg</file>
-       <file>../icons/reset.svg</file>
-       <file>../icons/save.svg</file>
-       <file>../icons/settings.svg</file>
-       <file>../icons/website.svg</file>
-   </qresource>
+    <qresource prefix="/">
+        <file>qtquickcontrols2.conf</file>
+        <file>../icons/add.svg</file>
+        <file>../icons/arrow_back.svg</file>
+        <file>../icons/bug_report.svg</file>
+        <file>../icons/delete.svg</file>
+        <file>../icons/donate.svg</file>
+        <file>../icons/done.svg</file>
+        <file>../icons/edit.svg</file>
+        <file>../icons/git.svg</file>
+        <file>../icons/help.svg</file>
+        <file>../icons/home.svg</file>
+        <file>../icons/keyboard.svg</file>
+        <file>../icons/light.svg</file>
+        <file>../icons/rangoli.svg</file>
+        <file>../icons/refresh.svg</file>
+        <file>../icons/reset.svg</file>
+        <file>../icons/save.svg</file>
+        <file>../icons/settings.svg</file>
+        <file>../icons/website.svg</file>
+        <file>GlobalProps.qml</file>
+        <file>EnhancedButton.qml</file>
+    </qresource>
 </RCC>

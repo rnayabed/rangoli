@@ -1,6 +1,9 @@
 {
     "pid":"69",
     "name":"RK71RGB Wireless",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":true,
     "top":[12, 43],
     "bottom":[707, 247],

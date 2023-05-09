@@ -50,16 +50,26 @@ endif()
 
 qt_add_executable(rangoli ${SOURCE_LIST})
 
+set_source_files_properties(${MACOS_APP_ICON} PROPERTIES
+    MACOSX_PACKAGE_LOCATION "Resources"
+)
+
+set_source_files_properties(GlobalProps.qml PROPERTIES
+    QT_QML_SINGLETON_TYPE TRUE
+)
+
 qt_add_qml_module(rangoli
     URI Rangoli
     VERSION ${VERSION}
     QML_FILES
         Main.qml
+        EnhancedButton.qml
         EnhancedDialog.qml
         KeyboardMenuButton.qml
         KeyboardConfigurator.qml
         Settings.qml
         Hyperlink.qml
+        GlobalProps.qml
 )
 
 set_target_properties(rangoli PROPERTIES
@@ -73,9 +83,6 @@ set_target_properties(rangoli PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
-set_source_files_properties(${MACOS_APP_ICON} PROPERTIES
-    MACOSX_PACKAGE_LOCATION "Resources"
-)
 
 # Add extra compiler flags supported by GCC
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
@@ -126,8 +133,9 @@ endif()
 if (WIN32 OR APPLE)
     qt_generate_deploy_qml_app_script(
         TARGET rangoli
-        FILENAME_VARIABLE deploy_script
+        OUTPUT_SCRIPT deploy_script
         NO_UNSUPPORTED_PLATFORM_ERROR
+        NO_TRANSLATIONS
     )
 
     install(SCRIPT ${deploy_script})

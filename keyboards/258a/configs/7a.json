@@ -1,6 +1,9 @@
 {
     "pid":"7a",
     "name":"RK61 RGB Bluetooth Dual Mode",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":true,
     "top":[6, 7],
     "bottom":[702, 232],

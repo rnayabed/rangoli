@@ -1,6 +1,9 @@
 {
     "pid":"6f",
     "name":"RK68Plus",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":true,
     "top":[18, 54],
     "bottom":[699, 246],

@@ -1,6 +1,9 @@
 {
     "pid":"102",
     "name":"RK-H81RGB",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":true,
     "top":[37, 49],
     "bottom":[808, 345],

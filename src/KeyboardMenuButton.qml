@@ -13,8 +13,8 @@
 
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Controls.Material 2.15
-import QtQuick.Controls.Material.impl 2.15
+import QtQuick.Controls.Material
+import QtQuick.Controls.Material.impl
 
 Item {
     property alias kbName: kbName.text
@@ -31,6 +31,9 @@ Item {
 
         topInset: 0
         bottomInset: 0
+
+        Material.roundedScale: GlobalProps.roundedScale
+        Material.elevation: 6
 
         anchors {
             fill: parent

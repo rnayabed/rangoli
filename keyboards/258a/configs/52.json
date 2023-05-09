@@ -1,6 +1,9 @@
 {
     "pid":"52",
     "name":"RK837",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":false,
     "top":[10, 11],
     "bottom":[710, 232],

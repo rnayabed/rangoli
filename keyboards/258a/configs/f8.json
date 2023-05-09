@@ -1,6 +1,9 @@
 {
     "pid":"f8",
     "name":"RK61plus RGB",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":true,
     "top":[18, 16],
     "bottom":[694, 236],

@@ -1,6 +1,9 @@
 {
     "pid":"f3",
     "name":"RK84Pro N RGB",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":true,
     "top":[22, 17],
     "bottom":[702, 271],

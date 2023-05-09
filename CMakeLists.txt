@@ -31,7 +31,7 @@ set(MACOSX_BUNDLE_GUI_IDENTIFIER io.github.rnayabed.rangoli)
 add_compile_definitions(
     VERSION=${VERSION}
     GIT_REPOSITORY="https://github.com/rnayabed/rangoli"
-    SUPPORTED_KEYBOARDS="https://github.com/rnayabed/rangoli/blob/master/supported-keyboards.md"
+    KEYBOARDS_SUPPORT_STATUS_LIST="https://github.com/rnayabed/rangoli/blob/master/keyboards-list.md"
     WEBSITE="https://rnayabed.github.io/rangoli"
     REPORT_ISSUE="https://github.com/rnayabed/rangoli/issues/new"
     LICENSE="https://github.com/rnayabed/rangoli/blob/master/LICENSE"

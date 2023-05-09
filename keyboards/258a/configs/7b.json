@@ -1,6 +1,9 @@
 {
     "pid":"7b",
     "name":"RK896",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":true,
     "top":[21, 17],
     "bottom":[1009, 294],

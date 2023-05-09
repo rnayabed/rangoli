@@ -1,6 +1,9 @@
 {
     "pid":"57",
     "name":"RK857 Single",
+    "enabled":true,
+    "keyMapEnabled":false,
+    "lightEnabled":true,
     "rgb":false,
     "top":[22, 17],
     "bottom":[702, 271],

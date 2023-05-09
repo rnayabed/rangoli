@@ -1,6 +1,9 @@
 {
     "pid":"f4",
     "name":"RK84 RGB ISO Return",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":true,
     "top":[28, 19],
     "bottom":[701, 270],

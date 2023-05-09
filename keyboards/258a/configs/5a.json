@@ -1,6 +1,9 @@
 {
     "pid":"5a",
     "name":"RK71RGB",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":true,
     "top":[12, 43],
     "bottom":[707, 247],

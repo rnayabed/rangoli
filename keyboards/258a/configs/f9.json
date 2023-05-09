@@ -1,6 +1,9 @@
 {
     "pid":"f9",
     "name":"RK987RGB N ",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":true,
     "top":[38, 25],
     "bottom":[732, 267],

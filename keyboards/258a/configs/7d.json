@@ -1,6 +1,9 @@
 {
     "pid":"7d",
     "name":"G87RGB Wired",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":true,
     "top":[28, 27],
     "bottom":[786, 287],

@@ -1,6 +1,9 @@
 {
     "pid":"58",
     "name":"RK SINK104",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":false,
     "top":[21, 17],
     "bottom":[1009, 294],

@@ -1,6 +1,9 @@
 {
     "pid":"8c",
     "name":"RK61RGB ISO ReturnWired",
+    "enabled":true,
+    "keyMapEnabled":true,
+    "lightEnabled":true,
     "rgb":true,
     "top":[6, 7],
     "bottom":[702, 232],
