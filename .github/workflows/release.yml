@@ -3,7 +3,7 @@ name: Release
 on: workflow_dispatch
 
 env:
-  QT_VERSION: '6.4.2'
+  QT_VERSION: '6.5'
   QT_IFW_VERSION: '4.5'
   INSTALLER_PACKAGE_NAME: 'io.github.rnayabed.rangoli'
   LINUX_64_STATIC_URL: 'https://github.com/rnayabed/qt-builds/releases/download/6.4.2/qt-6.4.2-rangoli-linux-x86_64-static.zip'

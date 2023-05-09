@@ -68,7 +68,7 @@ There is no guarantee that it will work with your keyboard. There is no official
 
 ### Prerequisites
 
-- Qt >= 6.4
+- Qt >= 6.5
 - CMake >= 3.16
 - GCC >= 9.4.0 / Clang >= 5
 - Ninja >= 1.10.2
