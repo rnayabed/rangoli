@@ -46,7 +46,7 @@ jobs:
           libxcb-randr0-dev libxcb-render-util0-dev libxcb-util-dev libxcb-xinerama0 libxcb-xinerama0-dev libxcb-xkb-dev \
           libxkbcommon-dev libxkbcommon-x11-dev freeglut3 freeglut3-dev binutils-gold libglew-dev \
           mesa-common-dev libglew1.5-dev libglm-dev libgles2-mesa-dev xorg-dev libatspi2.0-dev libudev-dev \
-          libmtdev-dev libmtdev1 libts-bin libts-dev libts0 libinput-bin libinput-dev libinput10
+          libmtdev-dev libmtdev1 libts-bin libts-dev libts0 libinput-bin libinput-dev libinput10 openssl
       - name: Build 64-bit
         if: matrix.arch == 64
         run: |
