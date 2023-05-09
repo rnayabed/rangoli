@@ -6,7 +6,7 @@ env:
   QT_VERSION: '6.5'
   QT_IFW_VERSION: '4.5'
   INSTALLER_PACKAGE_NAME: 'io.github.rnayabed.rangoli'
-  LINUX_64_STATIC_URL: 'https://github.com/rnayabed/qt-builds/releases/download/6.4.2/qt-6.4.2-rangoli-linux-x86_64-static.zip'
+  LINUX_64_STATIC_URL: 'https://github.com/rnayabed/qt-builds/releases/download/6.5.0/qt-6.5.0-rangoli-linux-x86_64-static.zip'
   WINDOWS_64_OPENSSL_URL: 'https://github.com/rnayabed/OpenSSL-builds/releases/download/1.1.1t/windows-x86_64.zip'
   LINUX_64_OPENSSL_URL: 'https://github.com/rnayabed/OpenSSL-builds/releases/download/1.1.1t/linux-x86_64.zip'
 
@@ -70,6 +70,7 @@ jobs:
         run: |
           mv icons/rangoli.svg installer/packages/${INSTALLER_PACKAGE_NAME}/data/bin/rangoli.svg
       - name: Move OpenSSL files
+        if: matrix.arch != 64
         run: |
           mv openssl/* installer/packages/${INSTALLER_PACKAGE_NAME}/data/bin
       - name: Create installer
