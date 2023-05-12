@@ -53,7 +53,7 @@ add_compile_definitions(
     DEFAULT_ACCENT_BLUE=115
 )
 
-find_package(Qt6 6.4 COMPONENTS Quick Svg REQUIRED) # QTBUG-55199
+find_package(Qt6 6.5 COMPONENTS Quick Svg REQUIRED) # QTBUG-55199
 
 set(HIDAPI_WITH_LIBUSB FALSE)
 set(BUILD_SHARED_LIBS FALSE)
