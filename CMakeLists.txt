@@ -23,7 +23,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(LINUX_UDEV_RULE_WRITER_NAME "udev-rule-writer.sh")
+set(LINUX_UDEV_RULE_WRITER_NAME "udev-rule-writer")
 
 set(MACOSX_BUNDLE_COPYRIGHT "Debayan Sutradhar")
 set(MACOSX_BUNDLE_GUI_IDENTIFIER io.github.rnayabed.rangoli)
