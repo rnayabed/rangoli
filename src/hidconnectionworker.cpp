@@ -88,11 +88,14 @@ void HIDConnectionWorker::refreshKeyboards(QPointer<KeyboardModel> connectedKeyb
 
         if (configFile.exists()
 #ifdef Q_OS_WIN
-                && QString(devIterator->path).contains(QStringLiteral("&Col%1")
+               /* && QString(devIterator->path).contains(QStringLiteral("&Col%1")
                                                        .arg(m_hidColConfig[QStringLiteral("%1:%2")
                                                             .arg(QString::number(usbID.vid, 16),
                                                                  QString::number(usbID.pid, 16))].toString(defaultCol)),
-                                                       Qt::CaseInsensitive)
+                                                       Qt::CaseInsensitive)*/
+
+            && QString(devIterator->path).contains(QStringLiteral("&MI_00"),
+                                                   Qt::CaseInsensitive)
 #else
                 && devIterator->usage == 0x0080 && devIterator->usage_page == 0x0001
 #endif
