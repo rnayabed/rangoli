@@ -59,7 +59,6 @@ jobs:
           cmake --build build
           cmake --install build
 
-          chmod a+x installer/packages/${INSTALLER_PACKAGE_NAME}/data/bin/udev-rule-writer.sh
       - name: Cleanup directories
         run: |
           rm -rf installer/packages/${INSTALLER_PACKAGE_NAME}/data/lib
