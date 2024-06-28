@@ -11,7 +11,7 @@
  * GNU General Public License for more details.
  */
 
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QLocale>
 #include <QIcon>
@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
     KeyboardConfiguratorController keyboardConfiguratorController;
     SettingsController settingsController;
 
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
 
     qInfo() << "Platform:" << app.platformName();
     qInfo() << "Qt" << qVersion();

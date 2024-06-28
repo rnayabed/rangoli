@@ -53,10 +53,12 @@ add_compile_definitions(
     DEFAULT_ACCENT_BLUE=115
 )
 
-find_package(Qt6 6.5 COMPONENTS Quick Svg REQUIRED) # QTBUG-55199
+find_package(Qt6 COMPONENTS Quick Svg Widgets REQUIRED)
 
 set(HIDAPI_WITH_LIBUSB FALSE)
 set(BUILD_SHARED_LIBS FALSE)
 
 add_subdirectory(hidapi)
 add_subdirectory(src)
+
+target_link_libraries(rangoli PRIVATE Qt6::Widgets)
