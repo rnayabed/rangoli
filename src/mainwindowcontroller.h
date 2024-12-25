@@ -109,6 +109,7 @@ public slots:
     void init();
     void quit();
     void refreshKeyboards();
+    void loadKeyboardWithDefaultProfile(const int &index);
     void loadKeyboard(const int& index);
     void setInterruptClose(const bool& interruptClose);
     void closeInterrupted();

@@ -180,14 +180,12 @@ void MainWindowController::init()
     {
         connect(&connection, &HIDConnection::keyboardsScanComplete,
                 this, [this](){
-            QSettings settings;
 
             qInfo() << "Apply default profile";
 
             for (int i = 0 ; i < m_connectedKeyboards->keyboards().size(); i++)
             {
-                m_keyboardConfiguratorController->load(i);
-                m_keyboardConfiguratorController->applyDefaultProfile();
+                loadKeyboardWithDefaultProfile(i);
             }
         }, Qt::SingleShotConnection);
     }
@@ -278,6 +276,12 @@ void MainWindowController::refreshKeyboards()
     emit keyboardsScanningChanged();
 
     emit HIDConnection::getInstance().refreshKeyboards(m_connectedKeyboards);
+}
+
+void MainWindowController::loadKeyboardWithDefaultProfile(const int &index) {
+    m_keyboardConfiguratorController->load(index);
+
+    m_keyboardConfiguratorController->applyDefaultProfile();
 }
 
 void MainWindowController::loadKeyboard(const int &index)
