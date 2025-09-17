@@ -48,7 +48,43 @@ elseif(APPLE)
     list(APPEND SOURCE_LIST ${MACOS_APP_ICON})
 endif()
 
-qt_add_executable(rangoli ${SOURCE_LIST})
+# Ressourcen definieren
+qt_add_resources(RANGOLI_RESOURCES
+    resources.qrc
+)
+
+qt_add_executable(rangoli ${SOURCE_LIST} ${RANGOLI_RESOURCES})
+
+# Linux: udev writer kopieren
+if (CMAKE_SYSTEM_NAME MATCHES "Linux")
+    add_custom_command(
+        TARGET rangoli POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+            "${CMAKE_CURRENT_SOURCE_DIR}/${LINUX_UDEV_RULE_WRITER_NAME}"
+            "${CMAKE_CURRENT_BINARY_DIR}/${LINUX_UDEV_RULE_WRITER_NAME}"
+    )
+
+    # Installationsziel
+    install(PROGRAMS "${CMAKE_CURRENT_SOURCE_DIR}/${LINUX_UDEV_RULE_WRITER_NAME}"
+            DESTINATION ${CMAKE_INSTALL_BINDIR})
+endif()
+
+# Keyboards-Ordner kopieren
+add_custom_command(
+    TARGET rangoli POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${CMAKE_SOURCE_DIR}/keyboards"
+        "${CMAKE_CURRENT_BINARY_DIR}/keyboards"
+)
+
+if (APPLE)
+    install(DIRECTORY "${CMAKE_SOURCE_DIR}/keyboards"
+            DESTINATION ${CMAKE_INSTALL_PREFIX})
+else()
+    install(DIRECTORY "${CMAKE_SOURCE_DIR}/keyboards"
+            DESTINATION ${CMAKE_INSTALL_BINDIR})
+endif()
+
 
 set_source_files_properties(${MACOS_APP_ICON} PROPERTIES
     MACOSX_PACKAGE_LOCATION "Resources"
@@ -58,6 +94,7 @@ set_source_files_properties(GlobalProps.qml PROPERTIES
     QT_QML_SINGLETON_TYPE TRUE
 )
 
+# QML Modul
 qt_add_qml_module(rangoli
     URI Rangoli
     VERSION ${VERSION}
@@ -91,9 +128,11 @@ endif()
 
 target_compile_options(rangoli PRIVATE -Wall -Wextra -Werror)
 
+# Libraries
 target_link_libraries(rangoli
     PRIVATE Qt6::Quick Qt6::Svg
-    PRIVATE hidapi::hidapi)
+    PRIVATE hidapi::hidapi
+)
 
 install(TARGETS rangoli
     BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX}

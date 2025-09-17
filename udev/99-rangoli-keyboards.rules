@@ -1,0 +1,21 @@
+# udev rules for Rangoli Keyboard Mapper
+# This file allows unprivileged users to access Rangoli keyboards without sudo
+#
+# Installation:
+# 1. Copy this file to /etc/udev/rules.d/99-rangoli-keyboards.rules
+# 2. Run: sudo udevadm control --reload-rules && sudo udevadm trigger
+# 3. Replug your keyboard or restart your system
+#
+# For remote access (SSH), also add your user to the appropriate group:
+# Ubuntu/Debian: sudo usermod -aG plugdev $USER
+# Fedora/RHEL:   sudo usermod -aG input $USER
+# Then log out and log back in.
+
+# HIDAPI/hidraw - Allow access to all keyboards with Vendor ID 258a
+# Try plugdev first (Ubuntu/Debian), fallback to input (Fedora/RHEL)
+KERNEL=="hidraw*", ATTRS{idVendor}=="258a", TAG+="uaccess", GROUP="plugdev", MODE="660"
+KERNEL=="hidraw*", ATTRS{idVendor}=="258a", TAG+="uaccess", GROUP="input", MODE="660"
+
+# HIDAPI/libusb - Allow access to all keyboards with Vendor ID 258a
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="258a", TAG+="uaccess", GROUP="plugdev", MODE="660"
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="258a", TAG+="uaccess", GROUP="input", MODE="660"

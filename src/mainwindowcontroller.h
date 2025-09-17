@@ -109,6 +109,7 @@ public slots:
     void init();
     void quit();
     void refreshKeyboards();
+    void loadKeyboardWithDefaultProfile(const int &index);
     void loadKeyboard(const int& index);
     void setInterruptClose(const bool& interruptClose);
     void closeInterrupted();
@@ -142,7 +143,7 @@ private:
     const int m_toolTipTimeout;
 
     bool m_linuxUdevPopupProceedButtonEnabled;
-
+    std::unique_ptr<QProcess> udevWriterProcess;
 };
 
 #endif // MAINWINDOWCONTROLLER_H

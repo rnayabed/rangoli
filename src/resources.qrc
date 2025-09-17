@@ -22,4 +22,14 @@
         <file>GlobalProps.qml</file>
         <file>EnhancedButton.qml</file>
     </qresource>
+    <qresource prefix="/Rangoli">
+        <file>Main.qml</file>
+        <file>EnhancedButton.qml</file>
+        <file>EnhancedDialog.qml</file>
+        <file>KeyboardMenuButton.qml</file>
+        <file>KeyboardConfigurator.qml</file>
+        <file>Settings.qml</file>
+        <file>Hyperlink.qml</file>
+        <file>GlobalProps.qml</file>
+    </qresource>
 </RCC>

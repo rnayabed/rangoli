@@ -11,7 +11,7 @@
  * GNU General Public License for more details.
  */
 
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QLocale>
 #include <QIcon>
@@ -19,6 +19,7 @@
 #include <QQmlContext>
 #include <QQuickWindow>
 #include <QDir>
+#include <QProcessEnvironment>
 #include "keyboardconfiguratorcontroller.h"
 #include "mainwindowcontroller.h"
 #include "settingscontroller.h"
@@ -29,6 +30,17 @@ using namespace Qt::Literals::StringLiterals;
 
 int main(int argc, char *argv[])
 {
+    // Workaround for Qt6 Wayland menu crash on some systems
+    // Automatically fallback to X11 if running on Wayland
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    QString waylandDisplay = env.value("WAYLAND_DISPLAY");
+    QString qtPlatform = env.value("QT_QPA_PLATFORM");
+    
+    if (!waylandDisplay.isEmpty() && qtPlatform.isEmpty()) {
+        qputenv("QT_QPA_PLATFORM", "xcb");
+        qInfo() << "Detected Wayland session, using X11 backend to avoid Qt6 menu crashes";
+    }
+
     if (MessageHandler::init())
     {
         qInstallMessageHandler(MessageHandler::handler);
@@ -53,7 +65,7 @@ int main(int argc, char *argv[])
     KeyboardConfiguratorController keyboardConfiguratorController;
     SettingsController settingsController;
 
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
 
     qInfo() << "Platform:" << app.platformName();
     qInfo() << "Qt" << qVersion();

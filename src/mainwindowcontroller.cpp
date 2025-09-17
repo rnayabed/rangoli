@@ -25,14 +25,15 @@ MainWindowController::MainWindowController(QObject *parent)
       m_interruptClose{true}, m_confirmQuitDialogVisible{false}, m_alwaysShowSystemTrayIcon{false},
       m_closeToSystemTrayIcon{false}, m_startToSystemTrayIcon{false}, m_keyboardsScanning{true},
       m_toolTipDelay{1000}, m_toolTipTimeout{15000}, m_linuxUdevPopupProceedButtonEnabled{true}
-{}
-
-void MainWindowController::showEnhancedDialog(QObject* object, const EnhancedDialog &dialog)
 {
-    emit qvariant_cast<MainWindowController*>
-            (qmlEngine(object)
-             ->rootContext()
-             ->contextProperty(u"mainWindowController"_s))->loadEnhancedDialog(dialog);
+}
+
+void MainWindowController::showEnhancedDialog(QObject *object, const EnhancedDialog &dialog)
+{
+    emit qvariant_cast<MainWindowController *>(qmlEngine(object)
+                                                   ->rootContext()
+                                                   ->contextProperty(u"mainWindowController"_s))
+        ->loadEnhancedDialog(dialog);
 }
 
 QString MainWindowController::macOSPermissionNotice()
@@ -129,67 +130,60 @@ void MainWindowController::init()
 
     m_profiles->registerProfiles();
 
-    m_keyboardConfiguratorController = qvariant_cast<KeyboardConfiguratorController*>
-            (qmlEngine(this)
-             ->rootContext()
-             ->contextProperty(u"keyboardConfiguratorController"_s));
+    m_keyboardConfiguratorController = qvariant_cast<KeyboardConfiguratorController *>(qmlEngine(this)
+                                                                                           ->rootContext()
+                                                                                           ->contextProperty(u"keyboardConfiguratorController"_s));
 
-    QPointer<SettingsController> m_settingsController = qvariant_cast<SettingsController*>
-            (qmlEngine(this)
-             ->rootContext()
-             ->contextProperty(u"settingsController"_s));
+    QPointer<SettingsController> m_settingsController = qvariant_cast<SettingsController *>(qmlEngine(this)
+                                                                                                ->rootContext()
+                                                                                                ->contextProperty(u"settingsController"_s));
 
     m_settingsController->init();
     m_keyboardConfiguratorController->init();
 
-    HIDConnection& connection = HIDConnection::getInstance();
+    HIDConnection &connection = HIDConnection::getInstance();
 
-    connect(&connection, &HIDConnection::HIDColInitFailed, this, [this](){
-        showFatalError(tr("Unable to open HID Cols Config file"),
-                       tr("The program will now exit."));
-    }, Qt::SingleShotConnection);
+    connect(&connection, &HIDConnection::HIDColInitFailed, this, [this]()
+            { showFatalError(tr("Unable to open HID Cols Config file"),
+                             tr("The program will now exit.")); }, Qt::SingleShotConnection);
 
-    connect(&connection, &HIDConnection::HIDAPIInitFailed, this, [this](){
-        showFatalError(tr("Unable to initialise HID API"),
-                       tr("Please check if you have permissions and restart Rangoli. "
-                          "The program will now exit."));
-    }, Qt::SingleShotConnection);
+    connect(&connection, &HIDConnection::HIDAPIInitFailed, this, [this]()
+            { showFatalError(tr("Unable to initialise HID API"),
+                             tr("Please check if you have permissions and restart Rangoli. "
+                                "The program will now exit.")); }, Qt::SingleShotConnection);
 
     connect(&connection, &HIDConnection::initSuccessful, this, &MainWindowController::refreshKeyboards,
             Qt::SingleShotConnection);
 
     connect(&connection, &HIDConnection::keyboardConnected,
-            this, [this](const Keyboard& keyboard){
+            this, [this](const Keyboard &keyboard)
+            {
         m_connectedKeyboards->append(keyboard);
-        emit adjustOptionsSize(m_connectedKeyboards->rowCount());
-    });
+        emit adjustOptionsSize(m_connectedKeyboards->rowCount()); });
 
     connect(&connection, &HIDConnection::keyboardDisconnected,
-            this, [this](const KeyboardUSBID& id){
+            this, [this](const KeyboardUSBID &id)
+            {
         m_connectedKeyboards->remove(id);
-        emit adjustOptionsSize(m_connectedKeyboards->rowCount());
-    });
+        emit adjustOptionsSize(m_connectedKeyboards->rowCount()); });
 
     connect(&connection, &HIDConnection::keyboardsScanComplete,
-            this, [this](){
+            this, [this]()
+            {
         m_keyboardsScanning = false;
-        emit keyboardsScanningChanged();
-    });
+        emit keyboardsScanningChanged(); });
 
     if (m_settingsController->applyDefaultProfileOnStartup())
     {
-        connect(&connection, &HIDConnection::keyboardsScanComplete,
-                this, [this](){
-            QSettings settings;
+        connect(&connection, &HIDConnection::keyboardsScanComplete, this, [this]()
+                {
 
             qInfo() << "Apply default profile";
 
             for (int i = 0 ; i < m_connectedKeyboards->keyboards().size(); i++)
             {
-                m_keyboardConfiguratorController->load(i);
-                m_keyboardConfiguratorController->applyDefaultProfile();
-            }
-        }, Qt::SingleShotConnection);
+                loadKeyboardWithDefaultProfile(i);
+            } }, Qt::SingleShotConnection);
     }
 
     QDir keyboards{u"keyboards"_s};
@@ -218,15 +212,14 @@ void MainWindowController::init()
     connection.start();
 
 #ifdef Q_OS_LINUX
-    if (!QFile::exists(QStringLiteral(LINUX_UDEV_RULES_PATH))
-            || !m_settingsController->udevRulesWritten())
+    if (!QFile::exists(QStringLiteral(LINUX_UDEV_RULES_PATH)) || !m_settingsController->udevRulesWritten())
     {
         qInfo() << "Show Linux udev prompt";
         emit openLinuxUdevPopup();
     }
 #endif
 
-    if(m_settingsController->firstTimeUse())
+    if (m_settingsController->firstTimeUse())
     {
         qInfo() << "First time use";
 
@@ -239,26 +232,24 @@ void MainWindowController::init()
             tr("Would you like to check for updates on startup?\n"
                "No user data is collected whatsoever.\n\n"
                "You can always change this in settings."),
-            EnhancedDialog::ButtonsType::YES_NO
-        };
+            EnhancedDialog::ButtonsType::YES_NO};
 
-        d.setOnAccepted([m_settingsController](){
+        d.setOnAccepted([m_settingsController]()
+                        {
             m_settingsController->setCheckForUpdatesOnStartup(true);
-            m_settingsController->checkForUpdates(true);
-        });
+            m_settingsController->checkForUpdates(true); });
 
-        d.setOnRejected([m_settingsController](){
-            m_settingsController->setCheckForUpdatesOnStartup(false);
-        });
+        d.setOnRejected([m_settingsController]()
+                        { m_settingsController->setCheckForUpdatesOnStartup(false); });
 
-        d.setOnClosed([m_settingsController](){
+        d.setOnClosed([m_settingsController]()
+                      {
             m_settingsController->save();
-            m_settingsController->setFirstTimeUse(false);
-        });
+            m_settingsController->setFirstTimeUse(false); });
 
         emit loadEnhancedDialog(d);
     }
-    else if(m_settingsController->checkForUpdatesOnStartup())
+    else if (m_settingsController->checkForUpdatesOnStartup())
     {
         m_settingsController->checkForUpdates(true);
     }
@@ -280,6 +271,13 @@ void MainWindowController::refreshKeyboards()
     emit HIDConnection::getInstance().refreshKeyboards(m_connectedKeyboards);
 }
 
+void MainWindowController::loadKeyboardWithDefaultProfile(const int &index)
+{
+    m_keyboardConfiguratorController->load(index);
+
+    m_keyboardConfiguratorController->applyDefaultProfile();
+}
+
 void MainWindowController::loadKeyboard(const int &index)
 {
     m_keyboardConfiguratorController->load(index);
@@ -292,7 +290,8 @@ void MainWindowController::loadKeyboard(const int &index)
 
 void MainWindowController::setInterruptClose(const bool &interruptClose)
 {
-    if (m_interruptClose == interruptClose) return;
+    if (m_interruptClose == interruptClose)
+        return;
 
     m_interruptClose = interruptClose;
     emit interruptCloseChanged();
@@ -306,7 +305,6 @@ void MainWindowController::closeInterrupted()
         return;
     }
 
-
     if (!m_confirmQuitDialogVisible)
     {
         qInfo() << "Show unsaved changes prompt";
@@ -317,14 +315,16 @@ void MainWindowController::closeInterrupted()
                          tr("There are unsaved changes. Are you sure you want to quit?"),
                          EnhancedDialog::ButtonsType::YES_NO);
 
-        d.setOnAccepted([this](){quit();});
-        d.setOnRejected([this](){m_confirmQuitDialogVisible = false;});
+        d.setOnAccepted([this]()
+                        { quit(); });
+        d.setOnRejected([this]()
+                        { m_confirmQuitDialogVisible = false; });
 
         emit loadEnhancedDialog(d);
     }
 }
 
-void MainWindowController::setTheme(const int& theme)
+void MainWindowController::setTheme(const int &theme)
 {
     if (theme == Theme::System)
     {
@@ -345,7 +345,8 @@ void MainWindowController::setTheme(const int& theme)
 
 void MainWindowController::setAlwaysShowSystemTrayIcon(const bool &alwaysShowSystemTrayIcon)
 {
-    if(m_alwaysShowSystemTrayIcon == alwaysShowSystemTrayIcon) return;
+    if (m_alwaysShowSystemTrayIcon == alwaysShowSystemTrayIcon)
+        return;
 
     m_alwaysShowSystemTrayIcon = alwaysShowSystemTrayIcon;
     emit alwaysShowSystemTrayIconChanged();
@@ -353,7 +354,8 @@ void MainWindowController::setAlwaysShowSystemTrayIcon(const bool &alwaysShowSys
 
 void MainWindowController::setCloseToSystemTrayIcon(const bool &closeToSystemTrayIcon)
 {
-    if(m_closeToSystemTrayIcon == closeToSystemTrayIcon) return;
+    if (m_closeToSystemTrayIcon == closeToSystemTrayIcon)
+        return;
 
     m_closeToSystemTrayIcon = closeToSystemTrayIcon;
     emit closeToSystemTrayIconChanged();
@@ -362,179 +364,130 @@ void MainWindowController::setCloseToSystemTrayIcon(const bool &closeToSystemTra
 void MainWindowController::launchLinuxUdevWriter()
 {
     qInfo() << "Launch Linux udev writer";
-
     setLinuxUdevPopupProceedButtonEnabled(false);
 
-    if (!QFile::exists(QStringLiteral(LINUX_UDEV_RULE_WRITER_NAME)))
-    {
-        emit loadEnhancedDialog(EnhancedDialog {
-                                    tr("Error"),
-                                    tr("Unable to find udev rule writer.")
-                                });
-
+    // Absolute path to udev writer
+    QString udevWriterPath = QDir(QCoreApplication::applicationDirPath())
+                                 .filePath(LINUX_UDEV_RULE_WRITER_NAME);
+    if (!QFile::exists(udevWriterPath)) {
+        emit loadEnhancedDialog(EnhancedDialog{
+            tr("Error"),
+            tr("Unable to find udev rule writer.")
+        });
         setLinuxUdevPopupProceedButtonEnabled(true);
         return;
     }
 
-    QString exitOK{u"0"_s};
-    QString exitKeyboardsReadFailed{u"1"_s};
-    QString exitRuleWriteFailed{u"2"_s};
+    QString exitOK{"0"};
+    QString exitKeyboardsReadFailed{"1"};
+    QString exitRuleWriteFailed{"2"};
+
+    QString outputPath = QDir(QCoreApplication::applicationDirPath())
+                             .filePath("udev-rule-writer_OUTPUT");
 
     QString oldID;
-    QString outputPath{QStringLiteral("%1_OUTPUT").arg(QStringLiteral(LINUX_UDEV_RULE_WRITER_NAME))};
     QFile oldOutput{outputPath};
-
-    if (oldOutput.exists())
-    {
-        if (!oldOutput.open(QIODevice::ReadOnly))
-        {
-            qCritical() << "Failed to old output" << outputPath;
-            emit loadEnhancedDialog(EnhancedDialog {
-                                        tr("Error"),
-                                        tr("Unable to read old ID.")
-                                    });
-
+    if (oldOutput.exists()) {
+        if (!oldOutput.open(QIODevice::ReadOnly)) {
+            qCritical() << "Failed to read old output:" << outputPath;
+            emit loadEnhancedDialog(EnhancedDialog{
+                tr("Error"),
+                tr("Unable to read old ID.")
+            });
             setLinuxUdevPopupProceedButtonEnabled(true);
             return;
         }
-
         oldID = oldOutput.readAll().split(':').at(0);
-
         oldOutput.close();
     }
 
-    QPointer<QProcess> udevWriter{new QProcess{this}};
-    connect(udevWriter, &QProcess::finished, this,
-            [this, outputPath, exitOK, exitKeyboardsReadFailed, exitRuleWriteFailed, oldID]
-            (int exitCode, QProcess::ExitStatus exitStatus) {
-        Q_UNUSED(exitStatus)
-        Q_UNUSED(exitCode)
+    // Keep QProcess as member so it doesn't get destroyed immediately
+    udevWriterProcess.reset(new QProcess(this));
 
+    connect(udevWriterProcess.get(), &QProcess::finished, this,
+            [this, outputPath, exitOK, exitKeyboardsReadFailed, exitRuleWriteFailed, oldID](int /*exitCode*/, QProcess::ExitStatus) {
         setLinuxUdevPopupProceedButtonEnabled(true);
 
         QFile output{outputPath};
-
-        if (!output.open(QIODevice::ReadOnly))
-        {
-            qCritical() << "Failed to new output" << outputPath;
-            emit loadEnhancedDialog(EnhancedDialog {
-                                        tr("Error"),
-                                        tr("The udev rules writer failed to run. Did you provide incorrect password?")
-                                    });
+        if (!output.open(QIODevice::ReadOnly)) {
+            qCritical() << "Failed to read output:" << outputPath;
+            emit loadEnhancedDialog(EnhancedDialog{
+                tr("Error"),
+                tr("The udev rules writer failed to run. Did you provide incorrect password?")
+            });
             return;
         }
 
         QByteArray outRaw = output.readAll();
-        qDebug() << "Output File raw:" << outRaw;
-
         output.close();
 
         QList<QByteArray> outputs{outRaw.split(':')};
-        qDebug() << "Outputs length:" << outputs.length();
-
-        QString newID = outputs.at(0);
-        qDebug() << "New ID:" << newID;
-        qDebug() << "Old ID:" << oldID;
-
-        if (newID == oldID)
-        {
-            emit loadEnhancedDialog(EnhancedDialog {
-                                        tr("Error"),
-                                        tr("The udev rules writer failed to run. Did you provide incorrect password?")
-                                    });
-            return;
-        }
-
-        if (outputs.length() != 2)
-        {
-            emit loadEnhancedDialog(EnhancedDialog {
-                                        tr("Error"),
-                                        tr("Malformed output from udev writer.")
-                                    });
+        if (outputs.size() != 2 || outputs.at(0) == oldID) {
+            emit loadEnhancedDialog(EnhancedDialog{
+                tr("Error"),
+                tr("The udev rules writer failed to run. Did you provide incorrect password?")
+            });
             return;
         }
 
         QString newExitCode = outputs.at(1);
-        qDebug() << "New exit code:" << newExitCode;
-
-        if (newExitCode == exitOK)
-        {
+        if (newExitCode == exitOK) {
             emit closeLinuxUdevPopup();
-
-            emit loadEnhancedDialog(EnhancedDialog {
-                                        tr("Successful"),
-                                        tr("udev rules have been applied and reloaded! Enjoy Rangoli!")
-                                    });
-
-            qvariant_cast<SettingsController*>
-                        (qmlEngine(this)
-                         ->rootContext()
-                         ->contextProperty(u"settingsController"_s))->setUdevRulesWritten(true);
-        }
-        else if (newExitCode == exitKeyboardsReadFailed)
-        {
-            qCritical() << "Failed to read keyboards information";
-
-            emit loadEnhancedDialog(EnhancedDialog {
-                                        tr("Error"),
-                                        tr("Failed to read keyboards information")
-                                    });
-        }
-        else if (newExitCode == exitRuleWriteFailed)
-        {
-            qCritical() << "Malformed output from udev writer";
-
-            emit loadEnhancedDialog(EnhancedDialog {
-                                        tr("Error"),
-                                        tr("Malformed output from udev writer.")
-                                    });
-        }
-        else
-        {
-            qCritical() << "Malformed exit code from udev writer";
-
-            emit loadEnhancedDialog(EnhancedDialog {
-                                        tr("Error"),
-                                        tr("Malformed exit code from udev writer.")
-                                    });
+            emit loadEnhancedDialog(EnhancedDialog{
+                tr("Successful"),
+                tr("udev rules have been applied and reloaded! Enjoy Rangoli!")
+            });
+            auto settings = qvariant_cast<SettingsController *>(qmlEngine(this)
+                ->rootContext()
+                ->contextProperty(u"settingsController"_s));
+            if (settings) {
+                settings->setUdevRulesWritten(true);
+            }
+        } else if (newExitCode == exitKeyboardsReadFailed) {
+            emit loadEnhancedDialog(EnhancedDialog{
+                tr("Error"),
+                tr("Failed to read keyboards information")
+            });
+        } else if (newExitCode == exitRuleWriteFailed) {
+            emit loadEnhancedDialog(EnhancedDialog{
+                tr("Error"),
+                tr("Malformed output from udev writer.")
+            });
+        } else {
+            emit loadEnhancedDialog(EnhancedDialog{
+                tr("Error"),
+                tr("Malformed exit code from udev writer.")
+            });
         }
     });
 
-    connect(udevWriter, &QProcess::errorOccurred, this,
-            [this](QProcess::ProcessError error){
-
+    connect(udevWriterProcess.get(), &QProcess::errorOccurred, this,
+            [this](QProcess::ProcessError error) {
         setLinuxUdevPopupProceedButtonEnabled(true);
-
-        qCritical() << "Failed to start" << LINUX_TERMINAL << ". Error Code:" << error;
-
-        if (error == QProcess::FailedToStart)
-        {
-            emit loadEnhancedDialog(EnhancedDialog{
-                                        tr("Unable to start udev rules writer"),
-                                        tr("You need to have '%1' installed!").arg(LINUX_TERMINAL)
-                                    });
-        }
-        else
-        {
-            emit loadEnhancedDialog(EnhancedDialog{
-                                        tr("Unable to start udev rules writer."),
-                                        tr("Error Code: %1").arg(QString::number(error))
-                                    });
-        }
+        qCritical() << "Failed to start pkexec. Error:" << error;
+        emit loadEnhancedDialog(EnhancedDialog{
+            tr("Unable to start udev rules writer"),
+            tr("You need to have 'pkexec' installed and properly configured!")
+        });
     });
 
-    udevWriter->start(QStringLiteral(LINUX_TERMINAL), QStringList() << u"-e"_s <<
-                          QStringLiteral("echo -n \"\\033]0;%1\\007\" && sudo ./%2 %3 %4 %5 %6 %7 %8")
-                          .arg(tr("Rangoli - Create udev Rules"),
-                               QStringLiteral(LINUX_UDEV_RULE_WRITER_NAME),
-                               QStringLiteral("%1/keyboards").arg(QDir::currentPath()),
-                               QStringLiteral(LINUX_UDEV_RULES_PATH),
-                               outputPath, exitOK, exitKeyboardsReadFailed, exitRuleWriteFailed));
+    // Start pkexec
+    udevWriterProcess->start(QStringLiteral("pkexec"), QStringList{
+        udevWriterPath,
+        QStringLiteral("%1/keyboards").arg(QDir::currentPath()),
+        LINUX_UDEV_RULES_PATH,
+        outputPath,
+        exitOK,
+        exitKeyboardsReadFailed,
+        exitRuleWriteFailed
+    });
 }
+
 
 void MainWindowController::setLinuxUdevPopupProceedButtonEnabled(const bool &linuxUdevPopupProceedButtonEnabled)
 {
-    if (m_linuxUdevPopupProceedButtonEnabled == linuxUdevPopupProceedButtonEnabled) return;
+    if (m_linuxUdevPopupProceedButtonEnabled == linuxUdevPopupProceedButtonEnabled)
+        return;
 
     m_linuxUdevPopupProceedButtonEnabled = linuxUdevPopupProceedButtonEnabled;
     emit linuxUdevPopupProceedButtonEnabledChanged();
@@ -545,16 +498,16 @@ void MainWindowController::openKeyboardsSupportStatusList()
     QDesktopServices::openUrl(QUrl(QStringLiteral(KEYBOARDS_SUPPORT_STATUS_LIST)));
 }
 
-void MainWindowController::showFatalError(const QString& title, const QString& message)
+void MainWindowController::showFatalError(const QString &title, const QString &message)
 {
     EnhancedDialog d{title, message};
 
     qCritical() << message;
 
-    d.setOnAccepted([this](){
+    d.setOnAccepted([this]()
+                    {
         setCloseToSystemTrayIcon(false);
-        quit();
-    });
+        quit(); });
 
     emit loadEnhancedDialog(d);
 }

@@ -73,6 +73,33 @@ There is no guarantee that it will work with your keyboard. There is no official
 - GCC >= 9.4.0 / Clang >= 5
 - Ninja >= 1.10.2
 
+#### Fedora Linux
+
+Install the required packages:
+
+```bash
+# Development tools and Qt6
+sudo dnf install cmake ninja-build gcc-c++ git
+
+# Qt6 packages
+sudo dnf install qt6-qtbase-devel qt6-qtdeclarative-devel qt6-qtsvg-devel
+
+# HID development libraries (for hidapi)
+sudo dnf install libudev-devel libusb1-devel
+
+# Optional: Additional Qt6 tools
+sudo dnf install qt6-qttools-devel
+```
+
+#### Other Linux Distributions
+
+For Ubuntu/Debian:
+```bash
+sudo apt install build-essential cmake ninja-build git
+sudo apt install qt6-base-dev qt6-declarative-dev qt6-svg-dev
+sudo apt install libudev-dev libusb-1.0-0-dev
+```
+
 ### Clone
 
 Rangoli uses [hidapi](https://github.com/libusb/hidapi). It has been included as a submodule.
@@ -99,6 +126,21 @@ cmake --build build --parallel
 - Linux: `./build/src/rangoli`
 - Windows: `.\build\src\rangoli.exe`
 - MacOS: `open ./build/src/rangoli.app`
+
+### Linux Permissions
+
+On Linux, Rangoli requires access to HID devices. If you get a segmentation fault when running without sudo, you need to install udev rules:
+
+```bash
+# Run the installation script
+./install-udev-rules.sh
+
+# Then unplug and replug your keyboard, or restart your system
+```
+
+For detailed instructions and troubleshooting, see:
+- [Linux Permissions Guide (English)](LINUX_PERMISSIONS_EN.md)
+- [Linux Berechtigungen (Deutsch)](LINUX_PERMISSIONS.md)
 
 ## Bugs and Support
 

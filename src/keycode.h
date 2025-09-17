@@ -135,6 +135,7 @@ public:
         Key_Num_Decimal_Point       = 0x6300,
         Key_Num_Lock                = 0x5300,
         Key_Num_Enter               = 0x5800,
+        Key_102ND                   = 0x6400,
 
         Key_Fn                      = 0xb000,
 
