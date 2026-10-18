@@ -32,7 +32,6 @@ Item {
         topInset: 0
         bottomInset: 0
 
-        Material.roundedScale: GlobalProps.roundedScale
         Material.elevation: 6
 
         anchors {

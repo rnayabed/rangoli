@@ -15,9 +15,11 @@
 #define CUSTOMMAPPEDKEYS_H
 
 #include <QAbstractListModel>
+#include <QPointer>
 #include <QSet>
 
 #include "keycode.h"
+#include "macromodel.h"
 
 class CustomMappedKeys : public QAbstractListModel
 {
@@ -43,10 +45,19 @@ public:
 
     Q_INVOKABLE int keysCount();
 
+    // Used to name keys that play a macro
+    void setMacros(MacroModel* macros);
+
+    // The macro slot the selected key plays, or -1
+    Q_INVOKABLE int selectedMacroSlot() const;
+
 public slots:
     void setSelectedKeyIndex(const int& keyIndex);
 
     void add(const KeyCode::Code& code);
+
+    // A key that plays a macro does nothing else
+    void setMacro(const int& slot);
     void remove(const int& index);
     void clear();
     void clearAll();
@@ -55,6 +66,7 @@ private:
     QHash<int, QList<KeyCode::Code>> m_keys;
     QList<int> m_keyIndexes;
     int m_selectedKeyIndex;
+    QPointer<MacroModel> m_macros;
 };
 
 #endif // CUSTOMMAPPEDKEYS_H

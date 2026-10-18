@@ -36,7 +36,15 @@ QVariant CustomMappedKeys::data(const QModelIndex &index, int role) const
 
     if (role == NameRole)
     {
-        return KeyCode::Names[m_keys[m_selectedKeyIndex].at(index.row())];
+        const KeyCode::Code code = m_keys[m_selectedKeyIndex].at(index.row());
+
+        if (MacroModel::isMacroCode(code))
+        {
+            const int slot = MacroModel::slotForCode(code);
+            return tr("Macro: %1").arg(m_macros ? m_macros->macroName(slot) : QString::number(slot + 1));
+        }
+
+        return KeyCode::Names[code];
     }
 
     return QVariant();
@@ -90,6 +98,15 @@ void CustomMappedKeys::add(const KeyCode::Code &code)
             << "for key index" << m_selectedKeyIndex;
 
     beginResetModel();
+
+    // Keys can't be added to a macro, it is replaced instead
+    if (m_keys.contains(m_selectedKeyIndex))
+    {
+        m_keys[m_selectedKeyIndex].removeIf([](const KeyCode::Code& i){
+            return MacroModel::isMacroCode(i);
+        });
+    }
+
     if (m_keys.contains(m_selectedKeyIndex))
     {
         if (!m_keys[m_selectedKeyIndex].contains(code))
@@ -149,3 +166,34 @@ void CustomMappedKeys::clearAll()
     endResetModel();
 }
 
+
+void CustomMappedKeys::setMacros(MacroModel *macros)
+{
+    m_macros = macros;
+}
+
+int CustomMappedKeys::selectedMacroSlot() const
+{
+    if (!m_keys.contains(m_selectedKeyIndex)) return -1;
+
+    for (auto&& code : m_keys[m_selectedKeyIndex])
+    {
+        if (MacroModel::isMacroCode(code)) return MacroModel::slotForCode(code);
+    }
+
+    return -1;
+}
+
+void CustomMappedKeys::setMacro(const int &slot)
+{
+    if (m_selectedKeyIndex == -1) return;
+
+    qInfo() << "Set macro slot" << slot << "for key index" << m_selectedKeyIndex;
+
+    beginResetModel();
+
+    if (!m_keys.contains(m_selectedKeyIndex)) m_keyIndexes << m_selectedKeyIndex;
+    m_keys[m_selectedKeyIndex] = {static_cast<KeyCode::Code>(MacroModel::keyMapCode(slot))};
+
+    endResetModel();
+}

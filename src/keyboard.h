@@ -30,6 +30,7 @@ struct Keyboard
              const bool& keyMapEnabled,
              const bool& lightEnabled,
              const bool& rgb,
+             const bool& macrosEnabled,
              const int& topLeftX, const int& topLeftY,
              const int& bottomRightX, const int& bottomRightY);
     ~Keyboard();
@@ -44,6 +45,9 @@ struct Keyboard
     bool keyMapEnabled;
     bool lightEnabled;
     bool rgb;
+
+    // Whether the macro format has been confirmed on this model
+    bool macrosEnabled;
 
     int topLeftX;
     int topLeftY;

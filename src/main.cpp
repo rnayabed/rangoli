@@ -11,7 +11,7 @@
  * GNU General Public License for more details.
  */
 
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QLocale>
 #include <QIcon>
@@ -24,11 +24,47 @@
 #include "settingscontroller.h"
 #include "icons.h"
 #include "messagehandler.h"
+#include "hidconnection.h"
+#include "systemtray.h"
+#include "singleinstance.h"
+
+#ifdef Q_OS_UNIX
+#include <csignal>
+#include <sys/socket.h>
+#include <unistd.h>
+#include <QSocketNotifier>
+
+static int quitSignalFds[2];
+
+static void handleQuitSignal(int)
+{
+    char c = 1;
+    [[maybe_unused]] auto written = ::write(quitSignalFds[0], &c, sizeof(c));
+}
+#endif
 
 using namespace Qt::Literals::StringLiterals;
 
 int main(int argc, char *argv[])
 {
+    // Checked before the log opens, which would wipe the running copy's log
+    SingleInstance singleInstance;
+
+    if (!singleInstance.tryLock())
+    {
+        QCoreApplication app(argc, argv);
+
+        qInfo("Rangoli is already running");
+
+        // Starting at login gives way quietly, anything else brings the running copy forward
+        if (!app.arguments().contains(u"start_to_system_tray_icon"_s))
+        {
+            SingleInstance::showRunningInstance();
+        }
+
+        return 0;
+    }
+
     if (MessageHandler::init())
     {
         qInstallMessageHandler(MessageHandler::handler);
@@ -53,7 +89,7 @@ int main(int argc, char *argv[])
     KeyboardConfiguratorController keyboardConfiguratorController;
     SettingsController settingsController;
 
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
 
     qInfo() << "Platform:" << app.platformName();
     qInfo() << "Qt" << qVersion();
@@ -71,6 +107,30 @@ int main(int argc, char *argv[])
     QDir::setCurrent(app.applicationDirPath());
 #endif
 
+    // Live lighting has to hand the keyboard back before the HID thread goes away
+    QObject::connect(&app, &QCoreApplication::aboutToQuit, &app, [&keyboardConfiguratorController](){
+        keyboardConfiguratorController.stopPlaybackBlocking();
+        HIDConnection::getInstance().stop();
+    });
+
+#ifdef Q_OS_UNIX
+    // Logging out or shutting down sends SIGTERM; turn it into a normal quit
+    if (::socketpair(AF_UNIX, SOCK_STREAM, 0, quitSignalFds) == 0)
+    {
+        auto notifier = new QSocketNotifier(quitSignalFds[1], QSocketNotifier::Read, &app);
+        QObject::connect(notifier, &QSocketNotifier::activated, &app, &QCoreApplication::quit);
+
+        struct sigaction action {};
+        action.sa_handler = handleQuitSignal;
+        sigemptyset(&action.sa_mask);
+        action.sa_flags = SA_RESTART;
+
+        sigaction(SIGTERM, &action, nullptr);
+        sigaction(SIGINT, &action, nullptr);
+        sigaction(SIGHUP, &action, nullptr);
+    }
+#endif
+
     QQmlApplicationEngine engine;
 
     QObject::connect(&engine, &QQmlApplicationEngine::quit, MessageHandler::close);
@@ -80,6 +140,13 @@ int main(int argc, char *argv[])
 
     engine.setContextForObject(&keyboardConfiguratorController, engine.rootContext());
     engine.rootContext()->setContextProperty(u"keyboardConfiguratorController"_s, &keyboardConfiguratorController);
+
+    SystemTray systemTray(&mainWindowController, &keyboardConfiguratorController);
+    engine.rootContext()->setContextProperty(u"systemTray"_s, &systemTray);
+
+    QObject::connect(&singleInstance, &SingleInstance::showRequested,
+                     &systemTray, &SystemTray::showWindowRequested);
+    singleInstance.listen();
 
     engine.setContextForObject(&settingsController, engine.rootContext());
     engine.rootContext()->setContextProperty(u"settingsController"_s, &settingsController);

@@ -13,6 +13,8 @@ GNU General Public License for more details.
 
 set(SOURCE_LIST
     customcolours.h customcolours.cpp
+    customeffectmodel.h customeffectmodel.cpp
+    macromodel.h macromodel.cpp
     customlightmodekeys.h customlightmodekeys.cpp
     custommappedkeys.h custommappedkeys.cpp
     enhanceddialog.h enhanceddialog.cpp
@@ -24,7 +26,9 @@ set(SOURCE_LIST
     keyboardconfiguratorcontroller.h keyboardconfiguratorcontroller.cpp
     keyboardmodel.h keyboardmodel.cpp
     keyboardusbid.h keyboardusbid.cpp
+    lightanimation.h lightanimation.cpp
     keycode.h
+    keyinput.h keyinput.cpp
     keycodemodel.h keycodemodel.cpp
     keycodemodelproxy.h keycodemodelproxy.cpp
     main.cpp
@@ -35,7 +39,9 @@ set(SOURCE_LIST
     profile.h profile.cpp
     profilemodel.h profilemodel.cpp
     settingscontroller.h settingscontroller.cpp
+    singleinstance.h singleinstance.cpp
     startatboot.h startatboot.cpp
+    systemtray.h systemtray.cpp
 
     resources.qrc
 )
@@ -92,7 +98,7 @@ endif()
 target_compile_options(rangoli PRIVATE -Wall -Wextra -Werror)
 
 target_link_libraries(rangoli
-    PRIVATE Qt6::Quick Qt6::Svg
+    PRIVATE Qt6::Quick Qt6::Svg Qt6::Widgets Qt6::Network
     PRIVATE hidapi::hidapi)
 
 install(TARGETS rangoli

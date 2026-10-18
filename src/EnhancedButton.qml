@@ -15,5 +15,4 @@ import QtQuick
 import QtQuick.Controls
 
 Button {
-    Material.roundedScale: GlobalProps.roundedScale
 }

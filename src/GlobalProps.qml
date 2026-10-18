@@ -18,5 +18,4 @@ import QtQuick.Controls.Material
 import Rangoli
 
 QtObject {
-    property int roundedScale: Material.SmallScale
 }

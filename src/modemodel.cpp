@@ -91,6 +91,16 @@ bool ModeModel::isCustomMode(const int &index) const
     }
 }
 
+int ModeModel::customModeIndex() const
+{
+    for (int i = 0; i < rowCount(); i++)
+    {
+        if (isCustomMode(i)) return i;
+    }
+
+    return -1;
+}
+
 QVariant ModeModel::data(const QModelIndex &index, int role) const
 {
     if (role <= Qt::UserRole || index.row() >= (m_rgb ? m_rgbModes.size() : m_modes.size()))

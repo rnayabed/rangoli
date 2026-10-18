@@ -21,6 +21,7 @@ Keyboard::Keyboard(const KeyboardUSBID& id,
                    const bool& keyMapEnabled,
                    const bool& lightEnabled,
                    const bool& rgb,
+                   const bool& macrosEnabled,
                    const int& topLeftX, const int& topLeftY,
                    const int& bottomRightX, const int& bottomRightY)
     : id{id},
@@ -28,6 +29,7 @@ Keyboard::Keyboard(const KeyboardUSBID& id,
     imagePath{QStringLiteral("file:keyboards/%1/images/%2.png")
                   .arg(QString::number(id.vid, 16), QString::number(id.pid, 16))},
     keys{keys}, keyMapEnabled{keyMapEnabled}, lightEnabled{lightEnabled}, rgb{rgb},
+    macrosEnabled{macrosEnabled},
     topLeftX{topLeftX}, topLeftY{topLeftY},
     bottomRightX{bottomRightX}, bottomRightY{bottomRightY}
 {}

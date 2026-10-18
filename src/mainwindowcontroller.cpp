@@ -191,6 +191,23 @@ void MainWindowController::init()
             }
         }, Qt::SingleShotConnection);
     }
+    else
+    {
+        // Animations only run while Rangoli does, so start them without being asked
+        connect(&connection, &HIDConnection::keyboardsScanComplete,
+                this, [this](){
+            for (int i = 0 ; i < m_connectedKeyboards->keyboards().size(); i++)
+            {
+                if (m_keyboardConfiguratorController->defaultProfileAnimated(m_connectedKeyboards->keyboards().at(i)))
+                {
+                    qInfo() << "Default profile is animated, apply it";
+
+                    m_keyboardConfiguratorController->load(i);
+                    m_keyboardConfiguratorController->applyDefaultProfile();
+                }
+            }
+        }, Qt::SingleShotConnection);
+    }
 
     QDir keyboards{u"keyboards"_s};
     if (!keyboards.exists())
@@ -267,6 +284,7 @@ void MainWindowController::init()
 void MainWindowController::quit()
 {
     setInterruptClose(false);
+    m_keyboardConfiguratorController->stopPlaybackBlocking();
     HIDConnection::getInstance().stop();
     m_connectedKeyboards.clear();
     emit close();

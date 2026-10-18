@@ -18,6 +18,7 @@
 
 #include <QJsonDocument>
 #include <QJsonArray>
+#include <QThread>
 
 #include "keyboardconfiguratorcontroller.h"
 #include "mainwindowcontroller.h"
@@ -25,7 +26,7 @@
 using namespace Qt::Literals::StringLiterals;
 
 HIDConnectionWorker::HIDConnectionWorker(QObject *parent)
-    : QObject{parent}, m_HIDInitSuccessful{false}
+    : QObject{parent}, m_HIDInitSuccessful{false}, m_liveHandle{nullptr}
 {
 }
 
@@ -54,6 +55,8 @@ void HIDConnectionWorker::init()
 void HIDConnectionWorker::exit()
 {
     qDebug() << "Exit HID Connection Worker";
+
+    closeLiveConnection();
 
     if (m_HIDInitSuccessful)
     {
@@ -210,6 +213,7 @@ void HIDConnectionWorker::refreshKeyboards(QPointer<KeyboardModel> connectedKeyb
                     keyMapEnabled,
                     configObj["lightEnabled"].toBool(),
                     configObj["rgb"].toBool(),
+                    keyMapEnabled && configObj["macrosEnabled"].toBool(),
                     topObj[0].toInt(), topObj[1].toInt(),
                     bottomObj[0].toInt(), bottomObj[1].toInt()
                 });
@@ -250,10 +254,32 @@ void HIDConnectionWorker::sendData(const QString &path, unsigned char** buffers,
 
     for(int i = 0; i < buffersLength; i++)
     {
-        if (hid_send_feature_report(handle, buffers[i], KeyboardConfiguratorController::BufferSize)
-                != KeyboardConfiguratorController::BufferSize)
+        // The keyboard sometimes refuses a report while it is busy, so retry a little
+        bool sent = false;
+
+        for (int attempt = 0; attempt < 3 && !sent; attempt++)
+        {
+            if (attempt > 0)
+            {
+                qWarning() << "Retry report" << i;
+                QThread::msleep(50);
+            }
+
+            sent = hid_send_feature_report(handle, buffers[i], KeyboardConfiguratorController::BufferSize)
+                    == KeyboardConfiguratorController::BufferSize;
+        }
+
+        if (!sent)
         {
             qCritical() << "Unable to send report" << i;
+
+            for (int j = i; j < buffersLength; j++)
+            {
+                delete [] buffers[j];
+            }
+            delete [] buffers;
+
+            hid_close(handle);
 
             emit failedToSendData(tr("Failed to send feature report to keyboard. "
                                      "Make sure you have sufficient permissions."));
@@ -261,6 +287,9 @@ void HIDConnectionWorker::sendData(const QString &path, unsigned char** buffers,
         }
 
         delete [] buffers[i];
+
+        // Reports sent much faster than the official software does time out
+        QThread::msleep(11);
     }
 
     delete [] buffers;
@@ -268,6 +297,70 @@ void HIDConnectionWorker::sendData(const QString &path, unsigned char** buffers,
     emit dataSentSuccessfully();
 
     hid_close(handle);
+}
+
+void HIDConnectionWorker::sendLiveFrame(const QString &path, const QByteArray &frame)
+{
+    // Live frames are streamed many times a second, so keep the device open
+    if (m_liveHandle && m_livePath != path)
+    {
+        closeLiveConnection();
+    }
+
+    if (!m_liveHandle)
+    {
+        m_liveHandle = hid_open_path(qPrintable(path));
+
+        if (!m_liveHandle)
+        {
+            qCritical() << "Unable to open device for live lighting";
+            emit liveFrameSent(false);
+            return;
+        }
+
+        m_livePath = path;
+    }
+
+    constexpr int BufferSize = KeyboardConfiguratorController::BufferSize;
+    constexpr int PacketCount = KeyboardConfiguratorController::LiveFramePacketCount;
+    constexpr int DataSize = BufferSize - 3;
+
+    for (int i = 0; i < PacketCount; i++)
+    {
+        unsigned char buffer[BufferSize] = {};
+
+        buffer[0] = 0x0a;
+        buffer[1] = PacketCount;
+        buffer[2] = i + 1;
+
+        for (int j = 0; j < DataSize && (i * DataSize + j) < frame.size(); j++)
+        {
+            buffer[3 + j] = frame.at(i * DataSize + j);
+        }
+
+        if (hid_send_feature_report(m_liveHandle, buffer, BufferSize) != BufferSize)
+        {
+            qWarning() << "Unable to send live lighting report" << i;
+            closeLiveConnection();
+            emit liveFrameSent(false);
+            return;
+        }
+
+        // The keyboard times out reports sent much faster than this
+        QThread::msleep(11);
+    }
+
+    emit liveFrameSent(true);
+}
+
+void HIDConnectionWorker::closeLiveConnection()
+{
+    if (m_liveHandle)
+    {
+        hid_close(m_liveHandle);
+        m_liveHandle = nullptr;
+        m_livePath.clear();
+    }
 }
 
 bool HIDConnectionWorker::initHIDCol()

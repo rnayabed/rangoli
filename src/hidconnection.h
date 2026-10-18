@@ -51,11 +51,19 @@ signals:
     void dataSentSuccessfully();
     void failedToSendData(const QString& message);
 
+    void sendLiveFrame(const QString& path, const QByteArray& frame);
+    void liveFrameSent(const bool& ok);
+    void closeLiveConnection();
+
     void exit();
 
 public slots:
     void start();
     void stop();
+
+    // Closes the live connection and sends buffers, waiting until done.
+    // Used when quitting, where queued work would never run.
+    void sendDataBlocking(const QString& path, unsigned char** buffers, int bufferLength);
 };
 
 #endif // HIDCONNECTION_H

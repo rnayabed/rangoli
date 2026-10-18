@@ -61,6 +61,7 @@ void CustomLightModeKeys::add(const int &keyIndex, const QColor &colour)
     beginResetModel();
     m_keys[keyIndex] = colour;
     m_keyIndexes << keyIndex;
+    endResetModel();
 }
 
 void CustomLightModeKeys::addIfNotExists(const int &keyIndex, const QColor &colour)

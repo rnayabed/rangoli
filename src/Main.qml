@@ -15,7 +15,6 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtQuick.Controls.Material.impl
-import Qt.labs.platform
 import QtQml.Models
 
 import Rangoli
@@ -23,8 +22,10 @@ import Rangoli
 ApplicationWindow {
     visible: true
 
-    width: 900
-    height: 700
+    // Wide enough for the larger keyboard pictures (about 1000 px) next to the
+    // lighting menu, without growing past smaller screens
+    width: Math.min(1240, Screen.desktopAvailableWidth - 40)
+    height: Math.min(860, Screen.desktopAvailableHeight - 60)
 
     minimumWidth: 500
     minimumHeight: 300
@@ -55,7 +56,7 @@ ApplicationWindow {
         function onHide()
         {
             hide()
-            if (mainWindowController.startToSystemTrayIcon) systemTrayIcon.visible = true
+            if (mainWindowController.startToSystemTrayIcon) systemTray.visible = true
         }
 
         function onClose()
@@ -85,7 +86,7 @@ ApplicationWindow {
 
         function onAlwaysShowSystemTrayIconChanged()
         {
-            systemTrayIcon.visible = mainWindowController.alwaysShowSystemTrayIcon
+            systemTray.visible = mainWindowController.alwaysShowSystemTrayIcon
         }
 
         function onOpenLinuxUdevPopup()
@@ -105,7 +106,7 @@ ApplicationWindow {
         if (mainWindowController.closeToSystemTrayIcon)
         {
             close.accepted = false
-            systemTrayIcon.visible = true
+            systemTray.visible = true
             window.hide()
             sv.pop(null)
             return
@@ -121,72 +122,16 @@ ApplicationWindow {
         }
     }
 
-    SystemTrayIcon {
-        id: systemTrayIcon
+    Connections {
+        target: systemTray
 
-        tooltip: qsTr("Rangoli")
+        function onShowWindowRequested()
+        {
+            if (!mainWindowController.alwaysShowSystemTrayIcon) systemTray.visible = false
 
-        icon.source: Icons.get(Icons.Rangoli)
-
-        onActivated: (reason) => {
-            if (reason === SystemTrayIcon.Context)
-            {
-                systemTrayMenu.open();
-            }
-            else if (reason === SystemTrayIcon.Trigger)
-            {
-                if (!mainWindowController.alwaysShowSystemTrayIcon) systemTrayIcon.visible = false
-
-                window.show()
-                window.raise()
-                window.requestActivate()
-            }
-        }
-
-        menu: Menu {
-            id: systemTrayMenu
-
-            Instantiator {
-                model: mainWindowController.connectedKeyboards
-
-                delegate: Menu {
-                    title: model.name
-
-                    id: kbMenuDel
-
-                    property int index: model.index
-
-                    Instantiator {
-                        model: keyboardConfiguratorController.profiles
-
-                        delegate: MenuItem {
-                            text: model.name
-                            onTriggered: {
-                                mainWindowController.loadKeyboard(kbMenuDel.index)
-                                keyboardConfiguratorController.selectedProfileIndex = model.index
-                            }
-                        }
-
-                        onObjectAdded: (index, object) => kbMenuDel.insertItem(index, object)
-                        onObjectRemoved: (index, object) => kbMenuDel.removeItem(object)
-                    }
-                }
-
-                onObjectAdded: (index, object) => systemTrayMenu.insertMenu(index, object)
-                onObjectRemoved: (index, object) => systemTrayMenu.removeMenu(object)
-            }
-
-            MenuSeparator {}
-
-            MenuItem {
-                text: qsTr("Quit")
-
-                onTriggered: {
-                    mainWindowController.closeToSystemTrayIcon = false
-                    mainWindowController.interruptClose = false
-                    mainWindowController.quit()
-                }
-            }
+            window.show()
+            window.raise()
+            window.requestActivate()
         }
     }
 
@@ -399,7 +344,6 @@ ApplicationWindow {
         margins: 10
         modal: true
 
-        Material.roundedScale: GlobalProps.roundedScale
 
         Column {
             spacing: 10

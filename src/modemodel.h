@@ -85,6 +85,8 @@ public:
 
     bool isCustomMode(const int& index) const;
 
+    int customModeIndex() const;
+
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
     QHash<int, QByteArray> roleNames() const override;

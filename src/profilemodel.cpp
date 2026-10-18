@@ -156,6 +156,13 @@ void ProfileModel::registerProfiles()
     m_profiles.clear();
     QString defaultID = settings.value(u"default_profile"_s).toString();
 
+    // Without a chosen default, use the profile picked last instead of
+    // whichever happens to come first
+    if (defaultID.isEmpty())
+    {
+        defaultID = settings.value(u"last_profile"_s).toString();
+    }
+
     settings.beginGroup(u"profiles"_s);
 
     QStringList profileIDs = settings.childGroups();

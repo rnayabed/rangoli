@@ -42,6 +42,7 @@ signals:
     void keyboardsScanComplete();
     void dataSentSuccessfully();
     void failedToSendData(const QString& message);
+    void liveFrameSent(const bool& ok);
 
 public slots:
     void init();
@@ -51,8 +52,14 @@ public slots:
 
     void sendData(const QString& path, unsigned char** buffers, int buffersLength);
 
+    void sendLiveFrame(const QString& path, const QByteArray& frame);
+    void closeLiveConnection();
+
 private:
     bool m_HIDInitSuccessful;
+
+    hid_device* m_liveHandle;
+    QString m_livePath;
     QJsonObject m_hidColConfig;
 
     bool initHIDCol();

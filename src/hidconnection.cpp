@@ -63,6 +63,17 @@ HIDConnection::HIDConnection(QObject *parent)
         emit failedToSendData(message);
     });
 
+    connect(this, &HIDConnection::sendLiveFrame,
+            m_worker, &HIDConnectionWorker::sendLiveFrame);
+
+    connect(m_worker, &HIDConnectionWorker::liveFrameSent,
+            this, [this](const bool& ok){
+        emit liveFrameSent(ok);
+    });
+
+    connect(this, &HIDConnection::closeLiveConnection,
+            m_worker, &HIDConnectionWorker::closeLiveConnection);
+
     connect(this, &HIDConnection::exit,
             m_worker, &HIDConnectionWorker::exit);
 }
@@ -76,6 +87,16 @@ HIDConnection &HIDConnection::getInstance()
 void HIDConnection::start()
 {
     m_thread.start();
+}
+
+void HIDConnection::sendDataBlocking(const QString &path, unsigned char **buffers, int bufferLength)
+{
+    if (!m_thread.isRunning()) return;
+
+    QMetaObject::invokeMethod(m_worker, [this, path, buffers, bufferLength](){
+        m_worker->closeLiveConnection();
+        m_worker->sendData(path, buffers, bufferLength);
+    }, Qt::BlockingQueuedConnection);
 }
 
 void HIDConnection::stop()
